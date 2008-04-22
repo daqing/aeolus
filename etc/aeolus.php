@@ -6,7 +6,7 @@
 
   # Debug control
   if(! defined('AEOLUS_DEBUG') ){
-    define('AEOLUS_DEBUG',true);
+    define('AEOLUS_DEBUG',false);
   }
 
   # Aeolus root directory which contains the 'index.php' file

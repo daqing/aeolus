@@ -19,7 +19,8 @@
     function get_sections()
     {
 	  ?><div class="section"><h3>Welcome to Aeolus sandbox</h3></div>
-	  <?php
+	  <p>Here's debug info about Model and its driver<p>
+	  <?php var_dump($this->data);var_dump($this->data->driver);
     }
 
     function get_javascript()

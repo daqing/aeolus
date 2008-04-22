@@ -30,7 +30,7 @@
     
     # The base URL where you can see your home page
     # Note : you'd include the leading slash in this base URL
-    $rule['base'] = '/aeolus';
+    $rule['base'] = '/git-repo/aeolus';
  
     # ======================================================= #
     # Don't edit below unless you know what you're doing. ;-p

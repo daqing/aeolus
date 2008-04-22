@@ -7,7 +7,7 @@
   function index()
   {
     $model = app_model_factory('sandbox','Index_Index_Model');
-	$view = app_view_factory('sandbox','Index_Index_View');
+	$view = app_view_factory('sandbox','Index_Index_View',$model);
     
 	$view->title = 'Sandbox';
 	$view->render();
