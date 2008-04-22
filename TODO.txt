@@ -1,0 +1,6 @@
+== Core Features =
+1. (A) Implement SimpleCache
+2. (A) Add PHPUnit support (http://www.phpunit.de)
+3. (B) Add PHing support (http://phing.info)
+4. (C) Add YAML support (http://www.yaml.org/)
+4. (D) Support multi languages

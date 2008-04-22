@@ -1,0 +1,145 @@
+/* Default theme */
+
+html,body {
+	background-color:white;
+	font-family: Verdana, "Lucida Grande", "Lucida Sans", sans, Hei;
+    font-size:11pt;
+	margin:0px;
+	padding:0px;
+	color: #000;
+	min-width:750px;
+}
+
+#citygeneration{
+    height:auto;
+	width:100%;
+	margin:0px;
+	padding:0px;
+	border:0px;
+    background:white;
+}
+
+img {
+    border:0px;
+}
+
+#logo_area {
+	
+    border-bottom:2px solid #EBEBEB;
+}
+
+#main_table {
+	width:100%;
+}
+
+#sidebar {
+   background-color: #C6DF34; 
+   padding:10px 2px;
+   margin:0px;
+   width:125px;   
+}
+
+#sidebar .inner_sidebar {
+    background-color:#FFF;
+    padding:3px;
+    text-align:right;        
+}
+
+ul {
+    padding:0px 5px;
+}
+
+
+ul li {	
+    list-style-type:none;
+	font-size:11pt;
+    margin-bottom:5px;
+    padding:0px 2px;
+    font-size:10pt;
+    border-top:1px solid #EBEBEB;
+}
+
+#control {
+	width:200px;
+    margin:10px 5px;
+    padding:10px 2px;    
+    float:right;
+    background-color:#C6DF34;
+    text-align:center;
+}
+
+#control span {
+    font-size:10pt;
+    padding-left:5px;           
+}
+
+#control .inner_control {
+    background-color:white;
+    margin-top:3px;
+    padding:4px 2px;    
+}
+
+#main {      
+    margin:0px 200px 0px 0px;
+    padding:10px 0px 0px 30px;
+}
+
+#content {    
+    width:85%;
+    background-color:#C6DF34;
+    padding:12px 0px 28px 0px;
+    
+}
+
+#content .inner_content {
+    background-color:white;
+    padding:8px;
+    
+}
+
+#spotlight {	
+	margin-bottom:10px;
+    border-left:4px solid #C6DF34;
+    padding:5px;
+    background-color:#EBEBEB;
+	width:87%
+}
+
+.section {
+    margin-top:5px;
+    border:1px solid #CCC;
+    padding:5px;
+}
+
+#footer {
+    background-color:white;
+    margin-top:25px;
+    padding-top:5px;    
+	text-align:center;
+    font-size:small;
+    color:#5762A8;
+    border-top:1px solid #EBEBEB;
+}
+
+.ajax_error {    
+    color:red;
+    width:auto;
+    font-size:10pt;
+}
+
+a:active, a:visited {
+    text-decoration:underline;
+    color:#5762A8;
+}
+
+a:link {
+    color:#5762A8;
+}
+
+a:active,a:hover {
+	color:#E85660;    
+}
+
+label {
+    font-size:10pt;    
+}
