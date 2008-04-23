@@ -31,7 +31,7 @@
 		}
 
 	  }else{
-        echo "[ERROR] This model $model already exists as $model_path. \n";
+        echo "[ERROR] This model $model already exists in $model_path. \n";
 	  }
 	}else{
       echo "[ERROR] Directory $module_path doesn't exist or doesn't allow writing files";

@@ -25,6 +25,13 @@
 
     function render_js()
     {
+	  app_helper_load('sandbox','sb_index_index');
+	  sb_index_index();
     }
+
+	function render_included_js()
+	{
+	  echo AEOLUS_SUBDIR.'/pub/js/app/sandbox.js';
+	}
   }
 ?>
