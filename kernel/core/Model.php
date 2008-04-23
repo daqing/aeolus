@@ -37,7 +37,7 @@
 		{
 		    if( 'mysql' == $driver )
 			{
-			    aeolus_load(AEOLUS_ROOT.'/kernel/SimpleDatabase/Mysql.php');
+			    aeolus_load(AEOLUS_ROOT.'/kernel/database/Mysql.php');
 				$this->driver = new Mysql();
 				$this->data = array(
 				    'result' => false,
@@ -47,11 +47,11 @@
 				);			
 			}
 			
-			require_once(AEOLUS_ROOT.'/kernel/SimpleCache/File.php');
+			require_once(AEOLUS_ROOT.'/kernel/cache/FileCache.php');
     	    
     	    if( !$this->cache )
     	    {
-    	        $this->cache = new SimpleCache_File(300);
+    	        $this->cache = new FileCache(300);
     	    }
 		}
 

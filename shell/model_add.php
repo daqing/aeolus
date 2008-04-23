@@ -21,20 +21,20 @@
 		  $content .= $model." extends Model\n  {\n\n\n  }\n?>";
 
 		  if( FALSE === fwrite($res,$content) ){
-		    echo "Can't write content $content to file $model_path.\n";
+		    echo "[ERROR] Can't write content $content to file $model_path.\n";
 	      }else{
-            echo "File $model_path has successfully created ! \n";
+            echo "[INFO] File $model_path has been successfully created ! \n";
 		  }
 
 		}else{
-		  echo "Can't open file $model_path to write.\n";
+		  echo "[ERROR] Can't open file $model_path to write.\n";
 		}
 
 	  }else{
-        echo "This model $model already exists as $model_path. \n";
+        echo "[ERROR] This model $model already exists as $model_path. \n";
 	  }
 	}else{
-      echo "The directory $module_path doesn't exist or doesn't allow writing files";
+      echo "[ERROR] Directory $module_path doesn't exist or doesn't allow writing files";
 	}
   }
 ?>

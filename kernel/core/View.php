@@ -18,7 +18,6 @@
 
 	class View
 	{
-    	
     	/**
     	 * Page title
     	 *
@@ -27,12 +26,6 @@
     	 */
     	var $title = 'Index';
 		
-     	/**
-    	 * Theme name
-    	 *
-    	 */
-    	var $theme = 'default';	
-
 		/**
 		 * Data to be displayed
 		 *
@@ -44,7 +37,7 @@
     	 * Constructor
     	 *
     	 */
-    	function View($data)
+    	function View($data=null)
     	{
     	  $this->data = $data;
     	}
@@ -57,80 +50,60 @@
     	{	
             ob_start();
 			
-			$template_path = AEOLUS_ROOT.'/static/template/'.$this->theme .'.php';
-			require($template_path);
+			$template = AEOLUS_ROOT.'/pub/theme/'.THEME.'/'.THEME.'.php';
+			require($template);
 						
 			ob_end_flush();
     	}
 
 		/**
-		 * Render a template
+		 * Render inlice Javascript
 		 *
 		 */
-		function render_template($module,$template)
-		{
-		  $template_path = AEOLUS_ROOT."/static/template/$module/$template.php";
-		  
-		  if( file_exists($template_path) ){
-            # parse the template
-            require($template_path);
+	    function render_js(){}
 
-		  }else{
-		    # Error: template not exists
-			die("Fatal error: the template -- $template_path -- does not exist.<br/>System exited.");
-		  }
+		/**
+		 * render Included javascript file
+		 *
+		 * @param $name name of the javascript file
+		 * @return $path path to the javascript file
+		 */
+		function render_included_js()
+		{
+		  echo AEOLUS_SUBDIR.'/pub/js/app/default.js';
 		}
 
-    
-    	/**
-    	 * Set theme
-    	 *
-    	 * @access private
-    	 */
-    	function set_theme($name = 'default')
-    	{
-    	    $this->theme = $name;
-    	}
-
-    	/**
-		 * Render JavaScript
-		 *
-		 */
-		function get_javascript()
-		{
-		}		
-        
-		function get_logo_area()
+		function render_logo_area()
 		{
 		   echo '<div id="message">';
 		   echo '</div>';
-		   echo '<a href="'.AEOLUS_OUTPUT.'/"><img src="'.AEOLUS_BASEURL.'/static/res/aeolus.gif"';
+		   echo '<a href="'.AEOLUS_OUTPUT.'/"><img src="'.AEOLUS_SUBDIR.'/pub/img/aeolus.gif"';
 		   echo ' alt="Aeolus" /></a>';
 		  
 		}
         
-        function get_theme()
+        function render_theme()
         {
-            echo AEOLUS_BASEURL.'/static/template/'.$this->theme.'.css';
+            echo AEOLUS_SUBDIR.'/pub/theme/'.THEME.'/'.THEME.'.css';
         }
         
-        function get_jquery()
+        function render_jquery()
         {
-            echo AEOLUS_BASEURL.'/static/script/jquery-1.2.3.min.js';
+            echo AEOLUS_SUBDIR.'/pub/js/core/jquery-1.2.3.min.js';
         }
         
-        function get_jquery_corner()
+        function render_jquery_corner()
         {
-            echo AEOLUS_BASEURL.'/static/script/jquery.corner-1.92.js';
+            echo AEOLUS_SUBDIR.'/pub/js/core/jquery.corner-1.92.js';
         }	
 	
 		# Render spotlight
-		function get_spotlight()
+		function render_spotlight()
 		{
 		    echo '<strong>Spotlight</strong>';
 		}
     
-		function get_control_panel()
+		function render_control()
 		{
 		  echo '<p>This is the control panel'; 
 		}
@@ -138,11 +111,11 @@
     	 * Render content
     	 *
     	 */
-    	function get_sections()
+    	function render_sections()
     	{
     	  echo '<div class="section">';
           echo '<p>This is a section<br/>';
-		  echo 'And the Base output URL is '. AEOLUS_OUTPUT.'</p>';
+		  echo 'And the output URL is '. AEOLUS_OUTPUT.'</p>';
 		  if(! $_SESSION['aeolus']['can_rewrite'] ){
 		      echo '<span style="color:red">You don\'t have mod_rewrite enabled or don\'t allow .htaccess file to override the default settings.</span>';
 		  }

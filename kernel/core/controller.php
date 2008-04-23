@@ -33,23 +33,6 @@
       die();
 	}
 
-	/**
-	 * Render a PHP/HTML file
-	 *
-	 * @param $path the ABSOLUTE path to the file
-	 */
-	function aeolus_render($path)
-	{
-      # Start output buffer
-	  ob_start();
-	  require($path);
-
-	  echo ob_get_clean();
-
-	  # clean the buffer
-	  ob_clean();
-	}
-	
     /**
 	 * Route a given URL according to the routing table
 	 *
@@ -63,23 +46,23 @@
 	function aeolus_route($url)
 	{
 	    /* Load routing table */
-		$table = app_load_routing_rule();
+		$table = load_routing_rule();
 		
 		# Process requesting URL
-		$table['base'] = rtrim($table['base'],'/\\');
-		$length = strlen($table['base']);
+		$table['subdir'] = rtrim($table['subdir'],'/\\');
+		$length = strlen($table['subdir']);
 		if(! $_SESSION['aeolus']['can_rewrite']){$length += strlen('index.php/');};
 		$url = substr($url,$length);		    
 		
-		if(!defined('AEOLUS_BASEURL')){		
-		    define('AEOLUS_BASEURL',$table['base']);			
+		if(!defined('AEOLUS_SUBDIR')){		
+		    define('AEOLUS_SUBDIR',$table['subdir']);			
 		}		
 		if(!defined('AEOLUS_OUTPUT')){
 			if( $_SESSION['aeolus']['can_rewrite']){
-			  define('AEOLUS_OUTPUT',$table['base']);
+			  define('AEOLUS_OUTPUT',$table['subdir']);
 			}else{
 			  
-			  define('AEOLUS_OUTPUT',$table['base'].'/index.php');
+			  define('AEOLUS_OUTPUT',$table['subdir'].'/index.php');
 			}
 		}
 
@@ -90,7 +73,6 @@
 		$number = count($source);
 
         /* The default case is an error result */
-		$result['base'] = $table['base'];
 		$result['group'] = 'index';
 		$result['controller'] = 'error';
 		$result['action'] = 'index';
@@ -335,17 +317,40 @@
 	    
 	}
 
+	/**
+	 * Load a helper function
+	 *
+	 * @param $module the name of the module
+	 * @param $helper the name of the helper
+	 * @return void
+	 *
+	 */
+	function app_helper_load($module,$helper)
+	{
+	  $path = AEOLUS_ROOT."/app/$module/helper/$helper.php";
+
+	  if( file_exists($path) ){
+	    aeolus_load($path);
+		if( !function_exists($helper) ){
+		  die("Helper function : $helper in $path doesn't exist");
+		}
+	  }else{
+	    die("File : $path doesn't exist");
+	  }
+	}
+
 
 	/**
 	 * Load the routing rule array
 	 *
 	 * @access private
-	 * @return void
+	 * @param void
+	 * @return $rule|null array|null
 	 */	
-	function app_load_routing_rule()
+	function load_routing_rule()
 	{
-		if( file_exists(AEOLUS_ROOT.'/etc/rule.php') ){
-			require AEOLUS_ROOT.'/etc/rule.php';
+		if( file_exists(AEOLUS_ROOT.'/conf/rule.php') ){
+			require AEOLUS_ROOT.'/conf/rule.php';
 			return $rule;
 		}
 

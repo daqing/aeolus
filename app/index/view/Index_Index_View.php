@@ -6,12 +6,12 @@
 
     class Index_Index_View extends View
 	{
-	  function get_control()
+	  function render_control()
 	  {
 	     echo 'Control Panel';
 	  }
 
-	  function get_sections()
+	  function render_sections()
 	  {
          ?>
          <div class="section"><h4>Welcome to Aeolus framework !</h4>
