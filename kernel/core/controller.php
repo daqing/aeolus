@@ -349,8 +349,8 @@
 	 */	
 	function load_routing_rule()
 	{
-		if( file_exists(AEOLUS_ROOT.'/conf/rule.php') ){
-			require AEOLUS_ROOT.'/conf/rule.php';
+		if( file_exists(AEOLUS_ROOT.'/conf/core/rule.php') ){
+			require AEOLUS_ROOT.'/conf/core/rule.php';
 			return $rule;
 		}
 

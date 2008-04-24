@@ -22,7 +22,7 @@
 		    if(!$this->res)
 			{
 		        /* Try to connect to the MySQL server */
-			    require(AEOLUS_ROOT.'/conf/database.php');
+			    require(AEOLUS_ROOT.'/conf/database/mysql.php');
            
 				$this->res = mysql_connect($mysql['host'],$mysql['user'],$mysql['password']);
 

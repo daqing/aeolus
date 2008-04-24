@@ -11,7 +11,7 @@
 
   # Aeolus root directory which contains the 'index.php' file
   if(! defined('AEOLUS_ROOT') ){
-    define('AEOLUS_ROOT',rtrim(dirname(dirname(__FILE__)),'/\\'));
+    define('AEOLUS_ROOT',dirname(dirname(dirname(__FILE__))));
   }
 
   # Add 'lib' directory to include_path

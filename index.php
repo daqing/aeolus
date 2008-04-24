@@ -8,8 +8,8 @@
    */
 
     # Load configuration file
-    require( 'conf/aeolus.php' );
-	require( 'conf/app.php' );
+    require( 'conf/core/aeolus.php' );
+	require( 'conf/app/app.php' );
 
     # load the controller and utils functions 
     require(AEOLUS_ROOT.'/kernel/core/controller.php');
