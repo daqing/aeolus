@@ -4,11 +4,6 @@
    *
    */
 
-  # Debug control
-  if(! defined('AEOLUS_DEBUG') ){
-    define('AEOLUS_DEBUG',true);
-  }
-
   # Aeolus root directory which contains the 'index.php' file
   if(! defined('AEOLUS_ROOT') ){
     define('AEOLUS_ROOT',dirname(dirname(dirname(__FILE__))));
@@ -38,12 +33,22 @@
   session_start();
 
   # Apache mod_rewrite detecting
-  if(! isset($_SESSION['aeolus']['can_rewrite'])){
-    $_SESSION['aeolus']['can_rewrite'] = false;   
-
+  if( !defined('AEOLUS_CAN_REWRITE') ){
     if(isset($_GET['rewrite']) && 1 == $_GET['rewrite'] ){
-      $_SESSION['aeolus']['can_rewrite'] = true;   
+	  define('AEOLUS_CAN_REWRITE',true);
+	}else{
+	  define('AEOLUS_CAN_REWRITE',false);
     }
+  }
+
+  # Output base 
+  if( !defined('AEOLUS_OUTPUT') ){
+    $base = AEOLUS_SUBDIR;
+	if( !AEOLUS_CAN_REWRITE ){
+	  $base .= 'index.php';
+	}
+
+	define('AEOLUS_OUTPUT',$base);
   }
 
 ?>

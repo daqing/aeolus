@@ -125,7 +125,7 @@
 				 *     a 'group/controller/action'-kind request
 			     *
 			     */
-			   if( array_key_exists($source[0],$table) )
+			   if( array_key_exists($source[0],$table)&& in_array($source[1],$table[$source[0]]) )
 			   {
 			       /* The second kind */
 				   $result['group'] = $source[0];
