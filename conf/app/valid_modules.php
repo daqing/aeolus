@@ -3,7 +3,7 @@
 	  }
 
     /**
-     * URL routing rules
+     * Valid modules
      * 
      * @author Qingcheng Zhang <kinch.zhang@gmail.com>
      * @copyright Copyright (c) 2008-2009, CityGeneration, Inc. (http://www.citygeneration.com)

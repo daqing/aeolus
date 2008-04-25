@@ -43,9 +43,9 @@
 
   # Output base 
   if( !defined('AEOLUS_OUTPUT') ){
-    $base = AEOLUS_SUBDIR;
+    $base = rtrim(AEOLUS_SUBDIR,'/\\');
 	if( !AEOLUS_CAN_REWRITE ){
-	  $base .= 'index.php';
+	  $base .= '/index.php';
 	}
 
 	define('AEOLUS_OUTPUT',$base);

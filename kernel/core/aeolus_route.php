@@ -10,7 +10,7 @@
    function aeolus_route($url)
    {
      # Load valid modules(the $module array)
-	 require( AEOLUS_ROOT.'/conf/app/routing_rule.php' );
+	 require( AEOLUS_ROOT.'/conf/app/valid_modules.php' );
 	 # Remove the subdirectory part of an URL
 	 $subdir = rtrim(AEOLUS_SUBDIR,'/\\');
 	 if( !AEOLUS_CAN_REWRITE ){
