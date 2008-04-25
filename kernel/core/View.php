@@ -37,7 +37,7 @@
     	 * Constructor
     	 *
     	 */
-    	function View($data=null)
+    	function View($data)
     	{
     	  $this->data = $data;
     	}
@@ -50,7 +50,7 @@
     	{	
             ob_start();
 			
-			$template = AEOLUS_ROOT.'/pub/theme/'.THEME.'/'.THEME.'.php';
+			$template = AEOLUS_ROOT.'/pub/theme/'.APP_THEME.'/'.APP_THEME.'.php';
 			require($template);
 						
 			ob_end_flush();
@@ -70,31 +70,31 @@
 		 */
 		function render_included_js()
 		{
-		  echo AEOLUS_SUBDIR.'/pub/js/app/default.js';
+		  echo APP_SUBDIR.'/pub/js/app/default.js';
 		}
 
 		function render_logo_area()
 		{
 		   echo '<div id="message">';
 		   echo '</div>';
-		   echo '<a href="'.AEOLUS_OUTPUT.'/"><img src="'.AEOLUS_SUBDIR.'/pub/img/aeolus.gif"';
+		   echo '<a href="'.AEOLUS_OUTPUT.'/"><img src="'.APP_SUBDIR.'/pub/img/aeolus.gif"';
 		   echo ' alt="Aeolus" /></a>';
 		  
 		}
         
         function render_theme()
         {
-            echo AEOLUS_SUBDIR.'/pub/theme/'.THEME.'/'.THEME.'.css';
+            echo APP_SUBDIR.'/pub/theme/'.APP_THEME.'/'.APP_THEME.'.css';
         }
         
         function render_jquery()
         {
-            echo AEOLUS_SUBDIR.'/pub/js/core/jquery-1.2.3.min.js';
+            echo APP_SUBDIR.'/pub/js/core/jquery-1.2.3.min.js';
         }
         
         function render_jquery_corner()
         {
-            echo AEOLUS_SUBDIR.'/pub/js/core/jquery.corner-1.92.js';
+            echo APP_SUBDIR.'/pub/js/core/jquery.corner-1.92.js';
         }	
 	
 		# Render spotlight

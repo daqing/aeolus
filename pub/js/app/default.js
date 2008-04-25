@@ -3,6 +3,3 @@
  *
  */
 
-$(function(){
-  alert('Hello,Aeolus hacker!');
-});

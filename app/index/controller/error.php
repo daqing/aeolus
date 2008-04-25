@@ -3,6 +3,8 @@
    * Error controller in 'index' module
    *
    */
-
-  die('Your request is invalid.<br/>System exited.');
+  function index()
+  {
+    die( '<h3>[ERROR 400] BAD REQUEST. </h3>' );
+  }
 ?>

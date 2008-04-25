@@ -11,13 +11,9 @@
    {
      # Load valid modules(the $module array)
 	 require( AEOLUS_ROOT.'/conf/app/valid_modules.php' );
+
 	 # Remove the subdirectory part of an URL
-	 $subdir = rtrim(AEOLUS_SUBDIR,'/\\');
-	 if( !AEOLUS_CAN_REWRITE ){
-	   $subdir .= 'index.php/';
-	 }
-     
-	 $url = substr(strtolower($url),strlen($subdir)+1);
+	 $url = substr(strtolower($url),strlen(AEOLUS_OUTPUT)+1);
 	 $url = rtrim($url,'/\\');
 
 	 # Get an array of all segments of an URL
@@ -122,6 +118,8 @@
 
 	     break;
 	   }
+
+     $_SESSION['aeolus']['result'] = $result;
 
 	 return $result;
    }

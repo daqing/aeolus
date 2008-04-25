@@ -17,12 +17,10 @@
 	     require($path);
 	     $GLOBALS['included'][$path] = true;
 	   }else{
-	     if( AEOLUS_DEBUG ){
-	       echo '<br/>[ERROR] The file: '.$path;
-		   echo 'you\'re trying to include doesn\'t exist';
-		   die();
+	     if( APP_DEBUG ){
+	       die( '<h3>[ERROR 404] FILE: '.$path.' NOT FOUND.</h3>' );
 		 }else{
-	       die('<br/>[ERROR] The file you\'re trying to include doesn\'t exist');
+	       die('<h3>[ERROR 404] RESOURCE NOT FOUND.</h3>');
 		 }
 	   }
 	 }
