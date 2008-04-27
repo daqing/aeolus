@@ -18,7 +18,7 @@
 	    if( $res = fopen($helper_path,'w')){
 		  $content = "<?php\n  /**\n   * ".ucfirst($helper)." helper function in ";
 		  $content .= "'$module' module\n   *\n   */\n\n  function ";
-		  $content .= $helper."()\n  {\n    ?>\n    $(function(){});";
+		  $content .= $helper."()\n  {\n    ?>\n    <div></div>";
 		  $content .= "\n    <?php\n  }\n?>";
 
 		  if( FALSE === fwrite($res,$content) ){

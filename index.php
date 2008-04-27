@@ -14,13 +14,13 @@
  require( 'conf/core/core.php' );
 
  # load core functions
- require(AEOLUS_ROOT.'/kernel/core/aeolus_load.php');
- require(AEOLUS_ROOT.'/kernel/core/aeolus_route.php');
- require(AEOLUS_ROOT.'/kernel/core/aeolus_dispatch.php');
- require(AEOLUS_ROOT.'/kernel/core/factory.php');
+ require(AEOLUS_ROOT.'/kernel/core/a_loaders.php');
+ require(AEOLUS_ROOT.'/kernel/core/a_process.php');
+ require(AEOLUS_ROOT.'/kernel/core/a_launch.php');
+ require(AEOLUS_ROOT.'/kernel/core/a_factories.php');
  
  # Dispatch the HTTP request
- aeolus_dispatch(aeolus_route($_SERVER['REQUEST_URI']));
+ a_launch(a_process($_SERVER['REQUEST_URI']));
 
  #Show debug info if xdebug's enabled
  if( APP_DEBUG && function_exists( 'xdebug_start_trace' ) ){

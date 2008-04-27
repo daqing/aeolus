@@ -1,19 +1,19 @@
 <?php
   /**
-   * Aeolus_route function
+   * Process the URL
    *
    * @param $url string the URL to route
    * @return $result array the routing result
    *
    */
 
-   function aeolus_route($url)
+   function a_process($url)
    {
      # Load valid modules(the $module array)
 	 require( AEOLUS_ROOT.'/conf/app/valid_modules.php' );
 
 	 # Remove the subdirectory part of an URL
-	 $url = substr(strtolower($url),strlen(AEOLUS_OUTPUT)+1);
+	 $url = substr(strtolower($url),strlen(APP_BASEURL)+1);
 	 $url = rtrim($url,'/\\');
 
 	 # Get an array of all segments of an URL

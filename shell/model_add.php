@@ -18,7 +18,7 @@
 	    if( $res = fopen($model_path,'w')){
 		  $content = "<?php\n  /**\n   * ".ucfirst($model)." class in ";
 		  $content .= "'$module' module\n   *\n   */\n\n  class ";
-		  $content .= $model." extends Model\n  {\n\n\n  }\n?>";
+		  $content .= $model." extends AeolusModel\n  {\n\n\n  }\n?>";
 
 		  if( FALSE === fwrite($res,$content) ){
 		    echo "[ERROR] Can't write content $content to file $model_path.\n";

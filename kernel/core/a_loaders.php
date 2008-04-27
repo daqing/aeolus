@@ -1,6 +1,6 @@
 <?php
   /**
-   * Aeolus_load function
+   * Loaders
    *
    * Load PHP file only once
    *
@@ -8,8 +8,8 @@
    * @return void
    *
    */
-
-   function aeolus_load($path)
+   # Load a file, only once
+   function a_load($path)
    {
      if( !isset($GLOBALS['included'][$path]) ){
        clearstatcache();
@@ -18,16 +18,17 @@
 	     $GLOBALS['included'][$path] = true;
 	   }else{
 	     if( APP_DEBUG ){
-	       die( '<h3>[ERROR 404] FILE: '.$path.' NOT FOUND.</h3>' );
+	       echo( '<h3>[ERROR 404] FILE: '.$path.' NOT FOUND.</h3>' );
 		 }else{
-	       die('<h3>[ERROR 404] RESOURCE NOT FOUND.</h3>');
+	       die('<h3>[ERROR 400] BAD REQUEST.</h3>');
 		 }
 	   }
 	 }
    }
-
-   function app_helper_load($module,$helper)
+   
+   # Load a helper function
+   function a_helper_load($module,$helper)
    {
-     aeolus_load( AEOLUS_ROOT."/app/$module/helper/$helper.php" );
+     a_load( AEOLUS_ROOT."/app/$module/helper/$helper.php" );
    }
 ?>

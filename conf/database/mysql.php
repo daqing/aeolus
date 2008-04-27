@@ -18,7 +18,7 @@
      * $Id$
      * 
      */
-
+    
     $mysql['host'] = 'localhost';
     $mysql['database'] = 'test';
     $mysql['user'] = 'test';

@@ -1,6 +1,6 @@
 <?php
     /**
-     * View class
+     * Aeolus View class
      * 
      * @category kernel
      * @author Qingcheng Zhang <kinch.zhang@gmail.com>
@@ -16,7 +16,7 @@
      * 
      */
 
-	class View
+	class AeolusView
 	{
     	/**
     	 * Page title
@@ -37,21 +37,26 @@
     	 * Constructor
     	 *
     	 */
-    	function View($data)
-    	{
-    	  $this->data = $data;
-    	}
+    	function View(){}
         
+		/**
+		 * Set data to render
+		 *
+		 */
+		function set_data($data)
+		{
+		  $this->data = $data;
+		}
+
     	/**
     	 * Render a given template
     	 *
     	 */
-    	function render()
+    	function show()
     	{	
             ob_start();
 			
-			$template = AEOLUS_ROOT.'/pub/theme/'.APP_THEME.'/'.APP_THEME.'.php';
-			require($template);
+			require( AEOLUS_ROOT.'/pub/theme/'.APP_THEME.'/'.APP_THEME.'.php');
 						
 			ob_end_flush();
     	}
@@ -73,11 +78,11 @@
 		  echo APP_SUBDIR.'/pub/js/app/default.js';
 		}
 
-		function render_logo_area()
+		function render_header()
 		{
 		   echo '<div id="message">';
 		   echo '</div>';
-		   echo '<a href="'.AEOLUS_OUTPUT.'/"><img src="'.APP_SUBDIR.'/pub/img/aeolus.gif"';
+		   echo '<a href="'.APP_BASEURL.'/"><img src="'.APP_SUBDIR.'/pub/img/aeolus.gif"';
 		   echo ' alt="Aeolus" /></a>';
 		  
 		}
@@ -98,28 +103,14 @@
         }	
 	
 		# Render spotlight
-		function render_spotlight()
-		{
-		    echo '<strong>Spotlight</strong>';
-		}
+		function render_spotlight(){}
     
-		function render_control()
-		{
-		  echo '<p>This is the control panel'; 
-		}
+		function render_sidebar(){}
+
     	/**
     	 * Render content
     	 *
     	 */
-    	function render_sections()
-    	{
-    	  echo '<div class="section">';
-          echo '<p>This is a section<br/>';
-		  echo 'And the output URL is '. AEOLUS_OUTPUT.'</p>';
-		  if(! $_SESSION['aeolus']['can_rewrite'] ){
-		      echo '<span style="color:red">You don\'t have mod_rewrite enabled or don\'t allow .htaccess file to override the default settings.</span>';
-		  }
-    	  echo '</div>';
-    	}
+    	function render_content(){}
     }
 ?>

@@ -5,7 +5,7 @@
    */
 
   # Debug control
-  define('APP_DEBUG',true);
+  define('APP_DEBUG',false);
 
   # The subdirectory where Aeolus's installed
   define('APP_SUBDIR','/git-repo/aeolus');

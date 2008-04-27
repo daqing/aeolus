@@ -1,6 +1,6 @@
 <?php
     /**
-     * Model class
+     * Aeolus Model class
      * 
      * @category kernel
      * @author Qingcheng Zhang <kinch.zhang@gmail.com>
@@ -15,7 +15,7 @@
      *
      */
 
-	class Model
+	class AeolusModel
 	{
         /**
 		 * Database driver

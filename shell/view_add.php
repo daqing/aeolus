@@ -18,9 +18,9 @@
 	    if( $res = fopen($view_path,'w')){
 		  $content = "<?php\n  /**\n   * ".ucfirst($view)." class in ";
 		  $content .= "'$module' module\n   *\n   */\n\n  class ";
-		  $content .= $view." extends View\n  {\n    function render_spotlight()\n    {\n    }\n";
-		  $content .= "\n    function render_control()\n    {\n    }\n";
-		  $content .= "\n    function render_sections()\n    {\n    }\n\n    function ";
+		  $content .= $view." extends AeolusView\n  {\n    function render_spotlight()\n    {\n    }\n";
+		  $content .= "\n    function render_sidebar()\n    {\n    }\n";
+		  $content .= "\n    function render_content()\n    {\n    }\n\n    function ";
 		  $content .= "render_js()\n    {\n    }\n  }\n?>";
 
 		  if( FALSE === fwrite($res,$content) ){

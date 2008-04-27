@@ -4,7 +4,7 @@
    *
    */
 
-  class Index_Index_Model extends Model
+  class Index_Index_Model extends AeolusModel
   {
 
 

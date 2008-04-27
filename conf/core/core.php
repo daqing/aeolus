@@ -30,11 +30,11 @@
     define('AEOLUS_CAN_REWRITE',false);
   }
 
-  # Base output URL 
+  # Base URL 
   $base = rtrim(APP_SUBDIR,'/\\');
   if( !AEOLUS_CAN_REWRITE ){
     $base .= '/index.php';
   }
-  define('AEOLUS_OUTPUT',$base);
+  define('APP_BASEURL',$base);
 
 ?>

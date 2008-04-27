@@ -5,6 +5,9 @@
    */
   function index()
   {
-    die( '<h3>[ERROR 400] BAD REQUEST. </h3>' );
+    echo( '<h3>[ERROR 400] BAD REQUEST. </h3>' );
+	if( !APP_DEBUG ){
+	  die();
+	}
   }
 ?>

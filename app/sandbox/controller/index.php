@@ -6,11 +6,11 @@
   
   function index()
   {
-    $model = app_model_factory('sandbox','Index_Index_Model');
-	$view = app_view_factory('sandbox','Index_Index_View',$model);
+    $model = a_model_factory('sandbox','Index_Index_Model');
+	$view = a_view_factory('sandbox','IndexIndexView',$model);
     
 	$view->title = 'Sandbox';
-	$view->render();
+	$view->show();
 	
   }
 

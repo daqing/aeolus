@@ -19,7 +19,7 @@
 		  $content = "<?php\n  /**\n   * ".ucfirst($controller)." controller in ";
 		  $content .= "'$module' module\n   *\n   */\n\n  function ";
 		  $content .= "index()\n  {\n    echo 'Hello,world! [From $controller";
-		  $content .= " controller in \'$module\' module]';\n    }\n?>";
+		  $content .= " controller in \'$module\' module]';\n  }\n?>";
 
 		  if( FALSE === fwrite($res,$content) ){
 		    echo "[ERROR] Can't write content $content to file $controller_path.\n";

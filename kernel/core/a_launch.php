@@ -1,6 +1,6 @@
 <?php
   /**
-   * Aeolus_dispatch function
+   * Launch application controllers
    *
    * Dispatch a request to the proper controller
    *
@@ -9,11 +9,11 @@
    *
    */
 
-   function aeolus_dispatch($result)
+   function a_launch($result)
    {
 	 $controller = AEOLUS_ROOT.'/app/'.$result['module'];
 	 $controller.= '/controller/'.$result['controller'].'.php';
-	 aeolus_load($controller);
+	 a_load($controller);
 
 	 # Check if the action function has been defined
 	 if( function_exists($result['action']) ){
@@ -26,11 +26,13 @@
 
 	 }else{
 	   # Fatal error: function doesn't exist
-	   echo '<br/>[ERROR] function \''.$result['action'].'\' not defined ';
-	   echo 'in \''.$result['controller'].'\' controller of ';
-	   echo ' \''.$result['module'].'\' module.';
-	   die();
-	 }
-
+	   if( APP_DEBUG ){
+	     echo '<h3>[ERROR 404] Function \''.$result['action'].'\' NOT';
+	     echo ' DEFINED BY THE \''.$result['controller'].'\' CONTROLLER';
+	     echo ' IN THE \''.$result['module'].'\' MODULE.</h3>';
+	   }else{
+         die('<h3>[ERROR 400] BAD REQUEST.</h3>');
+	   }
+     }
    }
  ?>

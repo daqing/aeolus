@@ -1,4 +1,3 @@
-Welcome to Aeolus framework
-===========================
-
+Welcome To Aeolus Framework
+---------------------------
 See http://code.google.com/p/aeolus for more details
