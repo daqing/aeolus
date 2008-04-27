@@ -9,9 +9,6 @@
 
    function a_process($url)
    {
-     # Load valid modules(the $module array)
-	 require( AEOLUS_ROOT.'/conf/app/valid_modules.php' );
-
 	 # Remove the subdirectory part of an URL
 	 $url = substr(strtolower($url),strlen(APP_BASEURL)+1);
 	 $url = rtrim($url,'/\\');
@@ -23,21 +20,35 @@
 	 $number = count($segment);
 	 
 	 # Set default result as an error one
-	 $result['module'] = 'index';
-	 $result['controller'] = 'error';
+	 $result['module'] = 'error';
+	 $result['controller'] = 'index';
 	 $result['action'] = 'index';
 	 $result['argc'] = 0;
 	 $result['argv'] = array();
      
+	 # Security check
+	 if( strpos($url,'.') ){
+	   return $result;
+	 }
+     
+	 # Continue if the URL is valid
 	 switch($number){
 	   case 1:
 		  # In this case, the first segment must be a valid module
 		  # or, the client is requesting for the home page.
          if( $url == '' || $url == '/' ){
-		   $result['controller'] = 'index';
-		 }elseif( in_array($segment[0],$module) ){
-		   $result['module'] = $segment[0];
-		   $result['controller'] = 'index';
+		   $result['module'] = 'index';
+		 }else{
+		   # First,check if this is a controller in 'index' module
+		   if( a_is_index_ctlr($segment[0]) ){
+		     $result['module'] = 'index';
+		     $result['controller'] = $segment[0];
+		   }else{
+             # check if this a module
+			 if( a_is_module($segment[0])){
+			   $result['module'] = $segment[0];
+			 }
+		   }
 		 }
 
 	     break;
@@ -48,10 +59,10 @@
 		 # call the 'index' function of that controller in that module
 		 # If (B), we'll cal that function of that controller in index
 		 # module.
-		 if( in_array($segment[0],$module) ){
+		 if( a_is_module($segment[0])){
 		   $result['module'] = $segment[0];
 		   $result['controller'] = $segment[1];
-		 }else{
+		 }elseif( a_is_index_ctlr($segment[0])){
 		   $result['controller'] = $segment[0];
 		   $result['action'] = $segment[1];
 		 }
@@ -61,11 +72,11 @@
 	   case 3:
 	     # a '/module/controller/action' type or
 		 # a '/controller/action/arg0' type
-		 if( in_array($segment[0],$module) ){
+		 if( a_is_module($segment[0])){
 		   $result['module'] = $segment[0];
 		   $result['controller'] = $segment[1];
 		   $result['action'] = $segment[2];
-		 }else{
+		 }elseif( a_is_index_ctlr($segment[0])){
 		   $result['controller'] = $segment[0];
 		   $result['action'] = $segment[1];
 		   $result['argc'] = 1;
@@ -77,13 +88,13 @@
 	   case 4:
 	     # a '/module/controller/action/param' type or
 		 # a '/controller/action/arg0/arg1' one
-		 if( in_array($segment[0],$module) ){
+		 if( a_is_module($segment[0]) ){
 		   $result['module'] = $segment[0];
 		   $result['controller'] = $segment[1];
 		   $result['action'] = $segment[2];
 		   $result['argc'] = 1;
 		   $result['argv'][] = $segment[3];
-		 }else{
+		 }elseif( a_is_index_ctlr($segment[0])){
 		   $result['controller'] = $segment[0];
 		   $result['action'] = $segment[1];
 		   $result['argc'] = 2;
@@ -96,7 +107,7 @@
 	   default:
 	     # a '/module/controller/action/arg0/arg1/arg2....' type or
 		 # a '/controller/action/arg0/arg1/arg2....' one
-		 if( in_array($segment[0],$module) ){
+		 if( a_is_module($segment[0]) ){
 		   $result['module'] = $segment[0];
 		   $result['controller'] = $segment[1];
 		   $result['action'] = $segment[2];
@@ -106,7 +117,7 @@
 		     $result['argv'][] = $segment[$i];
 		   }
 
-		 }else{
+		 }elseif( a_is_index_ctlr($segment[0])){
 		   $result['controller'] = $segment[0];
 		   $result['action'] = $segment[1];
 		   $result['argc'] = $number - 2;
@@ -123,4 +134,19 @@
 
 	 return $result;
    }
+
+   # Check if the request segment is a controller in 'index' module
+   function a_is_index_ctlr($ctlr)
+   {
+     clearstatcache();
+     return file_exists( AEOLUS_ROOT."/app/index/controller/$ctlr.php" );
+   }
+
+   # Check if the request segment is a module
+   function a_is_module($module)
+   {
+     clearstatcache();
+     return file_exists( AEOLUS_ROOT."/app/$module" );
+   }
+
 ?>
