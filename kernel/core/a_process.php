@@ -13,12 +13,6 @@
 	 $url = substr(strtolower($url),strlen(APP_BASEURL)+1);
 	 $url = rtrim($url,'/\\');
 
-	 # Get an array of all segments of an URL
-	 $segment = explode('/',$url);
-     
-	 # Start validating the URL based on the number of segments
-	 $number = count($segment);
-	 
 	 # Set default result as an error one
 	 $result['module'] = 'error';
 	 $result['controller'] = 'index';
@@ -26,12 +20,12 @@
 	 $result['argc'] = 0;
 	 $result['argv'] = array();
      
-	 # Security check
-	 if( strpos($url,'.') ){
-	   return $result;
-	 }
+	 # Get an array of all segments of an URL
+	 $segment = explode('/',$url);
      
-	 # Continue if the URL is valid
+	 # Start validating the URL based on the number of segments
+	 $number = count($segment);
+     
 	 switch($number){
 	   case 1:
 		  # In this case, the first segment must be a valid module

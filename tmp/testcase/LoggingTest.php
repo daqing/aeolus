@@ -1,18 +1,11 @@
 <?php
   /**
-   * simpletest controller in 'demo' module
+   * LoggingTest testcase class 
    *
    */
 
   require_once 'SimpleTest/autorun.php';
   require_once 'Log.php';
-  
-  function index()
-  {
-    $test = new LoggingTest();
-	$test->run(new HtmlReporter());
-	die();
-  }
 
   class LoggingTest extends UnitTestCase
   {
@@ -24,4 +17,3 @@
 	  $this->assertTrue(file_exists('/tmp/test.log'));
 	}
   }
-?>

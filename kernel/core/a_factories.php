@@ -49,4 +49,18 @@
       return null;
 	}  
   }
+
+  # Get an instance of a testcase class
+  function a_testcase_factory($testcase)
+  {
+    $path = AEOLUS_ROOT."/tmp/testcase/$testcase.php";
+	
+	a_load($path);
+
+	if( class_exists($testcase) ){
+	  return new $testcase(); 
+	}
+    
+	return null;
+  }
 ?>
