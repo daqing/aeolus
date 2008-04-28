@@ -79,7 +79,7 @@
 		 */
 		function update($sql)
 		{
-		    if($result = $this->driver->query($sql))
+		    if($this->driver->query($sql))
 		    {
 		        $this->data['result'] = true;
 		        $this->data['affected'] = mysql_affected_rows();
@@ -94,7 +94,7 @@
 		 */
 		function delete($sql)
 		{
-		    if($result = $this->driver->query($sql))
+		    if($this->driver->query($sql))
 		    {
 		        $this->data['result'] = true;
 		        $this->data['affected'] = mysql_affected_rows();
@@ -108,19 +108,16 @@
 		 *
 		 */
 		function select($sql)
-		{
-		    if($result = $this->driver->query($sql))
-		    {	        
-		        $this->data['affected'] = mysql_num_rows($result);
+		{			
+		    if($result = $this->driver->query($sql)){	        
+		      $this->data['affected'] = mysql_num_rows($result);
 		        
-		        if( $this->data['affected'] > 0 )
-		        {
-		          $this->data['result'] = true;
-		          while( $dataset = mysql_fetch_assoc($result) )
-		          {
-		            $this->data['set'][] = $dataset;
-		          }
+		      if( $this->data['affected'] > 0 ){
+		        $this->data['result'] = true;
+		        while( $dataset = mysql_fetch_assoc($result) ){
+		          $this->data['set'][] = $dataset;
 		        }
+		      }
 		    }
 		    
 		    return $this->data;

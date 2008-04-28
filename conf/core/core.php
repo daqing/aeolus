@@ -20,8 +20,11 @@
   # Start session
   session_start();
 
-  # Add 'lib' directory to include_path
-  ini_set('include_path',AEOLUS_ROOT.'/lib/'.ini_get('include_path'));
+  # Add 'lib' and 'kernel' directory to include_path
+  $path = AEOLUS_ROOT.'/lib/'.PATH_SEPARATOR;
+  $path .= AEOLUS_ROOT.'/kernel/'.PATH_SEPARATOR;
+  $path .= ini_get('include_path');
+  ini_set('include_path',$path);
 
   # Apache mod_rewrite detecting
   if(isset($_GET['rewrite']) && 1 == $_GET['rewrite'] ){

@@ -52,7 +52,7 @@ img {
 	margin-top:20px;
 	padding:10px 0px 5px 20px;
 	text-align:left;
-    font-size:small;
+    font-size:9pt;
     color:#5762A8;
     border-top:1px solid #EBEBEB;
 }
@@ -76,10 +76,11 @@ label {
 
 ul{
   margin:0px;
+  text-align:left;
+  font-size:10pt;
 }
 
 ul li{
-  list-style-type:none;
-  text-align:left;
-  margin:5px;
+  list-style-type:circle;
+  margin:2px; 
 }

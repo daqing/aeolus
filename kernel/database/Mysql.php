@@ -62,12 +62,11 @@
 			mysql_query("SET CHARACTER SET 'utf8'");
 			mysql_query("SET COLLATION_CONNECTION='utf8_general_ci'");
 			
-			if($result = mysql_query($sql,$this->res))
-			{
-			    return $result;
-			}else{
-			    $this->server_error();
+			if(!$result = mysql_query($sql,$this->res)){
+				$this->server_error();
 			}
+						
+			return $result;
 		}	
 	}
 ?>

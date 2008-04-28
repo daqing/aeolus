@@ -13,12 +13,13 @@
    {
      if( !isset($GLOBALS['included'][$path]) ){
        clearstatcache();
-	   if( file_exists($path) ){
+	   if( file_exists($path) && substr($path,-4,4) == '.php' ){
+	   	 # This is a PHP file so it's safe to include it
 	     require($path);
 	     $GLOBALS['included'][$path] = true;
-	   }else{
+	   }else{	   	 
 	     if( APP_DEBUG ){
-	       echo( '<h3>[ERROR 404] FILE: '.$path.' NOT FOUND.</h3>' );
+	       echo( '<h3>[ERROR 404] FILE: '.$path.' NOT FOUND.</h3>' );	       
 		 }else{
 	       die('<h3>[ERROR 400] BAD REQUEST.</h3>');
 		 }

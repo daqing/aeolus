@@ -38,11 +38,10 @@
   # Get an instance of a kernel class
   function a_kernel_factory($path)
   {
-    $class_path = AEOLUS_ROOT.'/kernel/'.$path;
-	$class = basename($class_path,'.php');
+	$class = basename($path,'.php');
 
 	# Load the class
-	a_load($class_path);
+	a_load($path);
 
 	if( class_exists($class) ){
 	  return new $class();

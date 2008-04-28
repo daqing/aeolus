@@ -15,7 +15,7 @@
     {
 	  echo '<ul>';
 	  echo '<li>Home</li>';
-	  echo '<li><a href="'.APP_BASEURL.'/sandbox/">Sandbox</a></li>';
+	  echo '<li><a href="'.APP_BASEURL.'/demo/">demo</a></li>';
 	  echo '</ul>';
 	}
 
