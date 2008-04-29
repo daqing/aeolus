@@ -7,8 +7,7 @@
   
   function index()
   {
-    $test = a_testcase_factory('LoggingTest');
-	$view = a_view_factory('testcase','IndexIndexView',$test);
+	$view = a_view_factory('testcase','IndexIndexView');
 	
 	$view->title = 'Index';
 	$view->show();

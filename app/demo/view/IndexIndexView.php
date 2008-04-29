@@ -14,7 +14,7 @@
     function render_sidebar()
     {
 	  echo '<ul>';
-	  echo '<li><a href="simpletest">SimpleTest</a></li>';
+	  echo '<li><a href="blog">Blog</a></li>';
 	  echo '</ul>';
     }
 

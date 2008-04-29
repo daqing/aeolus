@@ -8,7 +8,7 @@
   {
     function render_spotlight()
     {
-	  echo 'Simple Test';
+	  echo 'SimpleTest Home';
     }
 
     function render_sidebar()
@@ -21,7 +21,7 @@
 
     function render_content()
     {
-	  $this->data->run(new HtmlReporter());
+	  echo 'We\'re using SimpleTest for unit-testing';
     }
 
     function render_js()
