@@ -1,6 +1,8 @@
 <?php
   /**
-   * Aeolus configuration file
+   * Aeolus init
+   *
+   * @author Kinch Zhang <kinch.zhang@gmail.com>
    *
    */
 
