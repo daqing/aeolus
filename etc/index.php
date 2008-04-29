@@ -3,6 +3,5 @@
    * Deny all access to this directory
    *
    */
-
-  die('Your request is invalid.<br/>System exited.');
+  die('<h3>[ERROR 400] BAD REQUEST.</h3>');
 ?>
