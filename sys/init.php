@@ -1,6 +1,6 @@
 <?php
   /**
-   * Aeolus init
+   * Aeolus init script
    *
    * @author Kinch Zhang <kinch.zhang@gmail.com>
    *
@@ -22,9 +22,9 @@
   # Start session
   session_start();
 
-  # Add 'lib' and 'kernel' directory to include_path
-  $path = AEOLUS_ROOT.'/lib/'.PATH_SEPARATOR;
-  $path .= AEOLUS_ROOT.'/kernel/'.PATH_SEPARATOR;
+  # Add 'opt' and 'sys' directory to the include_path
+  $path = AEOLUS_HOME.'/opt/'.PATH_SEPARATOR;
+  $path .= AEOLUS_HOME.'/sys/'.PATH_SEPARATOR;
   $path .= ini_get('include_path');
   ini_set('include_path',$path);
 
@@ -36,10 +36,10 @@
   }
 
   # Base URL 
-  $base = rtrim(APP_SUBDIR,'/\\');
+  $base = rtrim(APP_SUB,'/\\');
   if( !AEOLUS_CAN_REWRITE ){
     $base .= '/index.php';
   }
-  define('APP_BASEURL',$base);
+  define('APP_BASE',$base);
 
 ?>
