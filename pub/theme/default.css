@@ -7,16 +7,10 @@ html,body {
 	margin:0px;
 	padding:0px;
 	color: #000;
-	min-width:750px;
 }
 
-#citygeneration{
-    height:auto;
-	width:100%;
-	margin:0px;
-	padding:0px;
-	border:0px;
-    background:white;
+table{
+  width:100%;
 }
 
 img {
@@ -24,7 +18,11 @@ img {
 }
 
 #header{
-  border-bottom:2px solid #CCDE97;
+}
+
+#navigator{
+  background: #CCDE97;
+  text-align:center;
 }
 
 #sidebar {
@@ -42,7 +40,7 @@ img {
 	margin:10px 10px 0px 10px;
 }
 
-#spotlight,#content{	
+#notice,#content{	
   background-color: #EFEFEF;
   padding:5px;
   border-bottom:1px solid #CCC;

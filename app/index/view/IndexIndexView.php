@@ -1,35 +1,36 @@
 <?php
   /**
-   * IndexIndexView class in 'index' module
+   * IndexIndexView view class in 'index' module
    *
    */
 
   class IndexIndexView extends AeolusView
   {
-    function render_spotlight()
+    function showNavigator()
     {
-	  echo 'Welcome to Aeolus';
+	  echo 'Navigator';
     }
 
-    function render_sidebar()
+    function showSidebar()
     {
-	  echo '<ul>';
-	  echo '<li>Home</li>';
-	  echo '<li><a href="'.APP_BASE.'/demo/">demo</a></li>';
-	  echo '</ul>';
-	}
-
-
-    function render_content()
-    {
-	  echo '<p>Aeolus is an open-source PHP Web framework ';
-	  echo 'that\'s fast,lightweight and flexible.</p>';
-	  echo '<p>See <a href="http://code.google.com/p/aeolus/">our ';
-	  echo 'homepage</a> for more details.</p>';
+	  echo 'sidebar';
     }
 
-    function render_js()
+    function showNotice()
     {
+	  echo 'Notice';
+    }
+
+    function showContent()
+    {
+	  echo 'content';
+    }
+
+    function showScript()
+    {
+	  ?>
+	  $(function(){});
+	  <?php
     }
   }
 ?>

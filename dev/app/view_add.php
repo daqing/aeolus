@@ -22,7 +22,8 @@
 		  $content .= "\n    function showSidebar()\n    {\n    }\n";
 		  $content .= "\n    function showNotice()\n    {\n    }\n";
 		  $content .= "\n    function showContent()\n    {\n    }\n";
-		  $content .= "\n    functio showScript()\n    {\n    }\n";
+		  $content .= "\n    function showScript()\n    {";
+		  $content .= "\n      ?>\n      <?php\n    }\n";
 		  $content .= "  }\n?>";
 
 		  if( FALSE === fwrite($res,$content) ){
