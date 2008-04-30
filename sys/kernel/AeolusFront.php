@@ -121,11 +121,10 @@
 	private function launch()
 	{
 	  if( 200 == $this->status ){
-	    extract($this->result);
-		if( 'ajax' != $module ){
-		  require( 'kernel/AeolusFactory.php' );
-		}
+		# Load factory methods
+	    require( 'kernel/AeolusFactory.php' );
 
+	    extract($this->result);
 	    $path = AEOLUS_HOME."/app/$module/controller/$controller.php";
 		require( $path );
 		if( function_exists( $action ) ){

@@ -27,7 +27,7 @@
     	 * Constructor
     	 *
     	 */
-    	function View(){}
+    	function __construct(){}
         
 		/**
 		 * Set data for template to use
@@ -46,29 +46,17 @@
     	{	
             ob_start();
 			
-			require( AEOLUS_HOME.'/pub/theme/'.APP_THEME.'/'.APP_THEME.'.php');
+			require( AEOLUS_HOME.'/pub/theme/'.APP_THEME.'.php');
 						
 			ob_end_flush();
     	}
 
-		/**
-		 * Render inlice Javascript
-		 *
-		 */
-	    function render_js(){}
-
-		/**
-		 * render Included javascript file
-		 *
-		 * @param $name name of the javascript file
-		 * @return $path path to the javascript file
-		 */
-		function render_included_js()
+		function showIncludedScript()
 		{
 		  echo APP_SUB.'/pub/script/app/default.js';
 		}
 
-		function render_header()
+		function showHeader()
 		{
 		   echo '<div id="message">';
 		   echo '</div>';
@@ -77,30 +65,30 @@
 		  
 		}
         
-        function render_theme()
+        function showTheme()
         {
-            echo APP_SUB.'/pub/theme/'.APP_THEME.'/'.APP_THEME.'.css';
+            echo APP_SUB.'/pub/theme/'.APP_THEME.'.css';
         }
         
-        function render_jquery()
+        function showJquery()
         {
             echo APP_SUB.'/pub/script/core/jquery-1.2.3.min.js';
         }
         
-        function render_jquery_corner()
+        function showJqueryCorner()
         {
             echo APP_SUB.'/pub/script/core/jquery.corner-1.92.js';
         }	
 	
-		# Render spotlight
-		function render_spotlight(){}
-    
-		function render_sidebar(){}
+	    function showScript(){}
 
-    	/**
-    	 * Render content
-    	 *
-    	 */
-    	function render_content(){}
+		function showNavigator(){}
+
+    
+		function showsidebar(){}
+
+		function showNotice(){}
+
+    	function showContent(){}
     }
 ?>

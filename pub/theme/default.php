@@ -12,40 +12,41 @@
     "http://www.w3.org/tr/xhtml1/DTD/xhtml1-transitional.dtd">
     <html><head>
     <title><?php echo($this->title);?></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<!-- No cache -->
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="Sun, 6 Mar 2005 01:00:00 GMT" />
-    <link href="<?php $this->render_theme();;?>" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="<?php $this->render_jquery();?>"></script>
-    <script type="text/javascript" src="<?php $this->render_jquery_corner();?>"></script>
-    <script type="text/javascript" src="<?php $this->render_included_js();?>"></script>
+    <link href="<?php $this->showTheme();?>" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="<?php $this->showJquery();?>"></script>
+    <script type="text/javascript" src="<?php $this->showJqueryCorner();?>"></script>
+    <script type="text/javascript" src="<?php $this->showIncludedScript();?>"></script>
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <script type="text/javascript"> 
-      <?php $this->render_js();?>               
+      <?php $this->showScript();?> 
     </script>    
     </head>
     
     <body>
-	<table id="citygeneration" width="960" border="0" cellspacing="0" cellpadding="0">
-      <!-- Logo Area -->
+	<table width="960" border="0" cellspacing="0" cellpadding="0">
+      <!-- Header -->
       <tr><td>
-	    <div id="header"><?php $this->render_header();?></div>
+	    <div id="header"><?php $this->showHeader();?></div>
 	  </td></tr>
       
-      <!-- Notification -->
+      <!-- Navigator -->
 	  <tr><td>
-	    <div id="notification" style="display:none;"></div>
+	    <div id="navigator"><?php $this->showNavigator()?></div>
 	  </td></tr>
 
       <tr><td>
       <!-- Main -->
       <div id="main"> 
-        <div id="spotlight"><?php $this->render_spotlight();?></div>
-	    <div id="content"><?php $this->render_content();?></div>
+        <div id="notice"><?php $this->showNotice();?></div>
+	    <div id="content"><?php $this->showContent();?></div>
       </div>           
 
       <!-- sidebar -->
-      <div id="sidebar"><? $this->render_sidebar();?></div>
+      <div id="sidebar"><? $this->showSidebar();?></div>
       </td></tr>
 
       <!-- Footer -->

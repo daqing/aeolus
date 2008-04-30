@@ -17,10 +17,13 @@
 	    if( $res = fopen($view_path,'w')){
 		  $content = "<?php\n  /**\n   * $view view class in ";
 		  $content .= "'$module' module\n   *\n   */\n\n  class ";
-		  $content .= $view." extends AeolusView\n  {\n    function render_spotlight()\n    {\n    }\n";
-		  $content .= "\n    function render_sidebar()\n    {\n    }\n";
-		  $content .= "\n    function render_content()\n    {\n    }\n\n    function ";
-		  $content .= "render_js()\n    {\n    }\n  }\n?>";
+		  $content .= $view." extends AeolusView\n  {";
+		  $content .= "\n    function showNavigator()\n    {\n    }\n";
+		  $content .= "\n    function showSidebar()\n    {\n    }\n";
+		  $content .= "\n    function showNotice()\n    {\n    }\n";
+		  $content .= "\n    function showContent()\n    {\n    }\n";
+		  $content .= "\n    functio showScript()\n    {\n    }\n";
+		  $content .= "  }\n?>";
 
 		  if( FALSE === fwrite($res,$content) ){
 		    echo "[ERROR] Can't write content $content to file $view_path.\n";
