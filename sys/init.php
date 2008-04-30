@@ -42,7 +42,4 @@
   }
   define('APP_BASE',$base);
   
-  # Load factory class
-  require 'kernel/AeolusFactory.php';
-
 ?>

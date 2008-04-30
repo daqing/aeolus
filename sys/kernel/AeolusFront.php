@@ -49,14 +49,14 @@
 	}
 
 	/**
-	 * Start the application
+	 * Run the application
 	 *
 	 * @access public
 	 * @param void
 	 * @return void
 	 *
 	 */
-	public function start()
+	public function run()
 	{
 	  $this->process();
 	  $this->launch();
@@ -89,23 +89,23 @@
       
 	  switch($size){
 	   case 1:	   
-		 $this->parseSizeOne();
+		 require( 'AeolusRouterOne.php' );
 	     break;
 
 	   case 2:
-	     $this->parseSizeTwo();
+	     require( 'AeolusRouterTwo.php' );
 		 break;
 
 	   case 3:
-	     $this->parseSizeThree();
+		 require( 'AeolusRouterThree.php' );
 	     break;
 
 	   case 4:
-	     $this->parseSizeFour();
+		 require( 'AeolusRouterFour.php' );
 		 break;
 
 	   default:
-	     $this->parseSizeDefault($size);
+		 require( 'AeolusRouterDefault.php' );
 	     break;
 	  }	 
     }
@@ -120,18 +120,14 @@
 	 */
 	private function launch()
 	{
-	  /*
-	  echo '<br/><br/>Request: ';
-	  var_dump($this->request);
-	  echo 'Result: ';
-	  var_dump($this->result);
-	  echo 'Status ';
-	  var_dump($this->status);
-      */
 	  if( 200 == $this->status ){
 	    extract($this->result);
+		if( 'ajax' != $module ){
+		  require( 'kernel/AeolusFactory.php' );
+		}
+
 	    $path = AEOLUS_HOME."/app/$module/controller/$controller.php";
-		AeolusFactory::loadOnce($path);
+		require( $path );
 		if( function_exists( $action ) ){
 		  if( $this->result['argc'] > 0 ){
 		    $action($this->result['argv']);
@@ -146,196 +142,6 @@
 	    $this->showError();
 	  }
 	}
-	
-	/**
-     * Parse the one-size command
-     * 
-     * @access private
-     * @param void
-     * @return void
-     * 
-     */
-	private function parseSizeOne()
-	{
-	  $cmd = $this->cmd;
-	  if( $cmd[0] != '' ){
-		   # First, check if it's a module
-           if( $this->isModule($cmd[0]) ){
-		     $this->result['module'] = $cmd[0];
-			 return;
-		   }
-
-           # Then, chekc if it's a controller in 'index' module
-		   if( $this->hasController('index',$cmd[0])){
-		       $this->result['controller'] = $cmd[0];
-			   return;
-		   }else{
-               # Neither a module, nor a controller in 'index' module
-		       $this->status= 401;
-		   }
-		 }
-	
-	 }
-	 
-	 /**
-      * Parse the two-size command
-      * 
-      * @access private
-      * @param void
-      * @return void
-      * 
-      */
-	 private function parseSizeTwo()
-	 {
-	   $cmd = $this->cmd;
-	   # First, check if it's a module
-       if( $this->isModule($cmd[0])){ 
-         # Check if the controller exists in this module
-         if($this->hasController($cmd[0],$cmd[1]) ){
-           $this->result['module'] = $cmd[0];
-           $this->result['controller'] = $cmd[1];
-           return;
-         }else{
-           # Controller not exists in this module
-           $this->status= 402;
-           return;
-         }
-       }
-
-       # Then,check if it's a controller in 'index' module
-       if( $this->hasController('index',$cmd[0]) ){
-         $this->result['controller'] = $cmd[0];
-         $this->result['action'] = $cmd[1];
-         return;
-       }else{
-         # Controller not exists in 'index' module
-         $this->status = 403;
-       }
-	 }
-	 
-	 /**
-      * Parse three-size command
-      * 
-      * @access private
-      * @param void
-      * @return void
-      * 
-      */
-	 private function parseSizeThree()
-	 {
-	   $cmd = $this->cmd;
-	   # First, check if it's a module
-	   if( $this->isModule($cmd[0])){
-	     if( $this->hasController($cmd[0],$cmd[1])){
-	       $this->result['module'] = $cmd[0];
-	       $this->result['controller'] = $cmd[1];
-	       $this->result['action'] = $cmd[2];
-	       return;
-	     }else{
-	       # Controller not exists in this module
-	       $this->status = 402;
-	     }
-	   }
-	   
-	   # Then, check if it's a controller in 'index' module
-	   if( $this->hasController('index',$cmd[0])){
-	     $this->result['controller'] = $cmd[0];
-	     $this->result['action'] = $cmd[1];
-	     $this->result['argc'] = 1;
-	     $this->result['argv'][] = $cmd[2];
-	     return;
-	   }else{
-	     # Controller not exists in 'index' module
-         $this->status = 403;
-	   }
-	 }
-	 
-	 /**
-      * Parse four-size command
-      * 
-      * @access private
-      * @param void
-      * @return void
-      * 
-      */
-	 private function parseSizeFour()
-	 {
-	   $cmd = $this->cmd;
-	   # First, check if it's a module
-       if( $this->isModule($cmd[0])){
-         if( $this->hasController($cmd[0],$cmd[1])){
-           $this->result['module'] = $cmd[0];
-           $this->result['controller'] = $cmd[1];
-           $this->result['action'] = $cmd[2];
-           $this->result['argc'] = 1;
-           $this->result['argv'][] = $cmd[3];
-           return;
-         }else{
-           # Controller not exists in this module
-           $this->status = 402;
-         }
-       }
-       
-       # Then, check if it's a controller in 'index' module
-       if( $this->hasController('index',$cmd[0])){
-         $this->result['controller'] = $cmd[0];
-         $this->result['action'] = $cmd[1];
-         $this->result['argc'] = 2;
-         $this->result['argv'][] = $cmd[2];
-         $this->result['argv'][] = $cmd[3];
-         return;
-       }else{
-         # Controller not exists in 'index' module
-         $this->status = 403;
-       }
-	 }
-	 
-	 /**
-      * Parse default-size command
-      * 
-      * @access private      
-      * @param int $size the size of the command array
-      * @return void
-      *
-      */
-	 private function parseSizeDefault($size)
-	 {
-	   $cmd = $this->cmd;
-	   # First, check if it's a module
-       if( $this->isModule($cmd[0])){
-         if( $this->hasController($cmd[0],$cmd[1])){
-           $this->result['module'] = $cmd[0];
-           $this->result['controller'] = $cmd[1];
-           $this->result['action'] = $cmd[2];
-           $this->result['argc'] = $size - 3;
-           
-           for( $i=3; $i<$size; $i++ ){
-             $this->result['argv'][] = $cmd[$i];
-           }
-           return;
-         }else{
-           # Controller not exists in this module
-           $this->status = 402;
-         }
-       }
-       
-       # Then, check if it's a controller in 'index' module
-       if( $this->hasController('index',$cmd[0])){
-         $this->result['controller'] = $cmd[0];
-         $this->result['action'] = $cmd[1];
-         $this->result['argc'] = $size - 2;
-         
-         for( $i=2; $i<$size; $i++ ){
-           $this->result['argv'][] = $cmd[$i];
-         }
-         return;
-       }else{
-         # Controller not exists in 'index' module
-         $this->status = 403;
-       }
-	 }
-      
-	
 
 	/**
 	 * Check if the module exists

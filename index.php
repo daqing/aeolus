@@ -18,7 +18,7 @@
  require( 'kernel/AeolusFront.php' );
 
  $front = new AeolusFront();
- $front->start();
+ $front->run();
 
  #Show debug trace if xdebug's enabled
  if( APP_DEBUG && function_exists( 'xdebug_start_trace' ) ){
