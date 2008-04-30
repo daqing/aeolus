@@ -1,18 +1,8 @@
 <?php
     /**
-     * Aeolus View class
+     * AeolusView class
      * 
-     * @category kernel
      * @author Qingcheng Zhang <kinch.zhang@gmail.com>
-     * @copyright Copyright (c) 2008-2009, CityGeneration, Inc. (http://www.citygeneration.com)
-     * 
-     * Subversion keywords
-     * 
-     * $LastChangedDate$
-     * $LastChangedBy$
-     * $LastChangedRevision$
-     * $URL$
-     * $Id$
      * 
      */
 
@@ -40,10 +30,10 @@
     	function View(){}
         
 		/**
-		 * Set data to render
+		 * Set data for template to use
 		 *
 		 */
-		function set_data($data)
+		function setData($data)
 		{
 		  $this->data = $data;
 		}
@@ -56,7 +46,7 @@
     	{	
             ob_start();
 			
-			require( AEOLUS_ROOT.'/pub/theme/'.APP_THEME.'/'.APP_THEME.'.php');
+			require( AEOLUS_HOME.'/pub/theme/'.APP_THEME.'/'.APP_THEME.'.php');
 						
 			ob_end_flush();
     	}
@@ -75,31 +65,31 @@
 		 */
 		function render_included_js()
 		{
-		  echo APP_SUBDIR.'/pub/js/app/default.js';
+		  echo APP_SUB.'/pub/js/app/default.js';
 		}
 
 		function render_header()
 		{
 		   echo '<div id="message">';
 		   echo '</div>';
-		   echo '<a href="'.APP_BASEURL.'/"><img src="'.APP_SUBDIR.'/pub/img/aeolus.gif"';
+		   echo '<a href="'.APP_BASE.'/"><img src="'.APP_SUB.'/pub/image/aeolus.gif"';
 		   echo ' alt="Aeolus" /></a>';
 		  
 		}
         
         function render_theme()
         {
-            echo APP_SUBDIR.'/pub/theme/'.APP_THEME.'/'.APP_THEME.'.css';
+            echo APP_SUB.'/pub/theme/'.APP_THEME.'/'.APP_THEME.'.css';
         }
         
         function render_jquery()
         {
-            echo APP_SUBDIR.'/pub/js/core/jquery-1.2.3.min.js';
+            echo APP_SUB.'/pub/js/core/jquery-1.2.3.min.js';
         }
         
         function render_jquery_corner()
         {
-            echo APP_SUBDIR.'/pub/js/core/jquery.corner-1.92.js';
+            echo APP_SUB.'/pub/js/core/jquery.corner-1.92.js';
         }	
 	
 		# Render spotlight

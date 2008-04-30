@@ -21,6 +21,7 @@
     function render_content()
     {
 	  echo '<p>Here you can find some demo apps</p>';
+	  var_dump($this->data);
     }
 
     function render_js()

@@ -1,135 +1,133 @@
 <?php
+  /**
+   * Aeolus Model class
+   * 
+   * @category kernel
+   * @author Kinch Zhang <kinch.zhang@gmail.com>
+   *
+   */
+
+  class AeolusModel
+  {
     /**
-     * Aeolus Model class
-     * 
-     * @category kernel
-     * @author Qingcheng Zhang <kinch.zhang@gmail.com>
-     * @copyright Copyright (c) 2008-2009, CityGeneration, Inc. (http://www.citygeneration.com)
-     * 
-     * Subversion Keywords
-     * 
-     * $LastChangedBy$
-     * $LastChangedRevision$
-     * $URL$
-     * $Id$
-     *
-     */
+	 * Database driver
+	 *
+	 * @access private
+	 *
+	 */
+    private $driver;
 
-	class AeolusModel
+	/**
+	 * Data set
+	 *
+	 * @access private
+	 *
+	 */
+	private $data;
+	
+	/**
+	 * Constructor
+	 *
+	 */
+	function __construct($driver='mysql')
 	{
-        /**
-		 * Database driver
-		 *
-		 */
-		var $driver = null;
-		
-		/**
-    	 * Cache object
-    	 *
-    	 */
-    	var $cache = null;
-		
-		/**
-		 * Constructor
-		 *
-		 */
-		function Model($driver='mysql')
-		{
-		    if( 'mysql' == $driver )
-			{
-			    aeolus_load(AEOLUS_ROOT.'/kernel/database/Mysql.php');
-				$this->driver = new Mysql();
-				$this->data = array(
-				    'result' => false,
-				    'affected' => 0,
-				    'lastInsertId' => null,
-				    'set' => array()
-				);			
-			}
-			
-			require_once(AEOLUS_ROOT.'/kernel/cache/FileCache.php');
-    	    
-    	    if( !$this->cache )
-    	    {
-    	        $this->cache = new FileCache(300);
-    	    }
-		}
-
-		/**
-		 * Insert data to database
-		 *
-		 */
-		function insert($sql)
-		{
-		    $result = $this->driver->query($sql);
-		    
-		    if($result)
-		    {
-		        $this->data['result'] = true;
-		        $this->data['affected'] = mysql_affected_rows();
-		        $this->data['lastInsertId'] = mysql_insert_id();
-		    }
-		    
-		    return $this->data;
-		}
-		
-		/**
-		 * Update database tables
-		 *
-		 */
-		function update($sql)
-		{
-		    if($this->driver->query($sql))
-		    {
-		        $this->data['result'] = true;
-		        $this->data['affected'] = mysql_affected_rows();
-		    }
-		    
-		    return $this->data;
-		}
-		
-		/**
-		 * Delete data from database tables
-		 *
-		 */
-		function delete($sql)
-		{
-		    if($this->driver->query($sql))
-		    {
-		        $this->data['result'] = true;
-		        $this->data['affected'] = mysql_affected_rows();
-		    }
-		    
-		    return $this->data;
-		}
-		
-		/**
-		 * Select data from database
-		 *
-		 */
-		function select($sql)
-		{			
-		    if($result = $this->driver->query($sql)){	        
-		      $this->data['affected'] = mysql_num_rows($result);
-		        
-		      if( $this->data['affected'] > 0 ){
-		        $this->data['result'] = true;
-		        while( $dataset = mysql_fetch_assoc($result) ){
-		          $this->data['set'][] = $dataset;
-		        }
-		      }
-		    }
-		    
-		    return $this->data;
-		}
-		
-		/**
-		 * Escape a variable
-		 * 
-		 */
-		function escape($v)
-		{
-		  return mysql_real_escape_string($v,$this->driver->res);
-		}	
+	  $class = ucfirst($driver);
+      AeolusFactory::loadOnce( "database/$class.php");
+	  $this->driver = new $class();
+	  $this->data = array( 'result' => false,
+	                       'affected' => 0,
+						   'lastInsertId' => 0,
+						   'set' => array()
+						  );
 	}
+
+	/**
+	 * Insert data to database
+	 *
+	 */
+	public function insert($sql)
+	{
+	  $result = $this->driver->query($sql);
+	  
+	  if($result){
+	    $this->data['result'] = true;
+	    $this->data['affected'] = mysql_affected_rows();
+	    $this->data['lastInsertId'] = mysql_insert_id();
+	  }
+	  
+	  return $this->data;
+	}
+	
+	/**
+	 * Update database tables
+	 *
+	 * @access public
+	 * @param string $sql SQL query string
+	 * @return array $data the result array
+	 *
+	 */
+	public function update($sql)
+	{
+	  if($this->driver->query($sql)){
+        $this->data['result'] = true;
+	    $this->data['affected'] = mysql_affected_rows();
+	  }
+	  
+	  return $this->data;
+	}
+	
+	/**
+	 * Delete data from database tables
+	 *
+	 * @access public
+	 * @param string $sql SQL query string
+	 * @return array $data the result data
+	 *
+	 */
+	public function delete($sql)
+	{
+	  if($this->driver->query($sql)){
+        $this->data['result'] = true;
+	    $this->data['affected'] = mysql_affected_rows();
+	  }
+	  
+	  return $this->data;
+	}
+	
+	/**
+	 * Select data from database
+	 *
+	 * @access public
+	 * @param string $sql SQL query string
+	 * @return array $data the result data
+	 *
+	 */
+	public function select($sql)
+	{			
+	  if($result = $this->driver->query($sql)){	        
+	    $this->data['affected'] = mysql_num_rows($result);
+	      
+	    if( $this->data['affected'] > 0 ){
+	      $this->data['result'] = true;
+	      while( $dataset = mysql_fetch_assoc($result) ){
+	        $this->data['set'][] = $dataset;
+	      }
+	    }
+	  }
+	  
+	  return $this->data;
+	}
+	
+	/**
+	 * Escape a variable
+	 * 
+	 * @access private
+	 * @param string $value the string to be escaped
+	 *
+	 */
+	private function escape($value)
+	{
+	  return mysql_real_escape_string($value,$this->driver->res);
+	}	
+  }
 ?>

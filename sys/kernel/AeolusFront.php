@@ -15,6 +15,12 @@
 	 *
 	 */
 	private $request;
+	
+	/**
+     * The command to process
+     * 
+     */
+	private $cmd;
 
 	/**
 	 * Processing result
@@ -37,6 +43,7 @@
 	function __construct()
 	{
 	  $this->request = strtolower($_SERVER['REQUEST_URI']);
+	  $this->cmd = null;
 	  $this->result = array();
 	  $this->status= 200;
 	}
@@ -66,11 +73,10 @@
 	private function process()
 	{
 	  # Remove the base url from the request
-	  $cmd = substr($this->request,strlen(APP_BASE));
-	  $cmd = trim($cmd,'/\\');
-	  $cmd = explode('/',$cmd);
-	  echo 'Command: ';
-      var_dump($cmd);
+	  $this->cmd = substr($this->request,strlen(APP_BASE));
+	  $this->cmd = trim($this->cmd,'/\\');
+	  $this->cmd = explode('/',$this->cmd);
+	  
 	  # Init.
 	  $this->result['module'] = 'index';
 	  $this->result['controller'] = 'index';
@@ -79,27 +85,27 @@
 	  $this->result['argv'] = array();
 	  
 	  # Process the command according to its size
-	  $size = count($cmd);
-      echo "Size: $size";
+	  $size = count($this->cmd);
+      
 	  switch($size){
 	   case 1:	   
-		 $this->parseSizeOne($cmd);
+		 $this->parseSizeOne();
 	     break;
 
 	   case 2:
-	     $this->parseSizeTwo($cmd);
+	     $this->parseSizeTwo();
 		 break;
 
 	   case 3:
-	     $this->parseSizeThree($cmd);
+	     $this->parseSizeThree();
 	     break;
 
 	   case 4:
-	     $this->parseSizeFour($cmd);
+	     $this->parseSizeFour();
 		 break;
 
 	   default:
-	     $this->parseSizeDefault($cmd,$size);
+	     $this->parseSizeDefault($size);
 	     break;
 	  }	 
     }
@@ -114,24 +120,44 @@
 	 */
 	private function launch()
 	{
+	  /*
 	  echo '<br/><br/>Request: ';
 	  var_dump($this->request);
 	  echo 'Result: ';
 	  var_dump($this->result);
 	  echo 'Status ';
 	  var_dump($this->status);
+      */
+	  if( 200 == $this->status ){
+	    extract($this->result);
+	    $path = AEOLUS_HOME."/app/$module/controller/$controller.php";
+		AeolusFactory::loadOnce($path);
+		if( function_exists( $action ) ){
+		  if( $this->result['argc'] > 0 ){
+		    $action($this->result['argv']);
+		  }else{
+		    $action();
+		  }
+		}else{
+		  $this->status = 403;
+		  $this->showError();
+		}
+	  }else{
+	    $this->showError();
+	  }
 	}
 	
 	/**
      * Parse the one-size command
      * 
      * @access private
-     * @param array $cmd the command array
+     * @param void
      * @return void
      * 
      */
-	private function parseSizeOne($cmd)
+	private function parseSizeOne()
 	{
+	  $cmd = $this->cmd;
 	  if( $cmd[0] != '' ){
 		   # First, check if it's a module
            if( $this->isModule($cmd[0]) ){
@@ -155,12 +181,13 @@
       * Parse the two-size command
       * 
       * @access private
-      * @param array $cmd the command array
+      * @param void
       * @return void
       * 
       */
-	 private function parseSizeTwo($cmd)
+	 private function parseSizeTwo()
 	 {
+	   $cmd = $this->cmd;
 	   # First, check if it's a module
        if( $this->isModule($cmd[0])){ 
          # Check if the controller exists in this module
@@ -190,12 +217,13 @@
       * Parse three-size command
       * 
       * @access private
-      * @param array $cmd the command array
+      * @param void
       * @return void
       * 
       */
-	 private function parseSizeThree($cmd)
+	 private function parseSizeThree()
 	 {
+	   $cmd = $this->cmd;
 	   # First, check if it's a module
 	   if( $this->isModule($cmd[0])){
 	     if( $this->hasController($cmd[0],$cmd[1])){
@@ -226,12 +254,13 @@
       * Parse four-size command
       * 
       * @access private
-      * @param array $cmd the command array
+      * @param void
       * @return void
       * 
       */
-	 private function parseSizeFour($cmd)
+	 private function parseSizeFour()
 	 {
+	   $cmd = $this->cmd;
 	   # First, check if it's a module
        if( $this->isModule($cmd[0])){
          if( $this->hasController($cmd[0],$cmd[1])){
@@ -264,14 +293,14 @@
 	 /**
       * Parse default-size command
       * 
-      * @access private
-      * @param array $cmd the command array
+      * @access private      
       * @param int $size the size of the command array
       * @return void
       *
       */
-	 private function parseSizeDefault($cmd,$size)
+	 private function parseSizeDefault($size)
 	 {
+	   $cmd = $this->cmd;
 	   # First, check if it's a module
        if( $this->isModule($cmd[0])){
          if( $this->hasController($cmd[0],$cmd[1])){
@@ -337,6 +366,46 @@
 	  clearstatcache();
 	  $path = AEOLUS_HOME."/app/$module/controller/$controller.php";
 	  return file_exists( $path );
+	}
+
+	/**
+	 * Show errors accound to the status code
+	 *
+	 * @access private
+	 * @param void
+	 * @return void
+	 *
+	 */
+	private function showError()
+	{
+	  if( APP_DEBUG ){
+        switch( $this->status ){
+		  case 401:
+		    $error = '<h3>[ERROR 401] \''.$this->cmd[0];
+			$error .= '\' IS NEITHER A MODULE NOR A CONTROLLER ';
+			$error .= 'IN THE \'index\' MODULE</h3>';
+			echo $error;
+			break;
+		  
+		  case 402:
+		    $error = '<h3>[ERROR 402] CONTROLLER \''.$this->cmd[1];
+			$error .= '\' NOT FOUND IN THE \''.$this->cmd[0];
+			$error .= '\' MODULE</h3>';
+			echo $error;
+			break;
+		  
+		  case 403:
+		    $error = '<h3>[ERROR 403] FUNCTION \''.$this->cmd[2];
+			$error .= '\' NOT DEFINED IN \''.AEOLUS_HOME.'/app/';
+			$error .= $this->cmd[0].'/controller/';
+			$error .= $this->cmd[1].'.php\'</h3>';
+			echo $error;
+			break;
+		}
+
+	  }else{
+	    die('<h3>[ERROR 400] BAD REQUEST.</h3>');
+	  }
 	}
   }
 
