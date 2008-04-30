@@ -1,6 +1,5 @@
 Core Features
 -------------
-(A) Upgrade to PHP 5.2.0 syntax
 (A) Implement SimpleCache
 (A) Add PHPUnit support (http://www.phpunit.de)
 (B) Add PHing support (http://phing.info)

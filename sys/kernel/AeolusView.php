@@ -65,7 +65,7 @@
 		 */
 		function render_included_js()
 		{
-		  echo APP_SUB.'/pub/js/app/default.js';
+		  echo APP_SUB.'/pub/script/app/default.js';
 		}
 
 		function render_header()
@@ -84,12 +84,12 @@
         
         function render_jquery()
         {
-            echo APP_SUB.'/pub/js/core/jquery-1.2.3.min.js';
+            echo APP_SUB.'/pub/script/core/jquery-1.2.3.min.js';
         }
         
         function render_jquery_corner()
         {
-            echo APP_SUB.'/pub/js/core/jquery.corner-1.92.js';
+            echo APP_SUB.'/pub/script/core/jquery.corner-1.92.js';
         }	
 	
 		# Render spotlight
