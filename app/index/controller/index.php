@@ -1,15 +1,14 @@
-<?php
-    /**
-	 * Index controller in 'index' module
-	 *
-	 */
-    function index()
-	{
-	  #echo 'Hello,Aeolus Framework !';
-	  $view = AeolusFactory::makeView('index','IndexIndexView');
+<?php if(! defined('APP_STARTED')){die('<h3>BAD REQUEST.</h3>');}
+  /**
+   * index controller in 'index' module
+   *
+   */
 
-	  $view->title = 'Index';
-	  $view->show();
-	}	
+  function index()
+  {
+    $view = AeolusFactory::makeView('index','IndexIndexView');
 
+	$view->title = 'index';
+	$view->show();
+  }
 ?>

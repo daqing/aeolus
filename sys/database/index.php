@@ -4,5 +4,5 @@
    *
    */
 
-  die('Your request is invalid.<br/>System exited.');
+  die('<h3>BAD REQUEST.</h3>');
 ?>

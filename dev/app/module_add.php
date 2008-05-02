@@ -12,15 +12,17 @@
   }else{
     for($i=1;$i<$argc;$i++){
 	  clearstatcache();
-	  $path = AEOLUS_ROOT."/app/$argv[$i]";
+	  $path = AEOLUS_HOME."/app/$argv[$i]";
+	  $index = AEOLUS_HOME."/app/index.php";
 	  if(! file_exists( $path )){
 	    @mkdir( $path );
 		@mkdir( $path.'/controller' );
 		@mkdir( $path.'/model' );
 		@mkdir( $path.'/view' );
 		@mkdir( $path.'/helper' );
+		@copy($index,$path.'/index.php');
 	  }else{
-	    foreach( array('controller','view','view','helper') as $v ){
+	    foreach( array('controller','view','model','helper') as $v ){
 		  if(! file_exists( $path."/$v" )){
 		    @mkdir( $path."/$v" );
 		  }

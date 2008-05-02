@@ -1,4 +1,5 @@
-<?php
+<?php if(! defined('APP_STARTED')){die('<h3>BAD REQUEST.</h3>');}
+     
   /**
    * IndexIndexView view class in 'demo' module
    *
@@ -8,30 +9,19 @@
   {
     function showNavigator()
     {
-	  echo 'Navigator';
     }
 
     function showSidebar()
     {
-	  echo 'sidebar';
-    }
-
-    function showNotice()
-    {
-	  echo 'Notice';
     }
 
     function showContent()
     {
-	  echo 'content';
     }
 
     function showScript()
     {
       ?>
-	  $(function(){
-        alert('demo');
-	  });
       <?php
     }
   }

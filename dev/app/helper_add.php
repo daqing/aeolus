@@ -16,7 +16,8 @@
 	if( file_exists( $module_path ) && is_writable($module_path) ){
 	  if(! file_exists($helper_path)){
 	    if( $res = fopen($helper_path,'w')){
-		  $content = "<?php\n  /**\n   * ".ucfirst($helper)." helper function in ";
+		  $content = "<?php if(! defined('APP_STARTED')){die('<h3>BAD REQUEST.</h3>');}";
+		  $content .= "\n  /**\n   * ".ucfirst($helper)." helper function in ";
 		  $content .= "'$module' module\n   *\n   */\n\n  function ";
 		  $content .= $helper."()\n  {\n    ?>\n    <div>Change Me!</div>";
 		  $content .= "\n    <?php\n  }\n?>";

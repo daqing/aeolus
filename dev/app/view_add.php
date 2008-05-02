@@ -10,17 +10,17 @@
 
     require '../init.php';
 	 
-	$module_path = AEOLUS_ROOT.'/app/'.$module;
-	$view_path = AEOLUS_ROOT.'/app/'.$module.'/view/'.$view.'.php';
+	$module_path = AEOLUS_HOME.'/app/'.$module;
+	$view_path = AEOLUS_HOME.'/app/'.$module.'/view/'.$view.'.php';
 	if( file_exists( $module_path ) && is_writable($module_path) ){
 	  if(! file_exists($view_path)){
 	    if( $res = fopen($view_path,'w')){
-		  $content = "<?php\n  /**\n   * $view view class in ";
+		  $content = "<?php if(! defined('APP_STARTED')){die('<h3>BAD REQUEST.</h3>');}";
+		  $content .= "\n     \n  /**\n   * $view view class in ";
 		  $content .= "'$module' module\n   *\n   */\n\n  class ";
 		  $content .= $view." extends AeolusView\n  {";
 		  $content .= "\n    function showNavigator()\n    {\n    }\n";
 		  $content .= "\n    function showSidebar()\n    {\n    }\n";
-		  $content .= "\n    function showNotice()\n    {\n    }\n";
 		  $content .= "\n    function showContent()\n    {\n    }\n";
 		  $content .= "\n    function showScript()\n    {";
 		  $content .= "\n      ?>\n      <?php\n    }\n";

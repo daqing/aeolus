@@ -10,12 +10,13 @@
 
     require '../init.php';
 
-	$module_path = AEOLUS_ROOT.'/app/'.$module;
-	$model_path = AEOLUS_ROOT.'/app/'.$module.'/model/'.$model.'.php';
+	$module_path = AEOLUS_HOME.'/app/'.$module;
+	$model_path = AEOLUS_HOME.'/app/'.$module.'/model/'.$model.'.php';
 	if( file_exists( $module_path ) && is_writable($module_path) ){
 	  if(! file_exists($model_path)){
 	    if( $res = fopen($model_path,'w')){
-		  $content = "<?php\n  /**\n   * $model model class in ";
+		  $content = "<?php if(! defined('APP_STARTED')){die('<h3>BAD REQUEST.</h3>');}";
+		  $content .= "\n  /**\n   * $model model class in ";
 		  $content .= "'$module' module\n   *\n   */\n\n  class ";
 		  $content .= $model." extends AeolusModel\n  {\n\n\n  }\n?>";
 

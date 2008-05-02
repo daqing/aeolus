@@ -1,4 +1,4 @@
-<?php
+<?php if(! defined('APP_STARTED')){ die('<h3>BAD REQUEST.</h3>');}
   /**
    * AeolusFront class
    *
@@ -209,7 +209,7 @@
 		}
 
 	  }else{
-	    die('<h3>[ERROR 400] BAD REQUEST.</h3>');
+	    die('<h3>BAD REQUEST.</h3>');
 	  }
 	}
   }

@@ -11,12 +11,13 @@
     
 	require '../init.php';
 
-	$module_path = AEOLUS_ROOT.'/app/'.$module;
-	$controller_path = AEOLUS_ROOT.'/app/'.$module.'/controller/'.$controller.'.php';
+	$module_path = AEOLUS_HOME.'/app/'.$module;
+	$controller_path = AEOLUS_HOME.'/app/'.$module.'/controller/'.$controller.'.php';
 	if( file_exists( $module_path ) && is_writable($module_path) ){
 	  if(! file_exists($controller_path)){
 	    if( $res = fopen($controller_path,'w')){
-		  $content = "<?php\n  /**\n   * $controller controller in ";
+		  $content = "<?php if(! defined('APP_STARTED')){die('<h3>BAD REQUEST.</h3>');}";
+		  $content .= "\n  /**\n   * $controller controller in ";
 		  $content .= "'$module' module\n   *\n   */\n\n  function ";
 		  $content .= "index()\n  {\n    echo 'Hello,world! [From $controller";
 		  $content .= " controller in \'$module\' module]';\n  }\n?>";

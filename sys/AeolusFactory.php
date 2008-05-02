@@ -1,4 +1,4 @@
-<?php
+<?php if(! defined('APP_STARTED')){die('<h3>BAD REQUEST.</h3>');}
   /**
    * AeolusFactory class
    * 
@@ -28,7 +28,7 @@
           if( APP_DEBUG ){
             echo("<h3>[FATAL ERROR] THE FILE: '$path' is not a PHP file.</h3>");
           }else{
-            die('<h3>[ERROR 400] BAD REQUEST.</h3>');
+            die('<h3>BAD REQUEST.</h3>');
           }
         }        
       }
