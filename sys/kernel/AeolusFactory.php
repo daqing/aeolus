@@ -46,6 +46,7 @@
     public function loadHelper($module,$helper)
     {
       $path = AEOLUS_HOME."/app/$module/helper/$helper.php";
+	  if( APP_DEBUG ){clearstatcache();}
       if( file_exists($path)){
         self::loadOnce($path);        
       }
@@ -65,8 +66,10 @@
     public function makeView($module, $view, $data=null)
     {
       $path = AEOLUS_HOME."/app/$module/view/$view.php";
-      
+      if( APP_DEBUG ){clearstatcache();}
+
       $obj = null;
+	  
       if( file_exists($path)){
         self::loadOnce('kernel/AeolusView.php');
         self::loadOnce($path);
@@ -92,8 +95,10 @@
     public function makeModel($module, $model)
     {
       $path = AEOLUS_HOME."/app/$module/model/$model.php";
-      
+      if( APP_DEBUG ){clearstatcache();}
+
       $obj = null;
+
       if( file_exists($path)){
         self::loadOnce('AeolusModel.php');
         self::loadOnce($path);

@@ -152,7 +152,7 @@
 	 */
 	private function isModule($module)
 	{
-	  clearstatcache();
+	  if( APP_DEBUG ){clearstatcache();}
 	  $path = AEOLUS_HOME."/app/$module";
 	  return file_exists( $path );
 	}
@@ -168,7 +168,7 @@
 	 */
 	private function hasController($module,$controller)
 	{
-	  clearstatcache();
+	  if( APP_DEBUG ){clearstatcache();}
 	  $path = AEOLUS_HOME."/app/$module/controller/$controller.php";
 	  return file_exists( $path );
 	}

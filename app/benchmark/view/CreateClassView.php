@@ -1,37 +1,30 @@
 <?php
   /**
-   * IndexIndexView view class in 'demo' module
+   * CreateClassView view class in 'benchmark' module
    *
    */
 
-  class IndexIndexView extends AeolusView
+  class CreateClassView extends AeolusView
   {
     function showNavigator()
     {
-	  echo 'Navigator';
     }
 
     function showSidebar()
     {
-	  echo 'sidebar';
     }
 
     function showNotice()
     {
-	  echo 'Notice';
     }
 
     function showContent()
     {
-	  echo 'content';
     }
 
     function showScript()
     {
       ?>
-	  $(function(){
-        alert('demo');
-	  });
       <?php
     }
   }
