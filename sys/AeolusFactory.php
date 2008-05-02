@@ -100,7 +100,7 @@
       $obj = null;
 
       if( file_exists($path)){
-        self::loadOnce('AeolusModel.php');
+        self::loadOnce('kernel/AeolusModel.php');
         self::loadOnce($path);
         if( class_exists($model)){
           $obj = new $model();

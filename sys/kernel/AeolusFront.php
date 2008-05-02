@@ -122,7 +122,7 @@
 	{
 	  if( 200 == $this->status ){
 		# Load factory methods
-	    require( 'kernel/AeolusFactory.php' );
+	    require( 'AeolusFactory.php' );
 
 	    extract($this->result);
 	    $path = AEOLUS_HOME."/app/$module/controller/$controller.php";
