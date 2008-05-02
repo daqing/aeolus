@@ -42,4 +42,13 @@
   }
   define('APP_BASE',$base);
   
+ #Show debug trace if xdebug's enabled
+ function aeolus_debug(){
+   if( APP_DEBUG && function_exists( 'xdebug_start_trace' ) ){
+     echo '<h3>[XDEBUG INFO]</h3>';
+     echo '<pre>';
+     echo file_get_contents(xdebug_get_tracefile_name());
+     echo '</pre>';
+   }
+ }
 ?>
