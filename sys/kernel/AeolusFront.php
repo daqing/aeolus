@@ -123,11 +123,18 @@
 	  if( 200 == $this->status ){
 		# Load factory methods
 	    require( 'AeolusFactory.php' );
+	    
+		# Setup environment variable
+		global $thisModule;
+		$thisModule = APP_BASE.'/'.$this->result['module'];
 
 	    extract($this->result);
 	    $path = AEOLUS_HOME."/app/$module/controller/$controller.php";
+		
 		require( $path );
+
 		if( function_exists( $action ) ){
+
 		  if( $this->result['argc'] > 0 ){
 		    $action($this->result['argv']);
 		  }else{

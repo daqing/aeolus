@@ -14,7 +14,9 @@
 
     function showSidebar()
     {
-	  echo 'sidebar';
+	  global $thisModule;
+	  echo 'sidebar<br/>';
+
     }
 
     function showContent()

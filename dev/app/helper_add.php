@@ -11,8 +11,8 @@
 
 	require '../init.php';
 
-	$module_path = AEOLUS_ROOT.'/app/'.$module;
-	$helper_path = AEOLUS_ROOT.'/app/'.$module.'/helper/'.$helper.'.php';
+	$module_path = AEOLUS_HOME.'/app/'.$module;
+	$helper_path = AEOLUS_HOME.'/app/'.$module.'/helper/'.$helper.'.php';
 	if( file_exists( $module_path ) && is_writable($module_path) ){
 	  if(! file_exists($helper_path)){
 	    if( $res = fopen($helper_path,'w')){

@@ -36,7 +36,9 @@
 	 */
 	public function escape($content)
 	{
+	  # TODO: use htmlentities() and whitelishts
 
 	}
+
   }
 ?>

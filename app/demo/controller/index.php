@@ -6,6 +6,7 @@
 
   function index()
   {
-    echo 'Hello,world! [From index controller in \'demo\' module]';
+    global $thisModule;
+	echo $thisModule;
   }
 ?>
