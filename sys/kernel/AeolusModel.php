@@ -121,11 +121,11 @@
 	/**
 	 * Escape a variable
 	 * 
-	 * @access private
+	 * @access public
 	 * @param string $value the string to be escaped
 	 *
 	 */
-	private function escape($value)
+	public function escape($value)
 	{
 	  return mysql_real_escape_string($value,$this->driver->res);
 	}	

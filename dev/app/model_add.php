@@ -18,7 +18,8 @@
 		  $content = "<?php if(! defined('APP_STARTED')){die('<h3>BAD REQUEST.</h3>');}";
 		  $content .= "\n  /**\n   * $model model class in ";
 		  $content .= "'$module' module\n   *\n   */\n\n  class ";
-		  $content .= $model." extends AeolusModel\n  {\n\n\n  }\n?>";
+		  $content .= $model." extends AeolusModel\n  {\n    ";
+		  $content .= "public function foo()\n    {\n    }\n  } \n?>";
 
 		  if( FALSE === fwrite($res,$content) ){
 		    echo "[ERROR] Can't write content $content to file $model_path.\n";
