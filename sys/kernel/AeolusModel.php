@@ -53,6 +53,7 @@
 	    $this->data['result'] = true;
 	    $this->data['affected'] = mysql_affected_rows();
 	    $this->data['lastInsertId'] = mysql_insert_id();
+		$this->data['set'] = array();
 	  }
 	  
 	  return $this->data;
@@ -71,6 +72,7 @@
 	  if($this->driver->query($sql)){
         $this->data['result'] = true;
 	    $this->data['affected'] = mysql_affected_rows();
+		$this->data['set'] = array();
 	  }
 	  
 	  return $this->data;
@@ -89,6 +91,7 @@
 	  if($this->driver->query($sql)){
         $this->data['result'] = true;
 	    $this->data['affected'] = mysql_affected_rows();
+		$this->data['set'] = array();
 	  }
 	  
 	  return $this->data;
@@ -109,6 +112,7 @@
 	      
 	    if( $this->data['affected'] > 0 ){
 	      $this->data['result'] = true;
+		  $this->data['set'] = array();
 	      while( $dataset = mysql_fetch_assoc($result) ){
 	        $this->data['set'][] = $dataset;
 	      }
@@ -123,11 +127,13 @@
 	 * 
 	 * @access public
 	 * @param string $value the string to be escaped
+	 * @return string $escaped the escaped string
 	 *
 	 */
 	public function escape($value)
 	{
 	  return mysql_real_escape_string($value,$this->driver->res);
 	}	
+
   }
 ?>

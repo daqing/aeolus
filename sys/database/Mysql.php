@@ -14,7 +14,7 @@
      * Resource
      *
      */
-    var $res = null;  
+    private $res = null;  
    
     /**
      * Constructor
@@ -48,7 +48,7 @@
     function server_error()
     {
       ob_start();
-      require(AEOLUS_ROOT.'/static/error/mysql_error.html');
+      require(AEOLUS_HOME.'/pub/error/mysql_error.html');
       ob_end_flush();
       die();
     }
