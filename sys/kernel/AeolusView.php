@@ -14,13 +14,13 @@
     	 * @access public
     	 *
     	 */
-    	var $title = 'Index';
+    	public $title = 'Index';
 		
 		/**
 		 * Data to be displayed
 		 *
 		 */
-		var $data = null;
+		public $data = null;
 
     
         /**
@@ -33,7 +33,7 @@
 		 * Set data for template to use
 		 *
 		 */
-		function setData($data)
+		public function setData($data)
 		{
 		  $this->data = $data;
 		}
@@ -42,7 +42,7 @@
     	 * Render a given template
     	 *
     	 */
-    	function show()
+    	public function show()
     	{	
 		  # TODO: the output content should be escaped
 		  #       by HTMLPurifier to avoid XSS attace.
@@ -53,12 +53,12 @@
 			ob_end_flush();
     	}
 
-		function showIncludedScript()
+		public function showIncludedScript()
 		{
 		  echo APP_SUB.'/pub/script/app/default.js';
 		}
 
-		function showHeader()
+		public function showHeader()
 		{
 		   echo '<div id="message">';
 		   echo '</div>';
@@ -67,30 +67,30 @@
 		  
 		}
         
-        function showTheme()
+        public function showTheme()
         {
             echo APP_SUB.'/pub/theme/'.APP_THEME.'.css';
         }
         
-        function showJquery()
+        public function showJquery()
         {
             echo APP_SUB.'/pub/script/core/jquery-1.2.3.min.js';
         }
         
-        function showJqueryCorner()
+        public function showJqueryCorner()
         {
             echo APP_SUB.'/pub/script/core/jquery.corner-1.92.js';
         }	
 	
-	    function showScript(){}
+	    public function showScript(){}
 
-		function showNavigator(){}
+		public function showNavigator(){}
 
     
-		function showsidebar(){}
+		public function showsidebar(){}
 
-		function showNotice(){}
+		public function showNotice(){}
 
-    	function showContent(){}
+    	public function showContent(){}
     }
 ?>

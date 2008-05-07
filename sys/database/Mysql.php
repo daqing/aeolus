@@ -45,7 +45,7 @@
      * Display server error and exit
      *
      */
-    function server_error()
+    private function server_error()
     {
       ob_start();
       require(AEOLUS_HOME.'/pub/error/mysql_error.html');
@@ -57,7 +57,7 @@
      * Query the database server
      *
      */
-    function query($sql)
+    public function query($sql)
     {
       # Set encoding
       mysql_query("SET NAMES 'utf8'");
@@ -70,5 +70,10 @@
         	 	
       return $result;
     }  
+
+	public function getRes()
+	{
+	  return $this->res;
+	}
   }
 ?>

@@ -132,7 +132,7 @@
 	 */
 	public function escape($value)
 	{
-	  return mysql_real_escape_string($value,$this->driver->res);
+	  return mysql_real_escape_string($value,$this->driver->getRes());
 	}	
 
   }

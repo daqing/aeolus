@@ -8,5 +8,8 @@
   {
     global $thisModule;
 	echo $thisModule;
+
+	$model = AeolusFactory::makeModel('demo','TestModel');
+	echo $model->escape("like't");
   }
 ?>
