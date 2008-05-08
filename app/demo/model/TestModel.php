@@ -9,5 +9,6 @@
     public function foo()
     {
     }
+
   } 
 ?>

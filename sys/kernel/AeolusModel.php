@@ -45,7 +45,7 @@
 	 * Insert data to database
 	 *
 	 */
-	public function insert($sql)
+	public final function insert($sql)
 	{
 	  $result = $this->driver->query($sql);
 	  
@@ -67,7 +67,7 @@
 	 * @return array $data the result array
 	 *
 	 */
-	public function update($sql)
+	public final function update($sql)
 	{
 	  if($this->driver->query($sql)){
         $this->data['result'] = true;
@@ -86,7 +86,7 @@
 	 * @return array $data the result data
 	 *
 	 */
-	public function delete($sql)
+	public final function delete($sql)
 	{
 	  if($this->driver->query($sql)){
         $this->data['result'] = true;
@@ -105,7 +105,7 @@
 	 * @return array $data the result data
 	 *
 	 */
-	public function select($sql)
+	public final function select($sql)
 	{			
 	  if($result = $this->driver->query($sql)){	        
 	    $this->data['affected'] = mysql_num_rows($result);
@@ -130,7 +130,7 @@
 	 * @return string $escaped the escaped string
 	 *
 	 */
-	public function escape($value)
+	public final function escape($value)
 	{
 	  return mysql_real_escape_string($value,$this->driver->getRes());
 	}	
