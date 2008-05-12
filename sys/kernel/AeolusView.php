@@ -53,11 +53,6 @@
 			ob_end_flush();
     	}
 
-		public function showIncludedScript()
-		{
-		  echo APP_SUB.'/pub/script/app/default.js';
-		}
-
 		public function showHeader()
 		{
 		   echo '<div id="message">';
