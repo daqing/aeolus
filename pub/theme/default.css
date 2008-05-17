@@ -27,12 +27,14 @@ img {
 }
 
 #sidebar {
-	width:13%;
+    width:10%;
     margin:10px;
     text-align:center;
     background-color:#EFEFEF;
-	border-bottom:1px solid #CCC;
-	border-left:1px solid #CFCFCF;
+    border-bottom:1px solid #CCC;
+    border-left:1px solid #CFCFCF;
+    position:absolute;
+    left:10px;
 }
 
 #main {      
