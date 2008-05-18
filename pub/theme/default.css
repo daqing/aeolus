@@ -10,7 +10,10 @@ html,body {
 }
 
 table{
-  width:100%;
+  width:90%;
+  position:relative;
+  left:50%;
+  margin-left:-45%;
 }
 
 img {
@@ -33,7 +36,7 @@ img {
     background-color:#EFEFEF;
     border-bottom:1px solid #CCC;
     border-left:1px solid #CFCFCF;
-    position:absolute;
+    position:relative;
     left:10px;
 }
 
