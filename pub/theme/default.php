@@ -11,11 +11,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 transitional//EN" 
     "http://www.w3.org/tr/xhtml1/DTD/xhtml1-transitional.dtd">
     <html><head>
-    <title><?php echo($this->title);?></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<!-- No cache -->
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="Sun, 6 Mar 2005 01:00:00 GMT" />
+    <title><?php echo($this->title);?></title>
     <link href="<?php $this->showTheme();?>" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="<?php $this->showJquery();?>"></script>
     <script type="text/javascript" src="<?php $this->showJqueryCorner();?>"></script>
