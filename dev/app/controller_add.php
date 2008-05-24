@@ -19,7 +19,7 @@
 		  $content = "<?php if(! defined('APP_STARTED')){die('<h3>BAD REQUEST.</h3>');}";
 		  $content .= "\n  /**\n   * $controller controller in ";
 		  $content .= "'$module' module\n   *\n   */\n\n  function ";
-		  $content .= "index()\n  {\n    echo 'Hello,world! [From $controller";
+		  $content .= "$controller()\n  {\n    echo 'Hello,world! [From $controller";
 		  $content .= " controller in \'$module\' module]';\n  }\n?>";
 
 		  if( FALSE === fwrite($res,$content) ){

@@ -29,12 +29,6 @@
 	private $result;
 
 	/**
-	 * Status code
-	 *
-	 */
-	private $status;
-    
-	/**
 	 * Constructor
 	 *
 	 * @param void
@@ -45,7 +39,6 @@
 	  $this->request = strtolower($_SERVER['REQUEST_URI']);
 	  $this->cmd = null;
 	  $this->result = array();
-	  $this->status= 200;
 	}
 
 	/**
@@ -73,41 +66,70 @@
 	private function process()
 	{
 	  # Remove the base url from the request
-	  $this->cmd = substr($this->request,strlen(APP_BASE));
-	  $this->cmd = trim($this->cmd,'/\\');
-	  $this->cmd = explode('/',$this->cmd);
+	  $this->request = substr($this->request,strlen(APP_BASE));
+	  $this->request = trim($this->request,'/\\');
+
+	  if( strlen($this->request) > 0 ){
+	    $this->cmd = explode('/',$this->request);
+	  }else{
+	    $this->cmd = '/';
+	  }
 	  
+	  # Load valid modules
+	  require AEOLUS_HOME.'/etc/module.php';
+
 	  # Init.
 	  $this->result['module'] = 'index';
 	  $this->result['controller'] = 'index';
-	  $this->result['action'] = 'index';
 	  $this->result['argc'] = 0;
 	  $this->result['argv'] = array();
 	  
-	  # Process the command according to its size
-	  $size = count($this->cmd);
-      
-	  switch($size){
-	   case 1:	   
-		 require( 'AeolusRouterOne.php' );
-	     break;
+	  if( '/' !== $this->cmd && is_array($this->cmd) ){
+		$size = count($this->cmd);
 
-	   case 2:
-	     require( 'AeolusRouterTwo.php' );
-		 break;
+		switch( $size ){
+		  case 1:
+			if( in_array($this->cmd[0], $module)){
+			  $this->result['module'] = $this->cmd[0];
+			}else{
+			  $this->result['controller'] = $this->cmd[0];
+			}
 
-	   case 3:
-		 require( 'AeolusRouterThree.php' );
-	     break;
+		    break;
 
-	   case 4:
-		 require( 'AeolusRouterFour.php' );
-		 break;
+		  case 2:
+		    if( in_array($this->cmd[0], $module) ){
+			  $this->result['module'] = $this->cmd[0];
+			  $this->result['controller'] = $this->cmd[1];
+			}else{
+			  $this->result['controller'] = $this->cmd[0];
+			  $this->result['argc'] = 1;
+			  $this->result['argv'][] = $this->cmd[1];
+			}
 
-	   default:
-		 require( 'AeolusRouterDefault.php' );
-	     break;
-	  }	 
+		    break;
+		  
+		  default:
+		    if( in_array($this->cmd[0], $module) ){
+			  $this->result['module'] = $this->cmd[0];
+			  $this->result['controller'] = $this->cmd[1];
+			  $this->result['argc'] = $size - 2;
+
+			  for( $i=0; $i < $this->result['argc']; $i++ ){
+			    $this->result['argv'][] = $this->cmd[$i+2];
+			  }
+			}else{
+			  $this->result['controller'] = $this->cmd[0];
+			  $this->result['argc'] = $size - 1;
+
+			  for( $i=0; $i < $this->result['argc']; $i++ ){
+			    $this->result['argv'][] = $this->cmd[$i+1];
+			  }
+			}
+
+		    break;
+		} 
+      }
     }
 
 	/**
@@ -120,7 +142,6 @@
 	 */
 	private function launch()
 	{
-	  if( 200 == $this->status ){
 		# Load factory methods
 	    require( 'AeolusFactory.php' );
 	    
@@ -130,95 +151,29 @@
 
 	    extract($this->result);
 	    $path = AEOLUS_HOME."/app/$module/controller/$controller.php";
-		
-		require( $path );
 
-		if( function_exists( $action ) ){
+		if( file_exists($path) ){
+		  require( $path );
 
-		  if( $this->result['argc'] > 0 ){
-		    $action($this->result['argv']);
+		  if( function_exists( $controller ) ){
+		    # Launch this controller
+		    if( $this->result['argc'] > 0 ){
+		      $controller($this->result['argv']);
+		    }else{
+		      $controller();
+		    }
+
 		  }else{
-		    $action();
+		    # Controller functon not defined
+			die('FATAL: Controller function not defined');
 		  }
+
 		}else{
-		  $this->status = 403;
-		  $this->showError();
+		  # Controller file not found
+		  die('FATAL: Controller file not found');
 		}
-	  }else{
-	    $this->showError();
-	  }
 	}
 
-	/**
-	 * Check if the module exists
-	 *
-	 * @access private
-	 * @param string $module module name
-	 * @return boolean true|false true if the module exists
-	 *
-	 */
-	private function isModule($module)
-	{
-	  if( APP_DEBUG ){clearstatcache();}
-	  $path = AEOLUS_HOME."/app/$module";
-	  return file_exists( $path );
-	}
-
-	/**
-	 * Check if a given module has a given controller
-	 *
-	 * @access private
-	 * @param string $module module name
-	 * @param string $controller controller name
-	 * @return boolean true|false true if the controller exists
-	 *
-	 */
-	private function hasController($module,$controller)
-	{
-	  if( APP_DEBUG ){clearstatcache();}
-	  $path = AEOLUS_HOME."/app/$module/controller/$controller.php";
-	  return file_exists( $path );
-	}
-
-	/**
-	 * Show errors accound to the status code
-	 *
-	 * @access private
-	 * @param void
-	 * @return void
-	 *
-	 */
-	private function showError()
-	{
-	  if( APP_DEBUG ){
-        switch( $this->status ){
-		  case 401:
-		    $error = '<h3>[ERROR 401] \''.$this->cmd[0];
-			$error .= '\' IS NEITHER A MODULE NOR A CONTROLLER ';
-			$error .= 'IN THE \'index\' MODULE</h3>';
-			echo $error;
-			break;
-		  
-		  case 402:
-		    $error = '<h3>[ERROR 402] CONTROLLER \''.$this->cmd[1];
-			$error .= '\' NOT FOUND IN THE \''.$this->cmd[0];
-			$error .= '\' MODULE</h3>';
-			echo $error;
-			break;
-		  
-		  case 403:
-		    $error = '<h3>[ERROR 403] FUNCTION \''.$this->cmd[2];
-			$error .= '\' NOT DEFINED IN \''.AEOLUS_HOME.'/app/';
-			$error .= $this->cmd[0].'/controller/';
-			$error .= $this->cmd[1].'.php\'</h3>';
-			echo $error;
-			break;
-		}
-
-	  }else{
-	    die('<h3>BAD REQUEST.</h3>');
-	  }
-	}
   }
 
 ?>
