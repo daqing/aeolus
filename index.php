@@ -11,8 +11,8 @@
  # Load configuration 
  require( 'etc/app.php' );
  
- # Init.
- require( 'sys/init.php' );
+ # Bootstrap
+ require( 'sys/bootstrap.php' );
 
  # Start the application
  require( 'kernel/AeolusFront.php' );
