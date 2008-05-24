@@ -25,7 +25,7 @@ img {
 }
 
 #navigator{
-  background: #CCDE97;
+  background: #D8E5F1;
   text-align:center;
 }
 
@@ -33,11 +33,9 @@ img {
     width:10%;
     margin:10px;
     text-align:center;
-    background-color:#EFEFEF;
-    border-bottom:1px solid #CCC;
-    border-left:1px solid #CFCFCF;
     position:relative;
     left:10px;
+	border: 1px dashed #D8E5F1;
 }
 
 #main {      
