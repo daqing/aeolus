@@ -3,5 +3,4 @@ How To Install Aeolus Framework
 
 REQUIREMENTS
 ------------
-  (1) PHP version should be at least '4.3.7' to use HTML Purifier.
-  (2) MySQL version should be at least '5.0.0'
+PHP version >= 5.2.0
