@@ -69,12 +69,12 @@
         
         public function showJquery()
         {
-            echo APP_SUB.'/pub/script/core/jquery-1.2.3.min.js';
+            echo APP_SUB.'/pub/script/jquery-1.2.3.min.js';
         }
         
         public function showJqueryCorner()
         {
-            echo APP_SUB.'/pub/script/core/jquery.corner-1.92.js';
+            echo APP_SUB.'/pub/script/jquery.corner-1.92.js';
         }	
 	
 	    public function showScript(){}

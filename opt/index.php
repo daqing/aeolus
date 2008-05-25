@@ -1,8 +1,8 @@
 <?php
   /**
-   * Deny all access 
+   * Deny all 
    *
    */
   
-  die('<h3>BAD REQUEST.</h3>');
+  die('<h3>BAD REQUEST</h3>');
 ?>

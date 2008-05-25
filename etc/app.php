@@ -1,5 +1,5 @@
 <?php if( basename(__FILE__) == basename($_SERVER['REQUEST_URI'])){
-        die('<h3>[ERROR 400] BAD REQUEST.</h3>');
+        die('<h3>BAD REQUEST</h3>');
 	  }
   /**
    * Application-specific configuration
@@ -13,9 +13,6 @@
   # The subdirectory where Aeolus's installed
   # Don't forget the leading slash
   define('APP_SUB','/aeolus');
-  
-  # Default language to use
-  define('APP_LANG','zh_CN');
   
   # Default theme
   define('APP_THEME','default');
