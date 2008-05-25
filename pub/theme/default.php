@@ -50,8 +50,8 @@
 
       <!-- Footer -->
 	  <tr><td>
-	  <div id="footer">
-	  <a href="http://code.google.com/p/aeolus/">Aeolus 0.1.50</a>
+	  <div id="footer">Powered by
+	  <a href="http://code.google.com/p/aeolus/">Aeolus</a>
       &middot;&nbsp;&copy;&nbsp;Copyright 2008-2009,
 	  <a href="http://citygeneration.com/">CityGeneration, Inc.</a>
 	  &middot;&nbsp;All Rights Reserved   
