@@ -38,20 +38,25 @@
      * Load a helper function
      * 
      * @access public
-     * @param string $module the module name
      * @param string $helper the helper function name
+     * @param string $module the module name
      * @return boolean true|false true if the helper exists
      * 
      */
-    public function loadHelper($module,$helper)
+    public function loadHelper($helper, $module='this')
     {
+	  if( 'this' == $module ){
+	    global $thisModule;
+		$module = $thisModule;
+	  }
+
+	  # Absolute path to the helper file
       $path = AEOLUS_HOME."/app/$module/helper/$helper.php";
 	  if( APP_DEBUG ){clearstatcache();}
+
       if( file_exists($path)){
         self::loadFile($path);        
       }
-      
-      return function_exists($helper);
     }
     
     /**

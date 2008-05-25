@@ -82,7 +82,7 @@
 	  # Load valid modules
 	  require AEOLUS_HOME.'/etc/module.php';
 	  
-	  if( '/' !== $cmd && is_array($this->cmd) ){
+	  if( '/' !== $cmd && is_array($cmd) ){
 		$size = count($cmd);
 
 		switch( $size ){

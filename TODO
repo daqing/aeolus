@@ -1,7 +1,1 @@
-Core Features
--------------
-(A) Implement SimpleCache
-(A) Add PHPUnit support (http://www.phpunit.de)
-(B) Add PHing support (http://phing.info)
-(C) Add YAML support (http://www.yaml.org/)
-(D) Support multi languages
+Implement AeolusCache 
