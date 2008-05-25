@@ -14,6 +14,6 @@
   # Don't forget the leading slash
   define('APP_SUB','/aeolus');
   
-  # Default theme
+  # Theme
   define('APP_THEME','default');
 ?>

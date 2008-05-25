@@ -9,10 +9,12 @@
 
   if( 2 > $argc ){
     echo "[Usage] module.php modules \n";
+
   }else{
-    for($i=1;$i<$argc;$i++){
+    for( $i=1; $i<$argc; $i++){
 	  clearstatcache();
 	  $path = AEOLUS_HOME."/app/$argv[$i]";
+
 	  if(! file_exists( $path )){
 	    @mkdir( $path );
 		@mkdir( $path.'/controller' );

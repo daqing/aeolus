@@ -73,6 +73,7 @@
 		return;
 	  }
 
+      # Get command
 	  if( strlen($this->request) > 0 ){
 	    $cmd = explode('/',$this->request);
 	  }else{
@@ -131,7 +132,7 @@
     }
 
 	/**
-	 * Launch the application controllers
+	 * Launch application controllers
 	 *
 	 * @access private
 	 * @param void
