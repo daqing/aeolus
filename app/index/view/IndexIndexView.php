@@ -7,11 +7,6 @@
 
   class IndexIndexView extends AeolusView
   {
-    function showNavigator()
-    {
-	  echo 'nav';
-    }
-
     function showSidebar()
     {
 	  global $thisModule;

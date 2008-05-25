@@ -6,6 +6,9 @@
 
   function index()
   {
-    echo 'Hello,world! [From index controller in \'forum\' module]';
+    $view = AeolusFactory::makeView('IndexIndexView');
+	$view->title = '论坛首页';
+
+	$view->show();
   }
 ?>

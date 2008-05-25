@@ -80,9 +80,15 @@
 	
 	    public function showScript(){}
 
-		public function showNavigator(){}
+		public function showNavigator()
+		{
+		  echo '<a href="'.APP_BASE.'">首页</a>';
+		  echo '<a href="'.APP_BASE.'/forum">论坛</a>';
+		  echo '<a href="'.APP_BASE.'/blog">博客</a>';
+		  echo '<a href="'.APP_BASE.'/wiki">Wiki</a>';
+		  echo '<a href="'.APP_BASE.'/chat">微言</a>';
+		}
 
-    
 		public function showsidebar(){}
 
 		public function showNotice(){}

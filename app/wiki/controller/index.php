@@ -6,6 +6,9 @@
 
   function index()
   {
-    echo 'Hello,world! [From index controller in \'wiki\' module]';
+    $view = AeolusFactory::makeView('IndexIndexView');
+	$view->title = 'Wiki首页';
+
+	$view->show();
   }
 ?>

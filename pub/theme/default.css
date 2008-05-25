@@ -26,7 +26,14 @@ img {
 
 #navigator{
   background: #D8E5F1;
-  text-align:center;
+  text-align:left;
+  padding:3px 20px;
+}
+
+#navigator a{
+  display:inline;
+  margin:5px 10px;
+  text-decoration:none;
 }
 
 #sidebar {
@@ -85,4 +92,9 @@ ul{
 ul li{
   list-style-type:circle;
   margin:2px; 
+}
+
+.section {
+  background-color:white;
+  margin:10px 0px;
 }

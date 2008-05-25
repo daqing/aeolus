@@ -6,6 +6,9 @@
 
   function index()
   {
-    echo 'Hello,world! [From index controller in \'chat\' module]';
+    $view = AeolusFactory::makeView('IndexIndexView');
+	$view->title = '微言首页';
+
+	$view->show();
   }
 ?>
