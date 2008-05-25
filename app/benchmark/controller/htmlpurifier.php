@@ -12,16 +12,16 @@
 
       $sum = intval($argv[0]);
 
-	  AeolusFactory::loadOnce( 'AeolusSecurity.php' );
+	  AeolusFactory::loadOnce( 'AeolusGuard.php' );
 	  $str = '<h1>Hello<span></h1><script>test();</scr></script>';
 
       for( $i=0; $i < $sum; $i++){
-        $pu = AeolusSecurity::purify($str);
+        $pu = AeolusGuard::purify($str);
 	  }
 	  
 	  $end = microtime();
 	  ob_end_clean();
-
+      
 	  echo '<br/>Start at '.$start;
 	  echo '<br/>End at '.$end;
       echo '<br/><br/>Total is '. ($end-$start);
