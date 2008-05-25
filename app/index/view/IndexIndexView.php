@@ -21,7 +21,15 @@
 
     function showContent()
     {
-	  var_dump($this->model);
+      $db = $this->model->getDatabases();
+	  
+	  if( is_array($db) ){
+	    foreach($db as $v){
+		  echo '<br/>';
+		  var_dump($v);
+		  echo '<br/>';
+		}
+	  }
     }
 
     function showScript()

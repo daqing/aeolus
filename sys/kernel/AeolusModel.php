@@ -15,7 +15,7 @@
 	 * @access private
 	 *
 	 */
-    private $driver;
+    private static  $driver;
 
 	/**
 	 * Data set
@@ -31,14 +31,17 @@
 	 */
 	function __construct($driver='mysql')
 	{
-	  $class = ucfirst($driver);
-      AeolusFactory::loadFile( "database/$class.php");
-	  $this->driver = new $class();
-	  $this->data = array( 'result' => false,
+	  if( null == self::$driver ){
+	    $class = ucfirst($driver);
+        AeolusFactory::loadFile( "database/$class.php");
+	    self::$driver = new $class();
+	    
+		$this->data = array( 'result' => false,
 	                       'affected' => 0,
 						   'lastInsertId' => 0,
 						   'set' => array()
 						  );
+	  }
 	}
 
 	/**
@@ -47,7 +50,7 @@
 	 */
 	public final function insert($sql)
 	{
-	  $result = $this->driver->query($sql);
+	  $result = self::$driver->query($sql);
 	  
 	  if($result){
 	    $this->data['result'] = true;
@@ -69,7 +72,7 @@
 	 */
 	public final function update($sql)
 	{
-	  if($this->driver->query($sql)){
+	  if(self::$driver->query($sql)){
         $this->data['result'] = true;
 	    $this->data['affected'] = mysql_affected_rows();
 		$this->data['set'] = array();
@@ -88,7 +91,7 @@
 	 */
 	public final function delete($sql)
 	{
-	  if($this->driver->query($sql)){
+	  if(self::$driver->query($sql)){
         $this->data['result'] = true;
 	    $this->data['affected'] = mysql_affected_rows();
 		$this->data['set'] = array();
@@ -107,7 +110,7 @@
 	 */
 	public final function select($sql)
 	{			
-	  if($result = $this->driver->query($sql)){	        
+	  if($result = self::$driver->query($sql)){	        
 	    $this->data['affected'] = mysql_num_rows($result);
 	      
 	    if( $this->data['affected'] > 0 ){
@@ -132,7 +135,7 @@
 	 */
 	public final function escape($value)
 	{
-	  return mysql_real_escape_string($value,$this->driver->getRes());
+	  return mysql_real_escape_string($value,self::$driver->getRes());
 	}	
 
   }

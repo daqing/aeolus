@@ -6,8 +6,15 @@
 
   class IndexTestModel extends AeolusModel
   {
-    public function foo()
+    public function getDatabases()
     {
+	  $query = "SELECT * FROM aeolus_admin";
+
+	  $re = $this->select($query);
+
+	  if( $re['result'] ){
+	    return $re['set'];
+	  }
     }
   } 
 ?>
