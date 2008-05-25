@@ -165,12 +165,12 @@
 
 		  }else{
 		    # Controller functon not defined
-			die('FATAL: Controller function not defined');
+			die('FATAL: CONTROLLER FUNCTION NOT DEFINED');
 		  }
 
 		}else{
 		  # Controller file not found
-		  die('FATAL: Controller file not found');
+		  die('FATAL: CONTROLLER NOT FOUND');
 		}
 	}
 

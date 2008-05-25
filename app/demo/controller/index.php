@@ -6,9 +6,7 @@
 
   function index()
   {
-    global $thisModule;
-	echo $thisModule;
-
 	$model = AeolusFactory::makeModel('demo','TestModel');
+	var_dump($model);
   }
 ?>
