@@ -14,7 +14,7 @@
  # Bootstrap
  require( 'sys/bootstrap.php' );
 
- # Start the application
+ # Run 
  require( 'kernel/AeolusFront.php' );
 
  $front = new AeolusFront();

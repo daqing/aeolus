@@ -39,6 +39,12 @@
 	  $this->request = strtolower($_SERVER['REQUEST_URI']);
 	  $this->cmd = null;
 	  $this->result = array();
+
+	  # Init.
+	  $this->result['module'] = 'index';
+	  $this->result['controller'] = 'index';
+	  $this->result['argc'] = 0;
+	  $this->result['argv'] = array();
 	}
 
 	/**
@@ -69,20 +75,19 @@
 	  $this->request = substr($this->request,strlen(APP_BASE));
 	  $this->request = trim($this->request,'/\\');
 
+	  if( strpos($this->request,'(') || strpos($this->request,'%')){
+	    # Invalid request
+		return;
+	  }
+
 	  if( strlen($this->request) > 0 ){
 	    $this->cmd = explode('/',$this->request);
 	  }else{
 	    $this->cmd = '/';
 	  }
-	  
+
 	  # Load valid modules
 	  require AEOLUS_HOME.'/etc/module.php';
-
-	  # Init.
-	  $this->result['module'] = 'index';
-	  $this->result['controller'] = 'index';
-	  $this->result['argc'] = 0;
-	  $this->result['argv'] = array();
 	  
 	  if( '/' !== $this->cmd && is_array($this->cmd) ){
 		$size = count($this->cmd);
@@ -164,13 +169,23 @@
 		    }
 
 		  }else{
-		    # Controller functon not defined
-			die('FATAL: CONTROLLER FUNCTION NOT DEFINED');
+			if( APP_DEBUG ){
+		      # Controller functon not defined
+			  die("<h4>FATAL: FUNCTION <i>'$controller'</i> NOT DEFINED IN <i>'$module'</i> MODULE</h4>");
+			}else{
+			  # Redirect to home page
+			  header('Location: /');
+			}
 		  }
 
 		}else{
-		  # Controller file not found
-		  die('FATAL: CONTROLLER NOT FOUND');
+		  if( APP_DEBUG ){
+		    # Controller not found
+		    die("<h4>FATAL: CONTROLLER <i>'$controller'</i> NOT FOUND IN <i>'$module'</i> MODULE</h4>");
+		  }else{
+		    # Redirect to home page
+		    header('Location: /');
+		  }
 		}
 	}
 
