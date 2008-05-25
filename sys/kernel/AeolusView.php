@@ -58,7 +58,7 @@
 		{
 		   echo '<div id="message">';
 		   echo '</div>';
-		   echo '<a href="'.APP_BASE.'/"><img src="'.APP_SUB.'/pub/image/aeolus.gif"';
+		   echo '<a href="'.APP_BASE.'"><img src="'.APP_SUB.'/pub/image/aeolus.gif"';
 		   echo ' alt="Aeolus" /></a>';
 		  
 		}

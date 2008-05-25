@@ -12,8 +12,8 @@
 
   # The subdirectory where Aeolus's installed
   # NOTE: 
-  # if you installed Aeolus under ROOT, leave this blank.
-  # if ELSE, don't forget the leading slash
+  # if you installed Aeolus under ROOT, leave this blank
+  # if ELSE, *don't* forget the leading slash
   define('APP_SUB','/aeolus');
   
   # Theme
