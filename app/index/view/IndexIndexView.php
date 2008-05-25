@@ -20,9 +20,9 @@
 	  
 	  if( is_array($db) ){
 	    foreach($db as $v){
-		  echo '<br/>';
+		  echo '<div class="section">';
 		  $this->escape(var_dump($v));
-		  echo '<br/>';
+		  echo '</div>';
 		}
 	  }
     }

@@ -9,10 +9,8 @@
     global $thisModule;
 	$base = APP_BASE."/$thisModule";
     ?>
-	<ul>
-	<li><a href="<?php echo $base;?>">所有文章</a></li>
-	<li><a href="<?php echo $base;?>/add">写日志</a></li>
-	</ul>
+	<a href="<?php echo $base;?>">所有文章</a>
+	<a href="<?php echo $base;?>/add">写日志</a>
     <?php
   }
 ?>

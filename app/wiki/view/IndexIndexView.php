@@ -14,7 +14,9 @@
 
     public function showContent()
     {
+	  echo '<div class="section">';
 	  echo 'wiki content';
+	  echo '</div>';
     }
 
     public function showScript()

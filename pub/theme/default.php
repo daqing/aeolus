@@ -40,7 +40,7 @@
       <tr><td>
       <!-- Main -->
       <div id="main"> 
-        <div id="notice"><?php $this->showNotice();?></div>
+        <div id="notice"></div>
 	    <div id="content"><?php $this->showContent();?></div>
       </div>           
 

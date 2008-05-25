@@ -17,13 +17,19 @@
     {
 	  $blogs = $this->model->getAllBlogs();
 	  echo '<div class="section">';
-      var_dump($blogs);
+      $this->escape(var_dump($blogs));
+	  echo '</div>';
+
+	  echo '<div class="section">';
+      $this->escape(var_dump($blogs));
 	  echo '</div>';
     }
 
     public function showScript()
     {
       ?>
+	  $(function(){
+	  });
       <?php
     }
   }

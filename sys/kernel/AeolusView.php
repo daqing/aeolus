@@ -91,8 +91,6 @@
 
 		public function showsidebar(){}
 
-		public function showNotice(){}
-
     	public function showContent(){}
 
 		public function escape($value)

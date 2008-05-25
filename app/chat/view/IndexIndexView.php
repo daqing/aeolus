@@ -14,7 +14,9 @@
 
     public function showContent()
     {
+	  echo '<div class="section">';
 	  echo '全部微言';
+	  echo '</div>';
     }
 
     public function showScript()
