@@ -147,7 +147,7 @@
 	    
 		# Setup environment variable
 		global $thisModule;
-		$thisModule = APP_BASE.'/'.$this->result['module'];
+		$thisModule = $this->result['module'];
 
 	    extract($this->result);
 	    $path = AEOLUS_HOME."/app/$module/controller/$controller.php";
