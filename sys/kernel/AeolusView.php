@@ -17,10 +17,10 @@
     	public $title = 'Index';
 		
 		/**
-		 * Data to be displayed
+		 * Model object
 		 *
 		 */
-		public $data = null;
+		public $model = null;
 
     
         /**
@@ -33,9 +33,9 @@
 		 * Set data for template to use
 		 *
 		 */
-		public function setData($data)
+		public function setModel($model)
 		{
-		  $this->data = $data;
+		  $this->model = $model;
 		}
 
     	/**

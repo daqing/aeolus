@@ -6,7 +6,8 @@
 
   function index()
   {
-    $view = AeolusFactory::makeView('index','IndexIndexView');
+    $model = AeolusFactory::makeModel('IndexTestModel');
+    $view = AeolusFactory::makeView('IndexIndexView',$model);
 
 	$view->title = 'index';
 	$view->show();

@@ -25,7 +25,7 @@
       if(!$this->res)
       {
         # Try to connect to the MySQL server
-        AeolusFactory::loadOnce( AEOLUS_HOME.'/etc/database/mysql.php');
+        AeolusFactory::loadFile( AEOLUS_HOME.'/etc/database/mysql.php');
         $this->res = MYSQL_connect(MYSQL_HOST.':'.MYSQL_PORT,
   	                             MYSQL_USER,
   								 MYSQL_PASSWORD);

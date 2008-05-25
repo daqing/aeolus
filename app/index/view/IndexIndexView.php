@@ -21,7 +21,7 @@
 
     function showContent()
     {
-	  echo 'content';
+	  var_dump($this->model);
     }
 
     function showScript()

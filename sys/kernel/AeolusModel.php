@@ -32,7 +32,7 @@
 	function __construct($driver='mysql')
 	{
 	  $class = ucfirst($driver);
-      AeolusFactory::loadOnce( "database/$class.php");
+      AeolusFactory::loadFile( "database/$class.php");
 	  $this->driver = new $class();
 	  $this->data = array( 'result' => false,
 	                       'affected' => 0,
