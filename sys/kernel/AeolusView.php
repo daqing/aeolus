@@ -91,10 +91,7 @@
 
 		public function escape($value)
 		{
-		  $value = htmlentities($value);
-
-		  # TODO: Make additional escape
-		  return $value;
+		  return htmlentities($value, ENT_QUOTES, 'UTF-8');
 		}
     }
 ?>

@@ -19,8 +19,7 @@
     <title><?php echo($this->title);?></title>
     <link href="<?php $this->showTheme();?>" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="<?php $this->showJquery();?>"></script>
-    <script type="text/javascript" src="<?php $this->showJqueryCorner();?>"></script>
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <script type="text/javascript" src="<?php $this->showJqueryCorner();?>"></script> 
     <script type="text/javascript"> 
       <?php $this->showScript();?> 
     </script>    
