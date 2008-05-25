@@ -7,7 +7,7 @@
   function showAddBlogForm()
   {
     ?>
-    <div>Change Me!</div>
+    <div class="section">Change Me!</div>
     <?php
   }
 ?>

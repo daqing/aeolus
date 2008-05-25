@@ -20,14 +20,14 @@ img {
   border:0px;
 }
 
-h1,h2,h3,h4,h5,h6 {
+h1,h2,h3,h4,h5,h6,p{
   margin:5px;
 }
 
 #navigator{
   background: #D8E5F1;
   text-align:left;
-  padding:4px 2px 4px 20px;
+  padding:5px 5px 7px 16px;
 }
 
 #navigator a{
@@ -71,17 +71,9 @@ h1,h2,h3,h4,h5,h6 {
     border-top:1px solid #EBEBEB;
 }
 
-a:active, a:visited {
+a:link, a:active, a:visited, a:hover {
     text-decoration:underline;
     color:#5762A8;
-}
-
-a:link {
-    color:#5762A8;
-}
-
-a:active,a:hover {
-	color:#E85660;    
 }
 
 label {
