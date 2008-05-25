@@ -47,10 +47,11 @@
 		  # TODO: the output content should be escaped
 		  #       by HTMLPurifier to avoid XSS attace.
             ob_start();
-			
+
 			require( AEOLUS_HOME.'/pub/theme/'.APP_THEME.'.php');
-						
+
 			ob_end_flush();
+
     	}
 
 		public function showHeader()
@@ -87,5 +88,13 @@
 		public function showNotice(){}
 
     	public function showContent(){}
+
+		public function escape($value)
+		{
+		  $value = htmlentities($value);
+
+		  # TODO: Make additional escape
+		  return $value;
+		}
     }
 ?>

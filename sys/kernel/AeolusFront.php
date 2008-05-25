@@ -17,12 +17,6 @@
 	private $request;
 	
 	/**
-     * The command to process
-     * 
-     */
-	private $cmd;
-
-	/**
 	 * Processing result
 	 *
 	 */
@@ -37,7 +31,6 @@
 	function __construct()
 	{
 	  $this->request = strtolower($_SERVER['REQUEST_URI']);
-	  $this->cmd = null;
 	  $this->result = array();
 
 	  # Init.
@@ -81,54 +74,54 @@
 	  }
 
 	  if( strlen($this->request) > 0 ){
-	    $this->cmd = explode('/',$this->request);
+	    $cmd = explode('/',$this->request);
 	  }else{
-	    $this->cmd = '/';
+	    $cmd = '/';
 	  }
 
 	  # Load valid modules
 	  require AEOLUS_HOME.'/etc/module.php';
 	  
-	  if( '/' !== $this->cmd && is_array($this->cmd) ){
-		$size = count($this->cmd);
+	  if( '/' !== $cmd && is_array($this->cmd) ){
+		$size = count($cmd);
 
 		switch( $size ){
 		  case 1:
-			if( in_array($this->cmd[0], $module)){
-			  $this->result['module'] = $this->cmd[0];
+			if( in_array($cmd[0], $module)){
+			  $this->result['module'] = $cmd[0];
 			}else{
-			  $this->result['controller'] = $this->cmd[0];
+			  $this->result['controller'] = $cmd[0];
 			}
 
 		    break;
 
 		  case 2:
-		    if( in_array($this->cmd[0], $module) ){
-			  $this->result['module'] = $this->cmd[0];
-			  $this->result['controller'] = $this->cmd[1];
+		    if( in_array($cmd[0], $module) ){
+			  $this->result['module'] = $cmd[0];
+			  $this->result['controller'] = $cmd[1];
 			}else{
-			  $this->result['controller'] = $this->cmd[0];
+			  $this->result['controller'] = $cmd[0];
 			  $this->result['argc'] = 1;
-			  $this->result['argv'][] = $this->cmd[1];
+			  $this->result['argv'][] = $cmd[1];
 			}
 
 		    break;
 		  
 		  default:
-		    if( in_array($this->cmd[0], $module) ){
-			  $this->result['module'] = $this->cmd[0];
-			  $this->result['controller'] = $this->cmd[1];
+		    if( in_array($cmd[0], $module) ){
+			  $this->result['module'] = $cmd[0];
+			  $this->result['controller'] = $cmd[1];
 			  $this->result['argc'] = $size - 2;
 
 			  for( $i=0; $i < $this->result['argc']; $i++ ){
-			    $this->result['argv'][] = $this->cmd[$i+2];
+			    $this->result['argv'][] = $cmd[$i+2];
 			  }
 			}else{
-			  $this->result['controller'] = $this->cmd[0];
+			  $this->result['controller'] = $cmd[0];
 			  $this->result['argc'] = $size - 1;
 
 			  for( $i=0; $i < $this->result['argc']; $i++ ){
-			    $this->result['argv'][] = $this->cmd[$i+1];
+			    $this->result['argv'][] = $cmd[$i+1];
 			  }
 			}
 

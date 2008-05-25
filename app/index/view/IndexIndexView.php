@@ -26,7 +26,7 @@
 	  if( is_array($db) ){
 	    foreach($db as $v){
 		  echo '<br/>';
-		  var_dump($v);
+		  $this->escape(var_dump($v));
 		  echo '<br/>';
 		}
 	  }
