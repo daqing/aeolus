@@ -44,12 +44,13 @@
     	 */
     	public function show()
     	{	
-		  # TODO: the output content should be escaped
-		  #       by HTMLPurifier to avoid XSS attace.
+			# Start output buffer
             ob_start();
+            
+			# Load template
+			require( AEOLUS_HOME.'/pub/theme/'.APP_TPL.'.php');
 
-			require( AEOLUS_HOME.'/pub/theme/'.APP_THEME.'.php');
-
+			# Send contents to client browser and close buffer
 			ob_end_flush();
 
     	}
@@ -64,9 +65,9 @@
 		  
 		}
         
-        public function showTheme()
+        public function showStyle()
         {
-            echo APP_SUB.'/pub/theme/'.APP_THEME.'.css';
+            echo APP_SUB.'/pub/theme/'.APP_STYLE.'.css';
         }
         
         public function showJquery()

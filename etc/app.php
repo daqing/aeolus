@@ -17,5 +17,8 @@
   define('APP_SUB','/aeolus');
   
   # Theme
-  define('APP_THEME','default');
+  define('APP_STYLE','default');
+
+  # Template
+  define('APP_TPL', 'aeolus');
 ?>

@@ -17,7 +17,7 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="Sun, 6 Mar 2005 01:00:00 GMT" />
     <title><?php echo($this->title);?></title>
-    <link href="<?php $this->showTheme();?>" rel="stylesheet" type="text/css" />
+    <link href="<?php $this->showStyle();?>" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="<?php $this->showJquery();?>"></script>
     <script type="text/javascript" src="<?php $this->showJqueryCorner();?>"></script> 
     <script type="text/javascript"> 
