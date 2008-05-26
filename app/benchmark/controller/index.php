@@ -6,8 +6,9 @@
 
   function index()
   {
-    echo 'Hello,world! [From index controller in \'benchmark\' module]';
-	global $thisModule;
-	echo "<br/>This module is: $thisModule";
+    $view = AeolusFactory::makeView('IndexIndexView');
+	$view->title = 'Benchmark';
+
+	$view->show();
   }
 ?>
