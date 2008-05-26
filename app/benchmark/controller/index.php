@@ -7,8 +7,8 @@
   function index()
   {
     $view = AeolusFactory::makeView('IndexIndexView');
-
 	$view->title = 'Benchmark';
+
 	$view->show();
   }
 ?>
