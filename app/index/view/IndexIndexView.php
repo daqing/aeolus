@@ -9,22 +9,14 @@
   {
     function showSidebar()
     {
-	  global $thisModule;
-	  echo 'sidebar<br/>';
-
+	  echo 'Aeolus Home';
     }
 
     function showContent()
     {
-      $db = $this->model->getDatabases();
-	  
-	  if( is_array($db) ){
-	    foreach($db as $v){
-		  echo '<div class="section">';
-		  $this->escape(var_dump($v));
-		  echo '</div>';
-		}
-	  }
+	  echo '<div class="section">';
+	  echo 'Welcome to Aeolus framework';
+	  echo '</div>';
     }
 
     function showScript()

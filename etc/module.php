@@ -5,6 +5,6 @@
    *
    */
 
-  $module = array('index','forum','blog','wiki','chat','benchmark');
+  $module = array('index', 'benchmark');
 
 ?>

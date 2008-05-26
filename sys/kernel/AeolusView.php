@@ -82,16 +82,8 @@
 
 		public function showNavigator()
 		{
-		  echo '<span style="float:right;">';
-		  echo '<a href="'.APP_BASE.'/register">注册</a>&middot;';
-		  echo '<a href="'.APP_BASE.'/login">登录</a>';
-		  echo '</span>';
-
 		  echo '<a href="'.APP_BASE.'">首页</a>&middot;';
-		  echo '<a href="'.APP_BASE.'/forum">论坛</a>&middot;';
-		  echo '<a href="'.APP_BASE.'/blog">博客</a>&middot;';
-		  echo '<a href="'.APP_BASE.'/wiki">Wiki</a>&middot;';
-		  echo '<a href="'.APP_BASE.'/chat">微言</a>';
+		  echo '<a href="'.APP_BASE.'/benchmark/">Benchmark</a>';
 		}
 
 		public function showsidebar(){}
