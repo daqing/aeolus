@@ -4,7 +4,7 @@
    *
    */
 
-  class IndexTestModel extends AeolusModel
+  class IndexModel extends AeolusModel
   {
     public function getDatabases()
     {

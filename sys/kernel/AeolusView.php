@@ -58,8 +58,9 @@
 		{
 		   echo '<div id="message">';
 		   echo '</div>';
-		   echo '<a href="'.APP_BASE.'"><img src="'.APP_SUB.'/pub/image/aeolus.gif"';
-		   echo ' alt="Aeolus" /></a>';
+		   echo '<a href="'.APP_BASE.'"><img width="165" height="34" ';
+		   echo 'src="'.APP_SUB.'/pub/image/logo.gif" ';
+		   echo 'alt="Logo" /></a>';
 		  
 		}
         

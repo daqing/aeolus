@@ -5,7 +5,7 @@
    *
    */
 
-  class IndexIndexView extends AeolusView
+  class IndexView extends AeolusView
   {
     function showSidebar()
     {
