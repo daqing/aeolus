@@ -10,5 +10,4 @@
   define('MYSQL_USER','php');
   define('MYSQL_PASSWORD','php');
   define('MYSQL_SCHEMA','php');
-
 ?>

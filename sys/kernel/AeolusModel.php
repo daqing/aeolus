@@ -31,8 +31,9 @@
 	function __construct($driver='mysql')
 	{
 	  if( null == self::$driver ){
-	    $class = ucfirst($driver);
-        AeolusFactory::loadFile( "database/$class.php");
+	    $driver = ucfirst($driver);
+		# Load driver class
+        AeolusFactory::loadFile( "database/$driver.php");
 	    self::$driver = new $class();
 	    
 		$this->data = array( 'result' => false,

@@ -2,7 +2,7 @@
   /**
    * Mysql class
    *
-   * Database Driver for MySQL
+   * Database driver for MySQL
    *
    * @author Kinch Zhang <kinch.zhang@gmail.com>
    */
