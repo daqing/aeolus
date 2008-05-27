@@ -1,9 +1,8 @@
-<?php if(! defined('APP_STARTED')){ die('<h3>BAD REQUEST.</h3>');}
+<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
     /**
      * AeolusView class
      * 
-     * @author Qingcheng Zhang <kinch.zhang@gmail.com>
-     * 
+     * @author Kinch Zhang <kinch.zhang@gmail.com>
      */
 
 	class AeolusView
@@ -85,7 +84,7 @@
 		public function showNavigator()
 		{
 		  echo '<a href="'.APP_PREFIX.'">首页</a>&middot;';
-		  echo '<a href="'.APP_PREFIX.'/benchmark/">Benchmark</a>';
+		  echo '<a href="'.APP_PREFIX.'/sandbox/">Sandbox</a>';
 		}
 
 		public function showsidebar(){}

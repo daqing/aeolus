@@ -1,12 +1,9 @@
-<?php if( basename(__FILE__) == basename($_SERVER['REQUEST_URI'])){
-        die('<h3>BAD REQUEST</h3>');}
+<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
     /**
-	 * Default theme
+	 * Aeolus Template
 	 *
-	 * @author Qingcheng Zhang <kinch.zhang@gmail.com>
-	 * @copyright Copyright (c) 2008-2009, CityGeneration, Inc. (http://citygeneration.com)
+	 * @author Kinch Zhang <kinch.zhang@gmail.com>
 	 * @category template
-	 *
 	 */   
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 transitional//EN" 

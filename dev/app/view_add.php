@@ -15,8 +15,8 @@
 	if( file_exists( $module_path ) && is_writable($module_path) ){
 	  if(! file_exists($view_path)){
 	    if( $res = fopen($view_path,'w')){
-		  $content = "<?php if(! defined('APP_STARTED')){die('<h3>BAD REQUEST.</h3>');}";
-		  $content .= "\n     \n  /**\n   * $view view class in ";
+		  $content = "<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}";
+		  $content .= "\n  /**\n   * $view view class in ";
 		  $content .= "'$module' module\n   *\n   */\n\n  class ";
 		  $content .= $view." extends AeolusView\n  {";
 		  $content .= "\n    public function showSidebar()\n    {\n    }\n";

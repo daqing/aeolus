@@ -1,11 +1,10 @@
-<?php if(! defined('APP_STARTED')){ die('<h3>BAD REQUEST.</h3>');}
+<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
   /**
    * AeolusFront class
    *
    * Front controller to handle HTTP request
    *
    * @author Kinch Zhang <kinch.zhang@gmail.com>
-   *
    */
 
   class AeolusFront

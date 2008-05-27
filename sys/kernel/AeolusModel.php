@@ -1,10 +1,9 @@
-<?php if(! defined('APP_STARTED')){ die('<h3>BAD REQUEST.</h3>');}
+<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
   /**
-   * Aeolus Model class
+   * AeolusModel class
    * 
    * @category kernel
    * @author Kinch Zhang <kinch.zhang@gmail.com>
-   *
    */
 
   class AeolusModel

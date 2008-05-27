@@ -1,6 +1,6 @@
 <?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
   /**
-   * IndexView view class in 'index' module
+   * IndexView view class in 'sandbox' module
    *
    */
 
@@ -8,12 +8,12 @@
   {
     public function showSidebar()
     {
-	  echo 'Index';
+	  echo 'sandbox';
     }
 
     public function showContent()
     {
-	  echo 'Welcome to Aeolus Framework';
+	  echo 'Welcome to sandbox';
     }
 
     public function showScript()

@@ -15,7 +15,7 @@
 	if( file_exists( $module_path ) && is_writable($module_path) ){
 	  if(! file_exists($model_path)){
 	    if( $res = fopen($model_path,'w')){
-		  $content = "<?php if(! defined('APP_STARTED')){die('<h3>BAD REQUEST.</h3>');}";
+		  $content = "<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}";
 		  $content .= "\n  /**\n   * $model model class in ";
 		  $content .= "'$module' module\n   *\n   */\n\n  class ";
 		  $content .= $model." extends AeolusModel\n  {\n    ";

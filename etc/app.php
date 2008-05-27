@@ -1,11 +1,12 @@
-<?php if( basename(__FILE__) == basename($_SERVER['REQUEST_URI'])){
-        die('<h3>BAD REQUEST</h3>');
-	  }
+<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
   /**
    * Application-specific configuration
    *
    * @author Kinch Zhang <kinch.zhang@gmail.com>
    */
+
+  # Availability control
+  define('APP_ENABLED', true);
 
   # Debug control
   define('APP_DEBUG',true);

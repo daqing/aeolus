@@ -1,9 +1,8 @@
-<?php
+<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
   /**
-   * Aeolus init script
+   * Aeolus bootstrap script
    *
    * @author Kinch Zhang <kinch.zhang@gmail.com>
-   *
    */
 
   # Use Xdebug for debugging
@@ -31,13 +30,9 @@
   # Application URL prefix 
   $prefix = rtrim(APP_SUB,'/\\');
   $rewrite = isset($_GET['rewrite']) && 1 == $_GET['rewrite'];
-  
   if(! $rewrite ){
     # Apache mod_rewrite disabled
     $prefix .= '/index.php';
   }
   define('APP_PREFIX',$prefix);
-  
-  # Application started
-  define('APP_STARTED',true);
 ?>

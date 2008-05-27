@@ -16,7 +16,7 @@
 	if( file_exists( $module_path ) && is_writable($module_path) ){
 	  if(! file_exists($controller_path)){
 	    if( $res = fopen($controller_path,'w')){
-		  $content = "<?php if(! defined('APP_STARTED')){die('<h3>BAD REQUEST.</h3>');}";
+		  $content = "<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}";
 		  $content .= "\n  /**\n   * $controller controller in ";
 		  $content .= "'$module' module\n   *\n   */\n\n  function ";
 		  $content .= "$controller()\n  {\n    echo 'Hello,world! [From $controller";

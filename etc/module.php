@@ -1,10 +1,8 @@
-<?php if( basename(__FILE__) == basename($_SERVER['REQUEST_URI'])){
-        die('<h3>BAD REQUEST</h3>');}
+<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
   /**
    * Valid modules
    *
    */
 
-  $module = array('index', 'benchmark');
-
+  $module = array('index', 'sandbox');
 ?>
