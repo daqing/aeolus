@@ -28,19 +28,15 @@
   $path .= ini_get('include_path');
   ini_set('include_path',$path);
 
-  # Apache mod_rewrite detecting
-  if(isset($_GET['rewrite']) && 1 == $_GET['rewrite'] ){
-    define('AEOLUS_CAN_REWRITE',true);
-  }else{
-    define('AEOLUS_CAN_REWRITE',false);
+  # Application URL prefix 
+  $prefix = rtrim(APP_SUB,'/\\');
+  $rewrite = isset($_GET['rewrite']) && 1 == $_GET['rewrite'];
+  
+  if(! $rewrite ){
+    # Apache mod_rewrite disabled
+    $prefix .= '/index.php';
   }
-
-  # Base URL 
-  $base = rtrim(APP_SUB,'/\\');
-  if( !AEOLUS_CAN_REWRITE ){
-    $base .= '/index.php';
-  }
-  define('APP_BASE',$base);
+  define('APP_PREFIX',$prefix);
   
   # Application started
   define('APP_STARTED',true);

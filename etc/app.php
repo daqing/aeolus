@@ -11,9 +11,9 @@
   define('APP_DEBUG',true);
 
   # The subdirectory where Aeolus's installed
-  # NOTE: 
-  # if you installed Aeolus under ROOT, leave this blank
-  # if ELSE, *don't* forget the leading slash
+  # NOTE:
+  # If you installed Aeolus under ROOT, type '/' here
+  # Otherwise, *don't* forget the leading slash
   define('APP_SUB','/aeolus');
   
   # Theme

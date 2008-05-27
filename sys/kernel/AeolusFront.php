@@ -65,7 +65,7 @@
 	private function process()
 	{
 	  # Remove the base url from the request
-	  $this->request = substr($this->request,strlen(APP_BASE));
+	  $this->request = substr($this->request,strlen(APP_PREFIX));
 	  $this->request = trim($this->request,'/\\');
 
 	  if( strpos($this->request,'(') || strpos($this->request,'%')){

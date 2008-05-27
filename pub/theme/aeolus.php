@@ -13,9 +13,7 @@
     "http://www.w3.org/tr/xhtml1/DTD/xhtml1-transitional.dtd">
     <html><head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<!-- No cache -->
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="Sun, 6 Mar 2005 01:00:00 GMT" />
+	<!-- Cache control -->
     <title><?php echo($this->title);?></title>
     <link href="<?php $this->showStyle();?>" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="<?php $this->showJquery();?>"></script>
@@ -27,9 +25,9 @@
     
     <body>
 	<table width="960" border="0" cellspacing="0" cellpadding="0">
-      <!-- Header -->
+      <!-- Top -->
       <tr><td>
-	    <div id="header"><?php $this->showHeader();?></div>
+	    <div id="header"><?php $this->showTop();?></div>
 	  </td></tr>
       
       <!-- Navigator -->

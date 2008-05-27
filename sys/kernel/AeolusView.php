@@ -46,20 +46,20 @@
     	{	
 			# Start output buffer
             ob_start();
-            
+
 			# Load template
 			require( AEOLUS_HOME.'/pub/theme/'.APP_TPL.'.php');
-
-			# Send contents to client browser and close buffer
+            
+			# Send buffered contents 
 			ob_end_flush();
 
     	}
-
-		public function showHeader()
+		
+		public function showTop()
 		{
 		   echo '<div id="message">';
 		   echo '</div>';
-		   echo '<a href="'.APP_BASE.'"><img width="165" height="34" ';
+		   echo '<a href="'.APP_PREFIX.'"><img width="165" height="34" ';
 		   echo 'src="'.APP_SUB.'/pub/image/logo.gif" ';
 		   echo 'alt="Logo" /></a>';
 		  
@@ -84,8 +84,8 @@
 
 		public function showNavigator()
 		{
-		  echo '<a href="'.APP_BASE.'">首页</a>&middot;';
-		  echo '<a href="'.APP_BASE.'/benchmark/">Benchmark</a>';
+		  echo '<a href="'.APP_PREFIX.'">首页</a>&middot;';
+		  echo '<a href="'.APP_PREFIX.'/benchmark/">Benchmark</a>';
 		}
 
 		public function showsidebar(){}
