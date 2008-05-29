@@ -1,11 +1,11 @@
 <?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
   /**
-   * AeolusFactory class
+   * Aeolus class
    * 
    * @author Kinch Zhang <kinch.zhang@gmail.com>
    */
   
-  class AeolusFactory
+  class Aeolus
   {
     /**
      * Load a generic PHP file once and only once
@@ -130,6 +130,16 @@
       
       return $obj;
     }
+
+	/**
+	 * Display errors
+	 *
+	 */
+	public function error($message)
+	{
+	  require( AEOLUS_HOME.'/pub/error/aeolus_error.html' );
+	  die();
+	}
     
   }
 ?>

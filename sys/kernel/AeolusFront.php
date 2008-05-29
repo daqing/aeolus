@@ -141,7 +141,7 @@
 	private function launch()
 	{
 		# Load factory methods
-	    require( 'AeolusFactory.php' );
+	    require( 'Aeolus.php' );
 	    
 		# Setup environment variable
 		global $thisModule;
