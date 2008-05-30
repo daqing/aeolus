@@ -1,13 +1,13 @@
 <?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
   /**
-   * Mysql class
+   * MySQL class
    *
    * Database driver for MySQL
    *
    * @author Kinch Zhang <kinch.zhang@gmail.com>
    */
   
-  class Mysql
+  class MySQL
   {
     /**
      * Resource
@@ -24,17 +24,15 @@
       if(!$this->res)
       {
         # Try to connect to the MySQL server
-        A::loadFile( AEOLUS_HOME.'/etc/db/mysql.php');
-        $this->res = MYSQL_connect(MYSQL_HOST.':'.MYSQL_PORT,
-  	                             MYSQL_USER,
-  								 MYSQL_PASSWORD);
-  
+        require( AEOLUS_HOME.'/etc/db/mysql.php');
+        $this->res = MYSQL_connect("$host:$port", $user, $passwd);
+
         if( !$this->res ){
           # Fatal error: can't connect to database 
           $this->server_error();
         }
     
-        if( !mysql_select_db(MYSQL_SCHEMA,$this->res)){
+        if( !mysql_select_db($schema, $this->res)){
           $this->server_error();
         }
       }

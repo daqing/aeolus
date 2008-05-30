@@ -14,7 +14,7 @@
 	 * @access private
 	 *
 	 */
-    private static  $driver;
+    private static $driver = null;
 
 	/**
 	 * Data set
@@ -28,12 +28,14 @@
 	 * Constructor
 	 *
 	 */
-	function __construct($driver='mysql')
+	function __construct()
 	{
 	  if( null == self::$driver ){
-	    $driver = ucfirst($driver);
+		# Load configurations
+		require( AEOLUS_HOME.'/etc/driver.php');
+
 		# Load driver class
-        A::loadFile( "db/$driver.php");
+        A::ld( "db/$driver.php");
 	    self::$driver = new $driver();
 	    
 		$this->data = array( 'result' => false,

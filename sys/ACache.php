@@ -23,7 +23,7 @@
 	{
 	  if( null == self::$driver ){
 	    # Load driver according to the configuration
-	    AeolusFactory::loadFile( AEOLUS_HOME.'/etc/cache.php' );
+	    A::ld_once( AEOLUS_HOME.'/etc/cache.php' );
 	    $driver = 'Aeolus'.CACHE_DRIVER.'Cache';
 	    AeolusFactory::loadFile( "cache/$driver.php" );
 
@@ -52,7 +52,6 @@
 	 */
 	public function store($data, $id)
 	{
-	  self::setDriver();
 	  self::$driver->store($data,$id);
 	}
   }

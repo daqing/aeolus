@@ -5,9 +5,9 @@
    * @author Kinch Zhang <kinch.zhang@gmail.com>
    */
 
-  define('MYSQL_HOST','localhost');
-  define('MYSQL_PORT',3306);
-  define('MYSQL_USER','php');
-  define('MYSQL_PASSWORD','php');
-  define('MYSQL_SCHEMA','php');
+  $host = 'localhost';
+  $port = 3306;
+  $user = 'php';
+  $passwd = 'php';
+  $schema = 'php';
 ?>

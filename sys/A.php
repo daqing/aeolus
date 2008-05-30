@@ -15,7 +15,7 @@
      * @return void
      * 
      */
-    public function loadFile($path)
+    public function ld($path)
     {
       if(! isset($GLOBALS['included'][$path])){
         if( substr($path,-4,4) == '.php' ){
@@ -54,7 +54,7 @@
 	  if( APP_DEBUG ){clearstatcache();}
 
       if( file_exists($path)){
-        self::loadFile($path);        
+        self::ld($path);        
       }
     }
     
@@ -82,8 +82,8 @@
 	  
       if( file_exists($path)){
 	    # Load related classes
-        self::loadFile('kernel/AView.php');
-        self::loadFile($path);
+        self::ld('kernel/AView.php');
+        self::ld($path);
 
         if( class_exists($view)){
           $obj = new $view();
@@ -120,8 +120,8 @@
 
       if( file_exists($path)){
 	    # Load related classes
-        self::loadFile('kernel/AModel.php');
-        self::loadFile($path);
+        self::ld('kernel/AModel.php');
+        self::ld($path);
 
         if( class_exists($model)){
           $obj = new $model();
