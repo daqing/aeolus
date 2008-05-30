@@ -18,20 +18,14 @@
     public function ld($path)
     {
       if(! isset($GLOBALS['included'][$path])){
-        if( substr($path,-4,4) == '.php' ){
-          # This is a PHP file so it's safe to include it
-          require($path);
-          $GLOBALS['included'][$path] = true;
-        }else{
-          # This is not a PHP file
-          if( APP_DEBUG ){
-            echo("<h3>[FATAL ERROR] THE FILE: '$path' is not a PHP file.</h3>");
-          }else{
-            die('<h3>BAD REQUEST.</h3>');
-          }
-        }        
-      }
-    }
+	    # Security check
+        if( substr($path,-4,4) != '.php' ){ $path .= '.php';}
+        if( APP_DEBUG ){ clearstatcache();}
+		
+        require($path);
+        $GLOBALS['included'][$path] = true;
+	  }
+	}
     
     /**
      * Load a helper function

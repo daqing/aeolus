@@ -1,4 +1,4 @@
-<?php if(! defined('AEOLUS_STARTED'){ die('<h3>BAD REQUEST</h3>');}
+<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
   /**
    * ACache class for caching
    *
@@ -23,9 +23,9 @@
 	{
 	  if( null == self::$driver ){
 	    # Load driver according to the configuration
-	    A::ld_once( AEOLUS_HOME.'/etc/cache.php' );
-	    $driver = 'Aeolus'.CACHE_DRIVER.'Cache';
-	    AeolusFactory::loadFile( "cache/$driver.php" );
+	    require( AEOLUS_HOME.'/etc/cache.php' );
+		$driver = 'A'.$driver.'Cache';
+	    A::ld( "cache/$driver.php" );
 
 	    self::$driver = new $driver();
 	  }
@@ -50,9 +50,9 @@
 	 * @param $data
 	 * @param $id
 	 */
-	public function store($data, $id)
+	public function store($data, $id, $lifetime = 300)
 	{
-	  self::$driver->store($data,$id);
+	  self::$driver->store($data,$id, $lifetime);
 	}
   }
 ?>

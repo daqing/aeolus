@@ -6,6 +6,7 @@
 
   function index()
   {
+    A::ld( 'ACache');
     $view = A::mkView('IndexView');
 	$view->title = 'Sandbox';
 
