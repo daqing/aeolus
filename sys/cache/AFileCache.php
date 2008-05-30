@@ -64,6 +64,21 @@
 	{
 	  $metafile =  $this->getPath($id) . $this->getMetaFile($id);
 	  $file = $this->getPath($id) . $this->getFile($id);
+	  # Remove file
+      if(! is_file($metafile) || ! is_file($file)){
+	    return false;
+	  }
+	  if(!@unlink($file)){ return false;}
+	  
+	  # Remove meta file
+	  if( isset($this->metadata[$id])){
+	    unset($this->metadata[$id]);
+	  }
+	  if(!@unlink($metafile)){
+	    return false;
+	  }
+
+	  return true;
 	}
 	
 	/**
