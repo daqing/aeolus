@@ -1,12 +1,12 @@
 <?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
   /**
-   * AeolusModel class
+   * AModel class
    * 
    * @category kernel
    * @author Kinch Zhang <kinch.zhang@gmail.com>
    */
 
-  class AeolusModel
+  class AModel
   {
     /**
 	 * Database driver
@@ -33,8 +33,8 @@
 	  if( null == self::$driver ){
 	    $driver = ucfirst($driver);
 		# Load driver class
-        AeolusFactory::loadFile( "database/$driver.php");
-	    self::$driver = new $class();
+        A::loadFile( "db/$driver.php");
+	    self::$driver = new $driver();
 	    
 		$this->data = array( 'result' => false,
 	                       'affected' => 0,

@@ -1,11 +1,11 @@
 <?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
   /**
-   * Aeolus class
+   * A class
    * 
    * @author Kinch Zhang <kinch.zhang@gmail.com>
    */
   
-  class Aeolus
+  class A
   {
     /**
      * Load a generic PHP file once and only once
@@ -67,7 +67,7 @@
      * @return object $obj an instance of the view class
      * 
      */
-    public function makeView($view, $model=null, $module='this')
+    public function mkView($view, $model=null, $module='this')
     {
 	  if( 'this' == $module ){
 	    global $thisModule;
@@ -82,7 +82,7 @@
 	  
       if( file_exists($path)){
 	    # Load related classes
-        self::loadFile('kernel/AeolusView.php');
+        self::loadFile('kernel/AView.php');
         self::loadFile($path);
 
         if( class_exists($view)){
@@ -105,7 +105,7 @@
      * @return object $obj an instance of the model class
      * 
      */
-    public function makeModel($model, $module='this')
+    public function mkModel($model, $module='this')
     {
 	  if( 'this' == $module){
 	    global $thisModule;
@@ -120,7 +120,7 @@
 
       if( file_exists($path)){
 	    # Load related classes
-        self::loadFile('kernel/AeolusModel.php');
+        self::loadFile('kernel/AModel.php');
         self::loadFile($path);
 
         if( class_exists($model)){

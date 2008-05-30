@@ -1,11 +1,11 @@
 <?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
     /**
-     * AeolusView class
+     * AView class
      * 
      * @author Kinch Zhang <kinch.zhang@gmail.com>
      */
 
-	class AeolusView
+	class AView
 	{
     	/**
     	 * Page title

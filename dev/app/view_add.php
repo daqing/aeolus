@@ -18,7 +18,7 @@
 		  $content = "<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}";
 		  $content .= "\n  /**\n   * $view view class in ";
 		  $content .= "'$module' module\n   *\n   */\n\n  class ";
-		  $content .= $view." extends AeolusView\n  {";
+		  $content .= $view." extends AView\n  {";
 		  $content .= "\n    public function showSidebar()\n    {\n    }\n";
 		  $content .= "\n    public function showContent()\n    {\n    }\n";
 		  $content .= "\n    public function showScript()\n    {";

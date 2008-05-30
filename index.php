@@ -20,9 +20,9 @@
  require( 'sys/bootstrap.php' );
 
  # Run 
- require( 'kernel/AeolusFront.php' );
+ require( 'kernel/AFront.php' );
 
- $front = new AeolusFront();
+ $front = new AFront();
  $front->run();
 
 ?>

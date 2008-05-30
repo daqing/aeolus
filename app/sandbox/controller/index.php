@@ -6,7 +6,7 @@
 
   function index()
   {
-    $view = Aeolus::makeView('IndexView');
+    $view = A::mkView('IndexView');
 	$view->title = 'Sandbox';
 
 	$view->show();

@@ -1,13 +1,13 @@
 <?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
   /**
-   * AeolusFront class
+   * AFront class
    *
    * Front controller to handle HTTP request
    *
    * @author Kinch Zhang <kinch.zhang@gmail.com>
    */
 
-  class AeolusFront
+  class AFront
   {
     /**
 	 * HTTP request
@@ -141,7 +141,7 @@
 	private function launch()
 	{
 		# Load factory methods
-	    require( 'Aeolus.php' );
+	    require( 'A.php' );
 	    
 		# Setup environment variable
 		global $thisModule;

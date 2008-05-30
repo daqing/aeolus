@@ -5,7 +5,9 @@
 
   function index()
   {
-    $view = Aeolus::makeView('IndexView');
+    $model = A::mkModel('IndexModel');
+
+    $view = A::mkView('IndexView', $model);
 	$view->title = '首页';
 
 	$view->show();

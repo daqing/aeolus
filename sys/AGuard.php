@@ -1,11 +1,11 @@
 <?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
   /**
-   * AeolusGuard class
+   * AGuard class
    *
    * @author Kinch Zhang <kinch.zhang@gmail.com>
    */
 
-  class AeolusGuard
+  class AGuard
   {
     /**
 	 * Purifier Engine

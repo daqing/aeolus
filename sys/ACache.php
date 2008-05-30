@@ -1,11 +1,11 @@
 <?php if(! defined('AEOLUS_STARTED'){ die('<h3>BAD REQUEST</h3>');}
   /**
-   * AeolusCache class for caching
+   * ACache class for caching
    *
    * @author Kinch Zhang <kinch.zhang@gmail.com>
    */
 
-  class AeolusCache
+  class ACache
   {
     /**
 	 * Cache driver
