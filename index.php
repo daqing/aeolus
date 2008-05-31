@@ -24,5 +24,5 @@
 
  $front = new AFront();
  $front->run();
-
+ 
 ?>

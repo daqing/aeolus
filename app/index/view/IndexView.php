@@ -12,15 +12,12 @@
 
     public function showContent()
     {
-	  var_dump($this->data);
+	  echo 'Welcome to Aeolus Framework.';
     }
 
     public function showScript()
     {
       ?>
-	  $(function(){
-	    $("#sidebar").html('<span style="background-color:#EFEFEF;">Index</span>');
-	  });
       <?php
     }
   }

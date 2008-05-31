@@ -5,21 +5,20 @@
    * @author Kinch Zhang <kinch.zhang@gmail.com>
    */
 
-  # Use Xdebug for debugging
+  # Error reporting
   if( APP_DEBUG ){
-    if( function_exists( 'xdebug_start_trace' ) ){
-	  # Xdebug enabled
-	  xdebug_start_trace('aeolus_trace',4);
-	}
     # Show all errors
 	error_reporting( E_ALL );
   }else{
     # Turn off error reporting
 	error_reporting(0);
   }
-
-  # Start session
-  session_start();
+  
+  if(! isset($GLOBALS['session']['started'])){
+    # Start session
+    session_start();
+	$GLOBALS['session']['started'] = true;
+  }
 
   # Add 'opt' and 'sys' directory to the include_path
   $path = AEOLUS_HOME.'/opt/'.PATH_SEPARATOR;
