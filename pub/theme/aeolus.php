@@ -53,6 +53,10 @@
 
 	<!-- JavaScript -->
     <script type="text/javascript"> 
+	  $(function(){
+	    $("#navigator").corner();
+	  });
+
       <?php $this->showScript();?> 
     </script>    
 </body></html>

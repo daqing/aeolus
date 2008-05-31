@@ -1,27 +1,32 @@
 #! /usr/bin/php
 <?php
   /**
-   * Add a group
+   * Add groups
    *
+   * @author Kinch Zhang <kinch.zhang@gmail.com>
    */
 
-  require '../init.php'; 
-
   if( 2 > $argc ){
-    echo "[Usage] group.php groups \n";
-
+    # Show help info
+    echo "Usage: group [GROUP]...\n";
+	echo "Add GROUP(s).\n\n";
+	echo "Report bugs to <kinch.zhang@gmail.com>.\n";
   }else{
+    define('AEOLUS_HOME', dirname(dirname(__FILE__)));
+
     for( $i=1; $i<$argc; $i++){
 	  clearstatcache();
 	  $path = AEOLUS_HOME."/app/$argv[$i]";
 
 	  if(! file_exists( $path )){
+	    # Add a new group
 	    @mkdir( $path );
 		@mkdir( $path.'/controller' );
 		@mkdir( $path.'/model' );
 		@mkdir( $path.'/view' );
 		@mkdir( $path.'/helper' );
 	  }else{
+	    # Create missing directories in that group
 	    foreach( array('controller','view','model','helper') as $v ){
 		  if(! file_exists( $path."/$v" )){
 		    @mkdir( $path."/$v" );
