@@ -61,7 +61,7 @@
      * @return object $obj an instance of the view class
      * 
      */
-    public function mkview($view, $model=null, $group='this')
+    public function mkview($view, $data = null, $group = 'this')
     {
 	  if( 'this' == $group ){
 	    global $thisgrp;
@@ -82,8 +82,8 @@
         if( class_exists($view)){
           $obj = new $view();
 
-          if($model){
-            $obj->setModel($model);  
+          if($data){
+            $obj->setData($data);  
           }
         }
       }

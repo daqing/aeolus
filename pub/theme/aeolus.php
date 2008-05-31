@@ -1,9 +1,8 @@
 <?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
     /**
-	 * Aeolus Template
+	 * Aeolus template
 	 *
 	 * @author Kinch Zhang <kinch.zhang@gmail.com>
-	 * @category template
 	 */   
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 transitional//EN" 
@@ -15,9 +14,6 @@
     <link href="<?php $this->showStyle();?>" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="<?php $this->showJquery();?>"></script>
     <script type="text/javascript" src="<?php $this->showJqueryCorner();?>"></script> 
-    <script type="text/javascript"> 
-      <?php $this->showScript();?> 
-    </script>    
     </head>
     
     <body>
@@ -32,27 +28,31 @@
 	    <div id="navigator"><?php $this->showNavigator()?></div>
 	  </td></tr>
 
+     <!-- Middle -->
       <tr><td>
-      <!-- Main -->
-      <div id="main"> 
-        <div id="notice"></div>
-	    <div id="content"><?php $this->showContent();?></div>
-      </div>           
+        <!-- Main -->
+        <div id="main"> 
+          <div id="notice"></div>
+	      <div id="content"><?php $this->showContent();?></div>
+        </div>           
 
-      <!-- sidebar -->
-      <div id="sidebar"><? $this->showSidebar();?></div>
+        <!-- sidebar -->
+        <div id="sidebar"><? $this->showSidebar();?></div>
       </td></tr>
 
-      <!-- Footer -->
+      <!-- Bottom -->
 	  <tr><td>
-	  <div id="footer">Powered by
-	  <a href="http://code.google.com/p/aeolus/">Aeolus</a>
-      &middot;&nbsp;&copy;&nbsp;Copyright 2008-2009,
-	  <a href="http://citygeneration.com/">CityGeneration, Inc.</a>
-	  &middot;&nbsp;All Rights Reserved   
-      </div>
+	    <div id="footer">Powered by
+		  <a href="http://code.google.com/p/aeolus/">Aeolus</a>
+		  &middot;&nbsp;&copy;&nbsp;Copyright 2008-2009,
+		  <a href="http://citygeneration.com/">CityGeneration, Inc.</a>
+		  &middot;&nbsp;All Rights Reserved   
+        </div>
 	  </td></tr>
-
     </table>
-    </body>
-</html>
+
+	<!-- JavaScript -->
+    <script type="text/javascript"> 
+      <?php $this->showScript();?> 
+    </script>    
+</body></html>
