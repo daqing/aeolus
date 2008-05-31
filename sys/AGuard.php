@@ -11,7 +11,6 @@
 	 * Purifier Engine
 	 *
 	 * Default engine is HTMLPurifier
-	 *
 	 */
 	private static $engine = null;
 
@@ -21,7 +20,6 @@
 	 * @access public
 	 * @param string $input the user input
 	 * @return string $purified the purified string
-	 *
 	 */
 	public function purify($input)
 	{
@@ -40,14 +38,11 @@
 	private function getEngine()
 	{
 	  if( null == self::$engine){
-	    A::ld('HTMLPurifier/HTMLPurifier.standalone.php');
+	    # Load files
+		A::ld('guard/HTMLPurifier/Bootstrap.php');
+	    A::ld('guard/HTMLPurifier.autoload.php');
 
-		# Config
-		$config = array(
-		  'Cache.SerializerPath' => AEOLUS_HOME.'/tmp/htmlpurifier',
-		);
-
-		self::$engine = new HTMLPurifier($config);
+		self::$engine = new HTMLPurifier();
 	  }
 
 	  return self::$engine;
