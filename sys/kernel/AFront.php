@@ -49,8 +49,7 @@
 	 */
 	public function run()
 	{
-	  $this->process();
-	  $this->launch();
+	  $this->launch($this->process());
 	}
 
 	/**
@@ -72,73 +71,74 @@
 		return;
 	  }
 
-      # Get command
+      # Get segments
 	  if( strlen($this->request) > 0 ){
-	    $cmd = explode('/',$this->request);
+	    $seg = explode('/',$this->request);
 	  }else{
-	    $cmd = '/';
+	    $seg = '/';
 	  }
 
-	  # Load valid groups
-	  require AEOLUS_HOME.'/etc/group.php';
-	  
-	  if( '/' !== $cmd && is_array($cmd) ){
-		$size = count($cmd);
+	  if( '/' !== $seg && is_array($seg) ){
+	    # Load valid groups
+	    require AEOLUS_HOME.'/etc/group.php';
 
+		$size = count($seg);
 		switch( $size ){
 		  case 1:
-			if( in_array($cmd[0], $group)){
-			  $this->result['group'] = $cmd[0];
+			if( in_array($seg[0], $group)){
+			  $this->result['group'] = $seg[0];
 			}else{
-			  $this->result['controller'] = $cmd[0];
+			  $this->result['controller'] = $seg[0];
 			}
 
 		    break;
 
 		  case 2:
-		    if( in_array($cmd[0], $group) ){
-			  $this->result['group'] = $cmd[0];
-			  $this->result['controller'] = $cmd[1];
+		    if( in_array($seg[0], $group) ){
+			  $this->result['group'] = $seg[0];
+			  $this->result['controller'] = $seg[1];
 			}else{
-			  $this->result['controller'] = $cmd[0];
+			  $this->result['controller'] = $seg[0];
 			  $this->result['argc'] = 1;
-			  $this->result['argv'][] = $cmd[1];
+			  $this->result['argv'][] = $seg[1];
 			}
 
 		    break;
 		  
 		  default:
-		    if( in_array($cmd[0], $group) ){
-			  $this->result['group'] = $cmd[0];
-			  $this->result['controller'] = $cmd[1];
+		    if( in_array($seg[0], $group) ){
+			  $this->result['group'] = $seg[0];
+			  $this->result['controller'] = $seg[1];
 			  $this->result['argc'] = $size - 2;
 
 			  for( $i=0; $i < $this->result['argc']; $i++ ){
-			    $this->result['argv'][] = $cmd[$i+2];
+			    $this->result['argv'][] = $seg[$i+2];
 			  }
 			}else{
-			  $this->result['controller'] = $cmd[0];
+			  $this->result['controller'] = $seg[0];
 			  $this->result['argc'] = $size - 1;
 
 			  for( $i=0; $i < $this->result['argc']; $i++ ){
-			    $this->result['argv'][] = $cmd[$i+1];
+			    $this->result['argv'][] = $seg[$i+1];
 			  }
 			}
 
 		    break;
-		} 
+		}
       }
+      
+	  return $seg;
     }
 
 	/**
 	 * Launch application controllers
 	 *
 	 * @access private
-	 * @param void
+	 * @param array $seg Segment array(for debugging)
 	 * @return void
 	 *
 	 */
-	private function launch()
+	private function launch($seg)
 	{
 		# Load factory methods
 	    require( 'A.php' );
@@ -148,7 +148,7 @@
 		$thisgrp = $this->result['group'];
 
 	    extract($this->result);
-	    $path = AEOLUS_HOME."/app/$group/controller/$controller.php";
+	    $path = AEOLUS_HOME."/app/$group/controller/$controller.php";    
 
 		if( file_exists($path) ){
 		  require( $path );
@@ -163,8 +163,9 @@
 
 		  }else{
 			if( APP_DEBUG ){
-		      # Controller functon not defined
-			  die("<h4>FATAL: FUNCTION <i>'$controller'</i> NOT DEFINED IN <i>'$group'</i> GROUP</h4>");
+			  # Error: controller not defined
+			  $error = "Fatal: function <i>'$controller'</i> not defined in <i>'$group'</i> group";
+			  die($error);
 			}else{
 			  # Redirect to home page
 			  header('Location: /');
@@ -173,8 +174,22 @@
 
 		}else{
 		  if( APP_DEBUG ){
-		    # Controller not found
-		    die("<h4>FATAL: CONTROLLER <i>'$controller'</i> NOT FOUND IN <i>'$group'</i> GROUP</h4>");
+			require( AEOLUS_HOME.'/etc/group.php');
+			if(in_array($seg[0], $group)){
+			  # Error: controller not found
+			  $error = "Fatal: Controller <i>'$controller'</i> not found in <i>'$seg[0]'</i> group";
+			  die($error);
+			}else{
+			  if( file_exists( AEOLUS_HOME."/app/$seg[0]")){
+			    # Error: group exists in app but not defined
+				$error = "Fatal: group '$seg[0]' exists but not defined";
+			    die($error);
+			  }else{
+			  	$error = "Fatal: group <i>'$seg[0]'</i> not defined and controller <i>'$controller'</i> ";
+			  	$error .= 'not found in <i>\'index\'</i> group';
+			    die($error);
+		      }
+			}
 		  }else{
 		    # Redirect to home page
 		    header('Location: /');
