@@ -84,49 +84,46 @@
 
 		$size = count($seg);
 		switch( $size ){
+
 		  case 1:
 			if( in_array($seg[0], $group)){
+			  # Group defined
 			  $this->result['group'] = $seg[0];
 			}else{
+			  # Controller in 'index' group
 			  $this->result['controller'] = $seg[0];
 			}
-
 		    break;
 
 		  case 2:
 		    if( in_array($seg[0], $group) ){
+			  # Group defined
 			  $this->result['group'] = $seg[0];
 			  $this->result['controller'] = $seg[1];
 			}else{
+			  # Controller in 'index' group
 			  $this->result['controller'] = $seg[0];
 			  $this->result['argc'] = 1;
 			  $this->result['argv'][] = $seg[1];
 			}
-
 		    break;
 		  
 		  default:
 		    if( in_array($seg[0], $group) ){
+			  # Group defined
 			  $this->result['group'] = $seg[0];
 			  $this->result['controller'] = $seg[1];
 			  $this->result['argc'] = $size - 2;
-
-			  for( $i=0; $i < $this->result['argc']; $i++ ){
-			    $this->result['argv'][] = $seg[$i+2];
-			  }
+			  $this->result['argv'] = array_slice($seg, 2);
 			}else{
+			  # Controller in 'index' group
 			  $this->result['controller'] = $seg[0];
 			  $this->result['argc'] = $size - 1;
-
-			  for( $i=0; $i < $this->result['argc']; $i++ ){
-			    $this->result['argv'][] = $seg[$i+1];
-			  }
+			  $this->result['argv'] = array_slice($seg, 1);
 			}
-
 		    break;
 		}
       }
-      
 	  return $seg;
     }
 
