@@ -32,19 +32,19 @@
      * 
      * @access public
      * @param string $helper the helper function name
-     * @param string $module the module name
+     * @param string $group the group name
      * @return boolean true|false true if the helper exists
      * 
      */
-    public function loadHelper($helper, $module='this')
+    public function getHelper($helper, $group='this')
     {
-	  if( 'this' == $module ){
+	  if( 'this' == $group ){
 	    global $thisModule;
-		$module = $thisModule;
+		$group = $thisModule;
 	  }
 
 	  # Absolute path to the helper file
-      $path = AEOLUS_HOME."/app/$module/helper/$helper.php";
+      $path = AEOLUS_HOME."/app/$group/helper/$helper.php";
 	  if( APP_DEBUG ){clearstatcache();}
 
       if( file_exists($path)){
@@ -57,19 +57,19 @@
      * 
      * @param string $view the name of the view class
      * @param object $model Model object
-     * @param string $module the module name
+     * @param string $group the group name
      * @return object $obj an instance of the view class
      * 
      */
-    public function mkView($view, $model=null, $module='this')
+    public function mkview($view, $model=null, $group='this')
     {
-	  if( 'this' == $module ){
-	    global $thisModule;
-		$module = $thisModule;
+	  if( 'this' == $group ){
+	    global $thisgrp;
+		$group = $thisgrp;
 	  }
 
 	  # Absolute path to the view file
-      $path = AEOLUS_HOME."/app/$module/view/$view.php";
+      $path = AEOLUS_HOME."/app/$group/view/$view.php";
 
       if( APP_DEBUG ){ clearstatcache();}
       $obj = null;
@@ -95,19 +95,19 @@
      * Get an instance of an application model class
      * 
      * @param string $model the name of the model class
-     * @param string $module the module name
+     * @param string $group the group name
      * @return object $obj an instance of the model class
      * 
      */
-    public function mkModel($model, $module='this')
+    public function mkmodel($model, $group='this')
     {
-	  if( 'this' == $module){
+	  if( 'this' == $group){
 	    global $thisModule;
-		$module = $thisModule;
+		$group = $thisModule;
 	  }
       
 	  # Absolute path to the model file
-      $path = AEOLUS_HOME."/app/$module/model/$model.php";
+      $path = AEOLUS_HOME."/app/$group/model/$model.php";
 
       if( APP_DEBUG ){clearstatcache();}
       $obj = null;

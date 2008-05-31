@@ -33,7 +33,7 @@
 	  $this->result = array();
 
 	  # Init.
-	  $this->result['module'] = 'index';
+	  $this->result['group'] = 'index';
 	  $this->result['controller'] = 'index';
 	  $this->result['argc'] = 0;
 	  $this->result['argv'] = array();
@@ -79,16 +79,16 @@
 	    $cmd = '/';
 	  }
 
-	  # Load valid modules
-	  require AEOLUS_HOME.'/etc/module.php';
+	  # Load valid groups
+	  require AEOLUS_HOME.'/etc/group.php';
 	  
 	  if( '/' !== $cmd && is_array($cmd) ){
 		$size = count($cmd);
 
 		switch( $size ){
 		  case 1:
-			if( in_array($cmd[0], $module)){
-			  $this->result['module'] = $cmd[0];
+			if( in_array($cmd[0], $group)){
+			  $this->result['group'] = $cmd[0];
 			}else{
 			  $this->result['controller'] = $cmd[0];
 			}
@@ -96,8 +96,8 @@
 		    break;
 
 		  case 2:
-		    if( in_array($cmd[0], $module) ){
-			  $this->result['module'] = $cmd[0];
+		    if( in_array($cmd[0], $group) ){
+			  $this->result['group'] = $cmd[0];
 			  $this->result['controller'] = $cmd[1];
 			}else{
 			  $this->result['controller'] = $cmd[0];
@@ -108,8 +108,8 @@
 		    break;
 		  
 		  default:
-		    if( in_array($cmd[0], $module) ){
-			  $this->result['module'] = $cmd[0];
+		    if( in_array($cmd[0], $group) ){
+			  $this->result['group'] = $cmd[0];
 			  $this->result['controller'] = $cmd[1];
 			  $this->result['argc'] = $size - 2;
 
@@ -144,11 +144,11 @@
 	    require( 'A.php' );
 	    
 		# Setup environment variable
-		global $thisModule;
-		$thisModule = $this->result['module'];
+		global $thisgrp;
+		$thisgrp = $this->result['group'];
 
 	    extract($this->result);
-	    $path = AEOLUS_HOME."/app/$module/controller/$controller.php";
+	    $path = AEOLUS_HOME."/app/$group/controller/$controller.php";
 
 		if( file_exists($path) ){
 		  require( $path );
@@ -164,7 +164,7 @@
 		  }else{
 			if( APP_DEBUG ){
 		      # Controller functon not defined
-			  die("<h4>FATAL: FUNCTION <i>'$controller'</i> NOT DEFINED IN <i>'$module'</i> MODULE</h4>");
+			  die("<h4>FATAL: FUNCTION <i>'$controller'</i> NOT DEFINED IN <i>'$group'</i> GROUP</h4>");
 			}else{
 			  # Redirect to home page
 			  header('Location: /');
@@ -174,7 +174,7 @@
 		}else{
 		  if( APP_DEBUG ){
 		    # Controller not found
-		    die("<h4>FATAL: CONTROLLER <i>'$controller'</i> NOT FOUND IN <i>'$module'</i> MODULE</h4>");
+		    die("<h4>FATAL: CONTROLLER <i>'$controller'</i> NOT FOUND IN <i>'$group'</i> GROUP</h4>");
 		  }else{
 		    # Redirect to home page
 		    header('Location: /');

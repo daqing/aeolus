@@ -3,24 +3,24 @@
   # Add an application controller
 
   if( 3 > $argc ){
-    echo "Usage: controller_add.php 'module' 'controller' \n";
+    echo "Usage: controller.php 'group' 'controller' \n";
 	die();
   }else{
-    $module = $argv[1];
+    $group = $argv[1];
 	$controller = $argv[2];
     
 	require '../init.php';
 
-	$module_path = AEOLUS_HOME.'/app/'.$module;
-	$controller_path = AEOLUS_HOME.'/app/'.$module.'/controller/'.$controller.'.php';
-	if( file_exists( $module_path ) && is_writable($module_path) ){
+	$group_path = AEOLUS_HOME.'/app/'.$group;
+	$controller_path = AEOLUS_HOME.'/app/'.$group.'/controller/'.$controller.'.php';
+	if( file_exists( $group_path ) && is_writable($group_path) ){
 	  if(! file_exists($controller_path)){
 	    if( $res = fopen($controller_path,'w')){
 		  $content = "<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}";
-		  $content .= "\n  /**\n   * $controller controller in ";
-		  $content .= "'$module' module\n   *\n   */\n\n  function ";
+		  $content .= "\n  /**\n   * '$controller' controller in ";
+		  $content .= "'$group' group\n   *\n   */\n\n  function ";
 		  $content .= "$controller()\n  {\n    echo 'Hello,world! [From $controller";
-		  $content .= " controller in \'$module\' module]';\n  }\n?>";
+		  $content .= " controller in \'$group\' group]';\n  }\n?>";
 
 		  if( FALSE === fwrite($res,$content) ){
 		    echo "[ERROR] Can't write content $content to file $controller_path.\n";
@@ -34,7 +34,7 @@
         echo "[ERROR] This controller $controller already exists as $controller_path. \n";
 	  }
 	}else{
-      echo "[ERROR] The directory $module_path doesn't exist or doesn't allow writing files";
+      echo "[ERROR] The directory $group_path doesn't exist or doesn't allow writing files";
 	}
   }
 ?>

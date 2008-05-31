@@ -3,21 +3,21 @@
   # Add an application view
 
   if( 3 > $argc ){
-    echo "Usage: view_add.php 'module' 'view' \n";
+    echo "Usage: view.php 'group' 'view' \n";
   }else{
-    $module = $argv[1];
+    $group = $argv[1];
 	$view = $argv[2];
 
     require '../init.php';
 	 
-	$module_path = AEOLUS_HOME.'/app/'.$module;
-	$view_path = AEOLUS_HOME.'/app/'.$module.'/view/'.$view.'.php';
-	if( file_exists( $module_path ) && is_writable($module_path) ){
+	$group_path = AEOLUS_HOME.'/app/'.$group;
+	$view_path = AEOLUS_HOME.'/app/'.$group.'/view/'.$view.'.php';
+	if( file_exists( $group_path ) && is_writable($group_path) ){
 	  if(! file_exists($view_path)){
 	    if( $res = fopen($view_path,'w')){
 		  $content = "<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}";
 		  $content .= "\n  /**\n   * $view view class in ";
-		  $content .= "'$module' module\n   *\n   */\n\n  class ";
+		  $content .= "'$group' group\n   *\n   */\n\n  class ";
 		  $content .= $view." extends AView\n  {";
 		  $content .= "\n    public function showSidebar()\n    {\n    }\n";
 		  $content .= "\n    public function showContent()\n    {\n    }\n";
@@ -37,7 +37,7 @@
         echo "[ERROR] This view $view already exists as $view_path. \n";
 	  }
 	}else{
-      echo "[ERROR] The directory $module_path doesn't exist or doesn't allow writing files";
+      echo "[ERROR] The directory $group_path doesn't exist or doesn't allow writing files";
 	}
   }
 ?>

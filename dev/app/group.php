@@ -1,14 +1,14 @@
 #! /usr/bin/php
 <?php
   /**
-   * Add a module
+   * Add a group
    *
    */
 
   require '../init.php'; 
 
   if( 2 > $argc ){
-    echo "[Usage] module.php modules \n";
+    echo "[Usage] group.php groups \n";
 
   }else{
     for( $i=1; $i<$argc; $i++){

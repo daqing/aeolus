@@ -3,21 +3,21 @@
   # Add an application model
 
   if( 3 > $argc ){
-    echo "Usage: model_add.php 'module' 'model' \n";
+    echo "Usage: model.php 'group' 'model' \n";
   }else{
-    $module = $argv[1];
+    $group = $argv[1];
 	$model = $argv[2];
 
     require '../init.php';
 
-	$module_path = AEOLUS_HOME.'/app/'.$module;
-	$model_path = AEOLUS_HOME.'/app/'.$module.'/model/'.$model.'.php';
-	if( file_exists( $module_path ) && is_writable($module_path) ){
+	$group_path = AEOLUS_HOME.'/app/'.$group;
+	$model_path = AEOLUS_HOME.'/app/'.$group.'/model/'.$model.'.php';
+	if( file_exists( $group_path ) && is_writable($group_path) ){
 	  if(! file_exists($model_path)){
 	    if( $res = fopen($model_path,'w')){
 		  $content = "<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}";
 		  $content .= "\n  /**\n   * $model model class in ";
-		  $content .= "'$module' module\n   *\n   */\n\n  class ";
+		  $content .= "'$group' group\n   *\n   */\n\n  class ";
 		  $content .= $model." extends AModel\n  {\n    ";
 		  $content .= "public function foo()\n    {\n    }\n  } \n?>";
 
@@ -33,7 +33,7 @@
         echo "[ERROR] This model $model already exists in $model_path. \n";
 	  }
 	}else{
-      echo "[ERROR] Directory $module_path doesn't exist or doesn't allow writing files";
+      echo "[ERROR] Directory $group_path doesn't exist or doesn't allow writing files";
 	}
   }
 ?>

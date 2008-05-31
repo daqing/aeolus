@@ -84,7 +84,7 @@
 		public function showNavigator()
 		{
 		  echo '<a href="'.APP_PREFIX.'">首页</a>&middot;';
-		  echo '<a href="'.APP_PREFIX.'/sandbox/">Sandbox</a>';
+		  echo '<a href="'.APP_PREFIX.'/demo/">演示</a>';
 		}
 
 		public function showsidebar(){}

@@ -1,8 +1,8 @@
 <?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
   /**
-   * Valid modules
+   * Valid groups
    *
    */
 
-  $module = array('index', 'sandbox');
+  $group = array('index', 'demo');
 ?>
