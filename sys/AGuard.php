@@ -25,17 +25,32 @@
 	 */
 	public function purify($input)
 	{
-	  # Use HTMLPurifier
-	  if( null == self::$engine ){
-	    AeolusFactory::loadOnce( 'HTMLPurifier/HTMLPurifier.standalone.php' );
+	  # Get engine
+	  $engine = self::getEngine();
 
-	    $config = array('Cache.SerializerPath' => AEOLUS_HOME.'/tmp/htmlpurifier');
-	    self::$engine = new HTMLPurifier($config);
-      }
-
-	  return self::$engine->purify($input);
+	  return $engine->purify($input);
 
 	}
 
+	/**
+	 * Set HTMLPurifier engine
+	 *
+	 * @access private
+	 */
+	private function getEngine()
+	{
+	  if( null == self::$engine){
+	    A::ld('HTMLPurifier/HTMLPurifier.standalone.php');
+
+		# Config
+		$config = array(
+		  'Cache.SerializerPath' => AEOLUS_HOME.'/tmp/htmlpurifier',
+		);
+
+		self::$engine = new HTMLPurifier($config);
+	  }
+
+	  return self::$engine;
+	}
   }
 ?>
