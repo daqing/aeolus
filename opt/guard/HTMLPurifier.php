@@ -2,7 +2,6 @@
 
 class HTMLPurifier
 {
-    
     /** Version of HTML Purifier */
     public $version = '3.1.0';
     

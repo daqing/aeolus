@@ -7,6 +7,9 @@
 
   class AGuard
   {
+    # Purifier engine
+    private static $engine = null;
+
     /**
 	 * Purify the user input
 	 *
@@ -16,11 +19,13 @@
 	 */
 	public function pf($input)
 	{
-	  # Get HTMLPurifier engine
-	  A::ld('guard/HTMLPurifier.php');
-	  $engine = new HTMLPurifier();
+	  if( null == self::$engine ){
+	    # Get HTMLPurifier engine
+	    A::ld('guard/HTMLPurifier.php');
+	    self::$engine = new HTMLPurifier();
+	  }
 
-	  return $engine->purify($input);
+	  return self::$engine->purify($input);
 
 	}
   }
