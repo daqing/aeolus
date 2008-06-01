@@ -1,5 +1,5 @@
 <?php
 
   # Valid groups
-  $group = array('index', 'demo');
+  $group = array('index');
 ?>
