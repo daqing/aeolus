@@ -1,4 +1,4 @@
-<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
+<?php
     /**
      * AView class
      * 
@@ -11,13 +11,13 @@
     	 * Page title
     	 *
     	 * @access public
-    	 *
     	 */
     	public $title = 'Index';
 		
 		/**
 		 * Data to display
 		 *
+		 * @access public
 		 */
 		public $data = array();
 
@@ -31,6 +31,7 @@
 		/**
 		 * Set data for template to use
 		 *
+		 * @access public
 		 */
 		public function setData($data)
 		{
@@ -40,6 +41,7 @@
     	/**
     	 * Render a given template
     	 *
+		 * @access public
     	 */
     	public function show()
     	{	
@@ -81,14 +83,31 @@
 	
 	    public function showScript(){}
 
-		public function showNavigator()
+		public function showNav()
 		{
-		  echo '<a href="'.APP_PREFIX.'">首页</a>';
+		  echo '<a href="'.APP_PREFIX.'">Home</a>';
+		  echo '<a href="'.APP_PREFIX.'/doc/">Doc</a>';
 		}
 
-		public function showsidebar(){}
+		public function showSidebar(){}
 
     	public function showContent(){}
+
+		public function getHelper($helper, $group = 'this')
+		{
+          if( 'this' == $group ){
+	        global $thisgrp;
+		    $group = $thisgrp;
+	      }
+
+    	  # Absolute path to the helper file
+          $path = AEOLUS_HOME."/app/$group/helper/$helper.php";
+    	  if( APP_DEBUG ){clearstatcache();}
+
+          if( file_exists($path)){
+            A::ld($path);        
+          }
+		}
 
 		public function escape($value)
 		{

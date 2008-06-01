@@ -1,4 +1,4 @@
-<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
+<?php
   /**
    * AGuard class
    *
@@ -21,7 +21,7 @@
 	 * @param string $input the user input
 	 * @return string $purified the purified string
 	 */
-	public function purify($input)
+	public function pf($input)
 	{
 	  # Get engine
 	  $engine = self::getEngine();

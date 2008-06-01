@@ -20,11 +20,9 @@
 	    $model_path = $group_path.'/model/'.$model.'.php';
 	    if(! file_exists($model_path)){
 	      if( $res = fopen($model_path,'w')){
-		    $content = "<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}";
-		    $content .= "\n  /**\n   * $model model class in ";
-		    $content .= "'$group' group\n   *\n   */\n\n  class ";
-		    $content .= $model." extends AModel\n  {\n    ";
-		    $content .= "public function foo()\n    {\n    }\n  } \n?>";
+		    $content = "<?php\n\n  # '$model' model in '$group' group\n  ";
+			$content .= "class $model extends AModel\n  {\n    ";
+		    $content .= "public function foobar()\n    {\n    }\n  } \n?>";
 
 		    if( FALSE === fwrite($res,$content) ){
 		      echo "[ERROR] Can't write content to '$model_path'.\n";

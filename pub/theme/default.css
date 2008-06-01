@@ -24,15 +24,26 @@ h1,h2,h3,h4,h5,h6,p{
   margin:5px;
 }
 
-#navigator{
-  background: #D8E5F1;
-  text-align:left;
-  padding:5px 5px 7px 16px;
+#top {
+  margin-top:5px;
 }
 
-#navigator a{
+#nav{
+  text-align:left;
+  padding:5px 20px;
+  margin-bottom:10px;
+  background: #D8E5F1;
+}
+
+#nav a:link, #nav a:visited{
   display:inline;
-  margin:5px 8px;
+  text-decoration:none;
+  margin-right:13px;
+}
+
+#nav a:hover{
+  display:inline;
+  text-decoration:underline;
 }
 
 #sidebar {
@@ -42,6 +53,7 @@ h1,h2,h3,h4,h5,h6,p{
   text-align:left;
   margin-left:80%;
   padding:2px 10px;
+  background: #D8E5F1;
 }
 
 #sidebar a{
@@ -60,7 +72,7 @@ h1,h2,h3,h4,h5,h6,p{
   margin:0px 5px;
 }
 
-#footer {
+#bottom {
 	margin-top:20px;
 	padding:10px 0px 5px 20px;
 	text-align:left;
@@ -94,5 +106,5 @@ ul li{
   margin-bottom:8px;
   padding:4px 10px;
   background-color:#EFEFEF;
-  border-bottom:1px solid #CCC;
+  border-top:1px solid #CCC;
 }

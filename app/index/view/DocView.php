@@ -1,18 +1,17 @@
 <?php
 
-  # 'IndexView' view in 'index' group
-  class IndexView extends AView
+  # 'DocView' view in 'index' group
+  class DocView extends AView
   {
     public function showSidebar()
     {
-	  $this->getHelper('sidebar');
-	  sidebar();
+	  echo 'Doc';
     }
 
     public function showContent()
     {
 	  echo '<div class="section">';
-	  echo $this->data;
+	  echo 'Welcome to Aeolus doc page.';
 	  echo '</div>';
     }
 

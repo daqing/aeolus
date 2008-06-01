@@ -1,13 +1,10 @@
-<?php if(! defined('APP_STARTED')){ die('<h3>BAD REQUEST.</h3>');}
-  /**
-   * Sidebar helper function in 'index' group
-   *
-   */
+<?php
 
+  # 'sidebar' helper in 'index' group
   function sidebar()
   {
     ?>
-    <div>Change Me!</div>
+    <div>Home</div>
     <?php
   }
 ?>

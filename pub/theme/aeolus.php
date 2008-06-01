@@ -1,4 +1,4 @@
-<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
+<?php
     /**
 	 * Aeolus template
 	 *
@@ -20,12 +20,12 @@
 	<table width="960" border="0" cellspacing="0" cellpadding="0">
       <!-- Top -->
       <tr><td>
-	    <div id="header"><?php $this->showTop();?></div>
+	    <div id="top"><?php $this->showTop();?></div>
 	  </td></tr>
       
       <!-- Navigator -->
 	  <tr><td>
-	    <div id="navigator"><?php $this->showNavigator()?></div>
+	    <div id="nav"><?php $this->showNav()?></div>
 	  </td></tr>
 
      <!-- Middle -->
@@ -42,7 +42,7 @@
 
       <!-- Bottom -->
 	  <tr><td>
-	    <div id="footer">Powered by
+	    <div id="bottom">Powered by
 		  <a href="http://code.google.com/p/aeolus/">Aeolus</a>
 		  &middot;&nbsp;&copy;&nbsp;Copyright 2008-2009,
 		  <a href="http://citygeneration.com/">CityGeneration, Inc.</a>
@@ -54,7 +54,7 @@
 	<!-- JavaScript -->
     <script type="text/javascript"> 
 	  $(function(){
-	    $("#navigator").corner();
+		$("#sidebar").corner();
 	  });
 
       <?php $this->showScript();?> 

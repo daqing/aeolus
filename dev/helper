@@ -21,10 +21,8 @@
 	  if( file_exists( $group_path ) && is_writable($group_path) ){
 	    if(! file_exists($helper_path)){
 	      if( $res = fopen($helper_path,'w')){
-		    $content = "<?php if(! defined('APP_STARTED')){ die('<h3>BAD REQUEST.</h3>');}";
-  		    $content .= "\n  /**\n   * ".ucfirst($helper)." helper function in ";
-  		    $content .= "'$group' group\n   *\n   */\n\n  function ";
-  		    $content .= $helper."()\n  {\n    ?>\n    <div>Change Me!</div>";
+		    $content = "<?php\n\n  # '$helper' helper in '$group' group\n  ";
+			$content .= "function $helper()\n  {\n    ?>\n    <div>Change Me!</div>";
   		    $content .= "\n    <?php\n  }\n?>";
   
   		    if( FALSE === fwrite($res,$content) ){

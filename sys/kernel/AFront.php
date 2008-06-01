@@ -1,4 +1,4 @@
-<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
+<?php
   /**
    * AFront class
    *
@@ -12,19 +12,19 @@
     /**
 	 * HTTP request
 	 *
+	 * @access private
 	 */
 	private $request;
 	
 	/**
 	 * Processing result
 	 *
+	 * @access private
 	 */
 	private $result;
 
 	/**
 	 * Constructor
-	 *
-	 * @param void
 	 *
 	 */
 	function __construct()
@@ -44,8 +44,6 @@
 	 *
 	 * @access public
 	 * @param void
-	 * @return void
-	 *
 	 */
 	public function run()
 	{
@@ -57,8 +55,6 @@
 	 *
 	 * @access private
 	 * @param void
-	 * @return void
-	 *
 	 */
 	private function process()
 	{
@@ -132,8 +128,6 @@
 	 *
 	 * @access private
 	 * @param array $seg Segment array(for debugging)
-	 * @return void
-	 *
 	 */
 	private function launch($seg)
 	{

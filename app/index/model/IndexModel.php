@@ -1,13 +1,14 @@
-<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
-  /**
-   * IndexModel model class in 'index' group
-   *
-   */
+<?php
 
+  # 'IndexModel' model in 'index' group
   class IndexModel extends AModel
   {
-    public function foo()
+    public function getData()
     {
+	  $message = 'Welcome to Aeolus.<br/><br/>';
+	  $message .= 'Cached at '.date('H:i:s');
+
+	  return $message;
     }
   } 
 ?>

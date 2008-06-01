@@ -21,10 +21,8 @@
 	    $view_path = $group_path.'/view/'.$view.'.php';
 	    if(! file_exists($view_path)){
 	      if( $res = fopen($view_path,'w')){
-		    $content = "<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}";
-		    $content .= "\n  /**\n   * $view view class in ";
-		    $content .= "'$group' group\n   *\n   */\n\n  class ";
-		    $content .= $view." extends AView\n  {";
+		    $content = "<?php\n\n  # '$view' view in '$group' group\n  ";
+			$content .= "class $view extends AView\n  {";
 		    $content .= "\n    public function showSidebar()\n    {\n    }\n";
 		    $content .= "\n    public function showContent()\n    {\n    }\n";
 		    $content .= "\n    public function showScript()\n    {";

@@ -1,4 +1,4 @@
-<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
+<?php
   /**
    * Aeolus bootstrap script
    *
@@ -14,13 +14,13 @@
 	error_reporting(0);
   }
   
-  if(! isset($GLOBALS['session']['started'])){
+  if(! isset($GLOBALS['session']['started']) ){
     # Start session
     session_start();
 	$GLOBALS['session']['started'] = true;
   }
 
-  # Add 'opt' and 'sys' directory to the include_path
+  # Add 'opt' and 'sys' directories to the include_path
   $path = AEOLUS_HOME.'/opt/'.PATH_SEPARATOR;
   $path .= AEOLUS_HOME.'/sys/'.PATH_SEPARATOR;
   $path .= ini_get('include_path');

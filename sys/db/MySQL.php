@@ -1,4 +1,4 @@
-<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
+<?php
   /**
    * MySQL class
    *
@@ -12,6 +12,7 @@
     /**
      * Resource
      *
+	 * @access private
      */
     private $res = null;  
    
@@ -41,6 +42,7 @@
     /**
      * Display server error and exit
      *
+	 * @access private
      */
     private function server_error()
     {
@@ -53,8 +55,9 @@
     /**
      * Query the database server
      *
+	 * @access public
      */
-    public function query($sql)
+    public final function query($sql)
     {
       # Set encoding
       mysql_query("SET NAMES 'utf8'");

@@ -1,4 +1,4 @@
-<?php if(! defined('AEOLUS_STARTED')){ die('<h3>BAD REQUEST</h3>');}
+<?php
   /**
    * A class
    * 
@@ -13,7 +13,6 @@
      * @access public
      * @param string $path the absolute or relative path to the file
      * @return void
-     * 
      */
     public function ld($path)
     {
@@ -25,41 +24,16 @@
         require($path);
         $GLOBALS['included'][$path] = true;
 	  }
-	}
-    
-    /**
-     * Load a helper function
-     * 
-     * @access public
-     * @param string $helper the helper function name
-     * @param string $group the group name
-     * @return boolean true|false true if the helper exists
-     * 
-     */
-    public function getHelper($helper, $group='this')
-    {
-	  if( 'this' == $group ){
-	    global $thisModule;
-		$group = $thisModule;
-	  }
+	} 
 
-	  # Absolute path to the helper file
-      $path = AEOLUS_HOME."/app/$group/helper/$helper.php";
-	  if( APP_DEBUG ){clearstatcache();}
-
-      if( file_exists($path)){
-        self::ld($path);        
-      }
-    }
-    
     /**
      * Get an instance of an application view class
      * 
+	 * @access public
      * @param string $view the name of the view class
      * @param object $model Model object
      * @param string $group the group name
      * @return object $obj an instance of the view class
-     * 
      */
     public function mkview($view, $data = null, $group = 'this')
     {
@@ -91,19 +65,19 @@
       return $obj;
     }
     
-  /**
+    /**
      * Get an instance of an application model class
      * 
+	 * @access public
      * @param string $model the name of the model class
      * @param string $group the group name
      * @return object $obj an instance of the model class
-     * 
      */
     public function mkmodel($model, $group='this')
     {
 	  if( 'this' == $group){
-	    global $thisModule;
-		$group = $thisModule;
+	    global $thisgrp;
+		$group = $thisgrp;
 	  }
       
 	  # Absolute path to the model file
@@ -128,12 +102,12 @@
 	/**
 	 * Display errors
 	 *
+	 * @access public
 	 */
 	public function error($message)
 	{
 	  require( AEOLUS_HOME.'/pub/error/aeolus_error.html' );
 	  die();
 	}
-    
   }
 ?>
