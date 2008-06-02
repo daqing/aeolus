@@ -85,7 +85,8 @@
 
 		public function showNav()
 		{
-		  echo '<a href="'.APP_PREFIX.'">Home</a>';
+		  $this->getHelper('nav', 'index');
+		  nav();
 		}
 
 		public function showSidebar(){}
