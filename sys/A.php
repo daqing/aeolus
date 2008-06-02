@@ -23,9 +23,7 @@
     public function ld($path)
     {
 	  if(! in_array($path, self::$loaded) ){
-	    # Security check
-        $spath = (substr($path,-4,4) == '.php') ? $path : $path .='.php';
-        require($spath);
+        require($path);
 		self::$loaded[] = $path;
 	  }
 	} 
