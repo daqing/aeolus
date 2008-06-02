@@ -86,7 +86,6 @@
 		public function showNav()
 		{
 		  echo '<a href="'.APP_PREFIX.'">Home</a>';
-		  echo '<a href="'.APP_PREFIX.'/doc/">Doc</a>';
 		}
 
 		public function showSidebar(){}

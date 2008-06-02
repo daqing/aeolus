@@ -13,8 +13,8 @@
 
   # The subdirectory where Aeolus's installed
   # NOTE:
-  #   If you installed Aeolus under ROOT, type '/' here
-  #   Otherwise, *don't* forget the leading slash
+  # If you installed Aeolus under 'DOCUMENT_ROOT/foo', type '/foo'(no trailing slash)
+  # If else, leave this blank
   define('APP_SUB','/aeolus');
   
   # Theme

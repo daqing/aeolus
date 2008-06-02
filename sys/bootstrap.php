@@ -27,11 +27,7 @@
   ini_set('include_path',$path);
 
   # Application URL prefix 
-  $prefix = rtrim(APP_SUB,'/\\');
   $rewrite = isset($_GET['rewrite']) && 1 == $_GET['rewrite'];
-  if(! $rewrite ){
-    # Apache mod_rewrite disabled
-    $prefix .= '/index.php';
-  }
+  $prefix = $rewrite ? APP_SUB : APP_SUB.'/index.php';
   define('APP_PREFIX',$prefix);
 ?>
