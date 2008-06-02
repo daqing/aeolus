@@ -8,6 +8,12 @@
   class A
   {
     /**
+	 * Loaded files
+	 *
+	 * @access private
+	 */
+	private static $loaded = array();
+    /**
      * Load a generic PHP file once and only once
      * 
      * @access public
@@ -16,13 +22,11 @@
      */
     public function ld($path)
     {
-      if(! isset($GLOBALS['included'][$path])){
+	  if(! in_array($path, self::$loaded) ){
 	    # Security check
-        if( substr($path,-4,4) != '.php' ){ $path .= '.php';}
-        if( APP_DEBUG ){ clearstatcache();}
-		
-        require($path);
-        $GLOBALS['included'][$path] = true;
+        $spath = (substr($path,-4,4) == '.php') ? $path : $path .='.php';
+        require($spath);
+		self::$loaded[] = $path;
 	  }
 	} 
 
