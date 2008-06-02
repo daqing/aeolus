@@ -55,8 +55,7 @@
     <script type="text/javascript"> 
 	  $(function(){
 		$("#sidebar").corner();
+        <?php $this->showScript();?> 
 	  });
-
-      <?php $this->showScript();?> 
     </script>    
 </body></html>

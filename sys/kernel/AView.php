@@ -99,7 +99,6 @@
 	        global $thisgrp;
 		    $group = $thisgrp;
 	      }
-
     	  # Absolute path to the helper file
           $path = AEOLUS_HOME."/app/$group/helper/$helper.php";
     	  if( APP_DEBUG ){clearstatcache();}
