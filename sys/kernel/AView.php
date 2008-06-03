@@ -85,28 +85,13 @@
 
 		public function showNav()
 		{
-		  $this->getHelper('nav', 'index');
+		  A::h('nav', 'index');
 		  nav();
 		}
 
 		public function showSidebar(){}
 
     	public function showContent(){}
-
-		public function getHelper($helper, $group = 'this')
-		{
-          if( 'this' == $group ){
-	        global $thisgrp;
-		    $group = $thisgrp;
-	      }
-    	  # Absolute path to the helper file
-          $path = AEOLUS_HOME."/app/$group/helper/$helper.php";
-    	  if( APP_DEBUG ){clearstatcache();}
-
-          if( file_exists($path)){
-            A::ld($path);        
-          }
-		}
 
 		public function escape($value)
 		{

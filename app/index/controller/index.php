@@ -6,14 +6,14 @@
     A::ld('ACache.php');
 	if(! $data = ACache::fetch('index') ){
 	  # Cache miss
-	  $model = A::mkmodel('IndexModel');
+	  $model = A::m('IndexModel');
 	  $data = $model->getData();
 
 	  ACache::store($data, 'index', 60);
 	  $model = null;
 	}
 
-    $view = A::mkview('IndexView', $data);
+    $view = A::v('IndexView', $data);
 
 	$view->title = 'Index';
 	$view->show();

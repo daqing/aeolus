@@ -37,7 +37,7 @@
      * @param string $group the group name
      * @return object $obj an instance of the view class
      */
-    public function mkview($view, $data = null, $group = 'this')
+    public function v($view, $data = null, $group = 'this')
     {
 	  if( 'this' == $group ){
 	    global $thisgrp;
@@ -75,7 +75,7 @@
      * @param string $group the group name
      * @return object $obj an instance of the model class
      */
-    public function mkmodel($model, $group='this')
+    public function m($model, $group='this')
     {
 	  if( 'this' == $group){
 	    global $thisgrp;
@@ -100,6 +100,27 @@
       
       return $obj;
     }
+
+	/**
+	 * Load an application helper
+	 *
+	 * @access public
+	 * @param string $helper Helper name
+	 * @param string $group Group name
+	 */
+	public function h($helper, $group = 'this')
+	{
+      if( 'this' == $group ){
+	    global $thisgrp;
+		$group = $thisgrp;
+	  }
+	  # Absolute path to the helper file
+      $path = AEOLUS_HOME."/app/$group/helper/$helper.php";
+
+      if( file_exists($path)){
+        A::ld($path);        
+      }
+	}
 
 	/**
 	 * Display errors

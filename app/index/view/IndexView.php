@@ -5,7 +5,7 @@
   {
     public function showSidebar()
     {
-	  $this->getHelper('sidebar');
+	  A::h('sidebar');
 	  sidebar();
     }
 
