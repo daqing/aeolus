@@ -113,10 +113,10 @@
 	public final function select($sql)
 	{			
 	  if($result = self::$driver->query($sql)){	        
+	    $this->data['result'] = true;
 	    $this->data['affected'] = mysql_num_rows($result);
 	      
 	    if( $this->data['affected'] > 0 ){
-	      $this->data['result'] = true;
 		  $this->data['set'] = array();
 	      while( $dataset = mysql_fetch_assoc($result) ){
 	        $this->data['set'][] = $dataset;
