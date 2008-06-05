@@ -58,12 +58,8 @@
 		
 		public function showTop()
 		{
-		   echo '<div id="message">';
-		   echo '</div>';
-		   echo '<a href="'.APP_PREFIX.'"><img width="165" height="34" ';
-		   echo 'src="'.APP_SUB.'/pub/image/logo.gif" ';
-		   echo 'alt="Logo" /></a>';
-		  
+		  A::h('logo');
+		  logo();
 		}
         
         public function showStyle()
