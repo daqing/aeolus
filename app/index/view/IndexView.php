@@ -20,6 +20,8 @@
     public function showScript()
     {
       ?>
+	  $(".section").corner();
+	  $("#nav").corner();
       <?php
     }
   }

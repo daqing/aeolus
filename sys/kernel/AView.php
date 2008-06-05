@@ -73,7 +73,7 @@
         
         public function showJquery()
         {
-            echo APP_SUB.'/pub/script/jquery-1.2.3.min.js';
+            echo APP_SUB.'/pub/script/jquery-1.2.6.min.js';
         }
         
         public function showJqueryCorner()

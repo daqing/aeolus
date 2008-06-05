@@ -127,7 +127,7 @@
 	 *
 	 * @access public
 	 */
-	public function error($message)
+	public function err($message)
 	{
 	  require( AEOLUS_HOME.'/pub/error/aeolus_error.html' );
 	  die();
