@@ -38,11 +38,11 @@
         A::ld( "db/$driver.php");
 	    self::$driver = new $driver();
 	    
-		$this->data = array( 'result' => false,
-	                       'affected' => 0,
-						   'lastInsertId' => 0,
-						   'set' => array()
-						  );
+		$this->data = array(
+		  'affected' => 0,
+		  'lastInsertId' => 0,
+		  'set' => array()
+		);
 	  }
 	}
 
@@ -55,7 +55,6 @@
 	  $result = self::$driver->query($sql);
 	  
 	  if($result){
-	    $this->data['result'] = true;
 	    $this->data['affected'] = mysql_affected_rows();
 	    $this->data['lastInsertId'] = mysql_insert_id();
 		$this->data['set'] = array();
@@ -75,9 +74,7 @@
 	public final function update($sql)
 	{
 	  if(self::$driver->query($sql)){
-        $this->data['result'] = true;
 	    $this->data['affected'] = mysql_affected_rows();
-		$this->data['set'] = array();
 	  }
 	  
 	  return $this->data;
@@ -94,9 +91,7 @@
 	public final function delete($sql)
 	{
 	  if(self::$driver->query($sql)){
-        $this->data['result'] = true;
 	    $this->data['affected'] = mysql_affected_rows();
-		$this->data['set'] = array();
 	  }
 	  
 	  return $this->data;
@@ -113,14 +108,14 @@
 	public final function select($sql)
 	{			
 	  if($result = self::$driver->query($sql)){	        
-	    $this->data['result'] = true;
 	    $this->data['affected'] = mysql_num_rows($result);
 	      
 	    if( $this->data['affected'] > 0 ){
-		  $this->data['set'] = array();
 	      while( $dataset = mysql_fetch_assoc($result) ){
 	        $this->data['set'][] = $dataset;
 	      }
+
+		  $dataset = null;
 	    }
 	  }
 	  
