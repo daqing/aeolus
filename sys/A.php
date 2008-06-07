@@ -123,16 +123,5 @@
         A::ld($path);        
       }
 	}
-
-	/**
-	 * Display errors
-	 *
-	 * @access public
-	 */
-	public function err($message)
-	{
-	  require( AEOLUS_HOME.'/pub/error/aeolus_error.html' );
-	  die();
-	}
   }
 ?>
