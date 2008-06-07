@@ -162,31 +162,30 @@
 		  }
 		}
 
-	}else{
-	  if( APP_DEBUG ){
-	    require( AEOLUS_HOME.'/etc/group.php');
-		if(in_array($seg[0], $group)){
-		  # Error: controller not found
-		  $error = "Fatal: Controller <i>'$controller'</i> not found in <i>'$seg[0]'</i> group";
-		  die($error);
-		}else{
-		  if( file_exists( AEOLUS_HOME."/app/$seg[0]")){
-		    # Error: group exists in app but not defined
-			$error = "Fatal: group '$seg[0]' exists but not defined";
-			die($error);
-		  }else{
-		  	$error = "Fatal: group <i>'$seg[0]'</i> not defined and controller <i>'$controller'</i> ";
-		  	$error .= 'not found in <i>\'index\'</i> group';
-		    die($error);
-		  }
-		}
 	  }else{
-	    # Redirect to home page
-	    header('Location: /');
+	    if( APP_DEBUG ){
+	      require( AEOLUS_HOME.'/etc/group.php');
+		  if(in_array($seg[0], $group)){
+		    # Error: controller not found
+		    $error = "Fatal: Controller <i>'$controller'</i> not found in <i>'$seg[0]'</i> group";
+		    die($error);
+		  }else{
+		    if( file_exists( AEOLUS_HOME."/app/$seg[0]")){
+		      # Error: group exists in app but not defined
+			  $error = "Fatal: group '$seg[0]' exists but not defined";
+			  die($error);
+		    }else{
+		  	  $error = "Fatal: group <i>'$seg[0]'</i> not defined and controller <i>'$controller'</i> ";
+		  	  $error .= 'not found in <i>\'index\'</i> group';
+		      die($error);
+		    }
+		  }
+	    }else{
+	      # Redirect to home page
+	      header('Location: /');
+	    }
 	  }
-	}
-  }
-
+    }
   }
 
 ?>

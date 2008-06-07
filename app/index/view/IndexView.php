@@ -3,25 +3,22 @@
   # 'IndexView' view in 'index' group
   class IndexView extends AView
   {
-    public function showSidebar()
+    public function show_sidebar()
     {
-	  A::h('sidebar');
+	  A::h('sidebar','index');
 	  sidebar();
     }
 
-    public function showContent()
+    public function show_content()
     {
-	  A::ld('AGuard');
 	  echo '<div class="section">';
-	  echo AGuard::pf($this->data);
+	  echo '<p>Hello, world</p>';
 	  echo '</div>';
     }
 
-    public function showScript()
+    public function show_script()
     {
       ?>
-	  $(".section").corner();
-	  $("#nav").corner();
       <?php
     }
   }

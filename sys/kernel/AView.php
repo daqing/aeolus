@@ -56,38 +56,38 @@
 
     	}
 		
-		public function showTop()
+		public function show_top()
 		{
 		  A::h('logo', 'index');
 		  logo();
 		}
         
-        public function showStyle()
+        public function show_style()
         {
             echo APP_SUB.'/pub/theme/'.APP_STYLE.'.css';
         }
         
-        public function showJquery()
+        public function show_jquery()
         {
             echo APP_SUB.'/pub/script/jquery-1.2.6.min.js';
         }
         
-        public function showJqueryCorner()
+        public function show_jcorner()
         {
             echo APP_SUB.'/pub/script/jquery.corner-1.92.js';
         }	
 	
-	    public function showScript(){}
+	    public function show_script(){}
 
-		public function showNav()
+		public function show_nav()
 		{
 		  A::h('nav', 'index');
 		  nav();
 		}
 
-		public function showSidebar(){}
+		public function show_sidebar(){}
 
-    	public function showContent(){}
+    	public function show_content(){}
 
 		public function escape($value)
 		{

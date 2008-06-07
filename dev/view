@@ -23,9 +23,9 @@
 	      if( $res = fopen($view_path,'w')){
 		    $content = "<?php\n\n  # '$view' view in '$group' group\n  ";
 			$content .= "class $view extends AView\n  {";
-		    $content .= "\n    public function showSidebar()\n    {\n    }\n";
-		    $content .= "\n    public function showContent()\n    {\n    }\n";
-		    $content .= "\n    public function showScript()\n    {";
+		    $content .= "\n    public function show_sidebar()\n    {\n    }\n";
+		    $content .= "\n    public function show_content()\n    {\n    }\n";
+		    $content .= "\n    public function show_script()\n    {";
 		    $content .= "\n      ?>\n      <?php\n    }\n";
 		    $content .= "  }\n?>";
 
