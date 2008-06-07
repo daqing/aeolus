@@ -27,7 +27,7 @@
 	function __construct()
 	{
 	  # Load configurations
-	  A::ld( AEOLUS_HOME.'/etc/cache/file.php');
+	  require AEOLUS_HOME.'/etc/cache/file.php';
 
 	  if(! is_writable( CACHE_DIR)){
 		$error = 'Fatal: directory <i>\''.CACHE_DIR.'\'</i> not writable, please chmod to 777';

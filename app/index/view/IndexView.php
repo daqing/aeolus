@@ -11,7 +11,7 @@
 
     public function showContent()
     {
-	  A::ld('AGuard.php');
+	  A::ld('AGuard');
 	  echo '<div class="section">';
 	  echo AGuard::pf($this->data);
 	  echo '</div>';

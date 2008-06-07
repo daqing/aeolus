@@ -25,7 +25,7 @@
 	    # Load driver according to the configuration
 	    require( AEOLUS_HOME.'/etc/cache.php' );
 		$driver = 'A'.$driver.'Cache';
-	    A::ld( "cache/$driver.php" );
+	    A::ld( "cache/$driver" );
 
 	    self::$driver = new $driver();
 	  }

@@ -35,7 +35,7 @@
 		require( AEOLUS_HOME.'/etc/driver.php');
 
 		# Load driver class
-        A::ld( "db/$driver.php");
+        A::ld( "db/$driver");
 	    self::$driver = new $driver();
 	    
 		$this->data = array(

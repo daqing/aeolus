@@ -58,7 +58,7 @@
 		
 		public function showTop()
 		{
-		  A::h('logo');
+		  A::h('logo', 'index');
 		  logo();
 		}
         

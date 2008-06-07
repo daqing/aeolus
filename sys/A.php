@@ -22,6 +22,8 @@
      */
     public function ld($path)
     {
+	  $path .= '.php';
+
 	  if(! in_array($path, self::$loaded) ){
         require($path);
 		self::$loaded[] = $path;
@@ -45,14 +47,14 @@
 	  }
 
 	  # Absolute path to the view file
-      $path = AEOLUS_HOME."/app/$group/view/$view.php";
+      $path = AEOLUS_HOME."/app/$group/view/$view";
 
       if( APP_DEBUG ){ clearstatcache();}
       $obj = null;
 	  
-      if( file_exists($path)){
+      if( file_exists($path.'.php')){
 	    # Load related classes
-        self::ld('kernel/AView.php');
+        self::ld('kernel/AView');
         self::ld($path);
 
         if( class_exists($view)){
@@ -75,7 +77,7 @@
      * @param string $group the group name
      * @return object $obj an instance of the model class
      */
-    public function m($model, $group='this')
+    public function m($model, $group = 'this')
     {
 	  if( 'this' == $group){
 	    global $thisgrp;
@@ -83,14 +85,14 @@
 	  }
       
 	  # Absolute path to the model file
-      $path = AEOLUS_HOME."/app/$group/model/$model.php";
+      $path = AEOLUS_HOME."/app/$group/model/$model";
 
       if( APP_DEBUG ){clearstatcache();}
       $obj = null;
 
-      if( file_exists($path)){
+      if( file_exists($path.'.php')){
 	    # Load related classes
-        self::ld('kernel/AModel.php');
+        self::ld('kernel/AModel');
         self::ld($path);
 
         if( class_exists($model)){
@@ -115,9 +117,9 @@
 		$group = $thisgrp;
 	  }
 	  # Absolute path to the helper file
-      $path = AEOLUS_HOME."/app/$group/helper/$helper.php";
+      $path = AEOLUS_HOME."/app/$group/helper/$helper";
 
-      if( file_exists($path)){
+      if( file_exists($path.'.php')){
         A::ld($path);        
       }
 	}

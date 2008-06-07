@@ -3,7 +3,7 @@
   # 'index' controller in 'index' group
   function index()
   {
-    A::ld('ACache.php');
+    A::ld('ACache');
 	if(! $data = ACache::fetch('index') ){
 	  # Cache miss
 	  $model = A::m('IndexModel');
