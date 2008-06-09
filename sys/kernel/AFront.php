@@ -35,7 +35,6 @@
 	  # Init.
 	  $this->result['group'] = 'index';
 	  $this->result['controller'] = 'index';
-	  $this->result['argc'] = 0;
 	  $this->result['argv'] = array();
 	}
 
@@ -99,7 +98,6 @@
 			}else{
 			  # Controller in 'index' group
 			  $this->result['controller'] = $seg[0];
-			  $this->result['argc'] = 1;
 			  $this->result['argv'][] = $seg[1];
 			}
 		    break;
@@ -109,12 +107,10 @@
 			  # Group defined
 			  $this->result['group'] = $seg[0];
 			  $this->result['controller'] = $seg[1];
-			  $this->result['argc'] = $size - 2;
 			  $this->result['argv'] = array_slice($seg, 2);
 			}else{
 			  # Controller in 'index' group
 			  $this->result['controller'] = $seg[0];
-			  $this->result['argc'] = $size - 1;
 			  $this->result['argv'] = array_slice($seg, 1);
 			}
 		    break;
@@ -145,11 +141,7 @@
 
 	    if( function_exists( $controller ) ){
 	      # Launch this controller
-	      if( $this->result['argc'] > 0 ){
-	        $controller($this->result['argv']);
-	      }else{
-	        $controller();
-	      }
+          $controller($this->result['argv']);
 
 	    }else{
 	  	  if( APP_DEBUG ){
