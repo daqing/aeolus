@@ -22,7 +22,7 @@
 	private function set_backend()
 	{
 	  # Load backend according to the configuration
-	  require( A_PREFIX.'/etc/cache/backend.php' );
+	  require( A_PREFIX.'etc/cache/backend.php' );
 	  $backend = 'A'.$backend.'Cache';
 	  A::ld( "cache/$backend" );
 

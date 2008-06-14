@@ -81,7 +81,7 @@
 
 	  if( '/' !== $seg && is_array($seg) ){
 	    # Load valid groups
-	    require A_PREFIX.'/etc/group.php';
+	    require A_PREFIX.'etc/group.php';
 	    
 		# Set intermedia data
 		$this->result['inter']['grp'] = $group;
@@ -141,7 +141,7 @@
 	  $launched = false;
 
 	  extract($this->result);
-	  $path = A_PREFIX."/app/$group/controller/$controller.php";    
+	  $path = A_PREFIX."app/$group/controller/$controller.php";    
 
       if( file_exists($path) ){
 	    # Load Assistant class

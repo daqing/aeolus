@@ -50,7 +50,7 @@
       $obj = null;
 	  
 	  # Absolute path to the view file
-      $path = A_PREFIX."/app/$group/view/$view";
+      $path = A_PREFIX."app/$group/view/$view";
       if( file_exists($path.'.php')){
 	    # Load related classes
         self::ld('kernel/AView');
@@ -88,7 +88,7 @@
       $obj = null;
 
 	  # Absolute path to the model file
-      $path = A_PREFIX."/app/$group/model/$model";
+      $path = A_PREFIX."app/$group/model/$model";
       if( file_exists($path.'.php')){
 	    # Load related classes
         self::ld('kernel/AModel');
@@ -118,7 +118,7 @@
 	  }
 
 	  # Absolute path to the helper file
-      $path = A_PREFIX."/app/$group/helper/$helper";
+      $path = A_PREFIX."app/$group/helper/$helper";
       if( file_exists($path.'.php')){
         A::ld($path);        
       }
