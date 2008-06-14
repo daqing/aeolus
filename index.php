@@ -5,7 +5,7 @@
   * @author Kinch Zhang <kinch.zhang@gmail.com>
   */
  
- define('AEOLUS_HOME', dirname(__FILE__));
+ define('A_PREFIX', dirname(__FILE__));
 
  # Load configuration 
  require 'etc/app.php';

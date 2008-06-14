@@ -6,7 +6,7 @@
    */
 
    # Cache directory
-   define('CACHE_DIR', AEOLUS_HOME.'/tmp/cache');
+   define('CACHE_DIR', A_PREFIX.'/tmp/cache');
 
    # Filename prefix
    define('CACHE_FILE_PREFIX', 'aeolus');

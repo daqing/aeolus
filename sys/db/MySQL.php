@@ -25,7 +25,7 @@
       if(!$this->res)
       {
         # Try to connect to the MySQL server
-        require( AEOLUS_HOME.'/etc/db/mysql.php');
+        require( A_PREFIX.'/etc/db/mysql.php');
         $this->res = MYSQL_connect("$host:$port", $user, $passwd);
 
         if( !$this->res ){
@@ -47,7 +47,7 @@
     private function server_error()
     {
       ob_start();
-      require(AEOLUS_HOME.'/pub/error/mysql_error.html');
+      require(A_PREFIX.'/pub/error/mysql_error.html');
       ob_end_flush();
       die();
     }

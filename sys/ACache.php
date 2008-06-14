@@ -8,27 +8,25 @@
   class ACache
   {
     /**
-	 * Cache driver
+	 * Cache backend
 	 *
 	 * @access private
 	 */
-	private static $driver = null;
+	private static $backend = null;
 
 	/**
-	 * Set cache driver
+	 * Set cache backend
 	 * 
 	 * @access private
 	 */
-	private function setDriver()
+	private function set_backend()
 	{
-	  if( null == self::$driver ){
-	    # Load driver according to the configuration
-	    require( AEOLUS_HOME.'/etc/cache.php' );
-		$driver = 'A'.$driver.'Cache';
-	    A::ld( "cache/$driver" );
+	  # Load backend according to the configuration
+	  require( A_PREFIX.'/etc/cache/backend.php' );
+	  $backend = 'A'.$backend.'Cache';
+	  A::ld( "cache/$backend" );
 
-	    self::$driver = new $driver();
-	  }
+      self::$backend = new $backend();
 	}
 
 	/**
@@ -39,8 +37,11 @@
 	 */
 	public function fetch($id)
 	{
-	  self::setDriver();
-	  return self::$driver->fetch($id);
+	  if( null == self::$backend ){
+	    self::set_backend();
+	  }
+
+	  return self::$backend->fetch($id);
 	}
 
 	/**
@@ -52,7 +53,7 @@
 	 */
 	public function store($data, $id, $lifetime = 300)
 	{
-	  self::$driver->store($data,$id, $lifetime);
+	  self::$backend->store($data,$id, $lifetime);
 	}
   }
 ?>

@@ -54,8 +54,11 @@
 	<!-- JavaScript -->
     <script type="text/javascript"> 
 	  $(function(){
+		// Base URL
+	    var base = '<?php echo URL_BASE;?>';
+
 		$("#nav").corner();
-		$("#sidebar").corner('top');
+
         <?php $this->show_script();?> 
 	  });
     </script>    

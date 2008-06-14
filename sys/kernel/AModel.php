@@ -32,7 +32,7 @@
 	{
 	  if( null == self::$driver ){
 		# Load configurations
-		require( AEOLUS_HOME.'/etc/driver.php');
+		require( A_PREFIX.'/etc/db/driver.php');
 
 		# Load driver class
         A::ld( "db/$driver");

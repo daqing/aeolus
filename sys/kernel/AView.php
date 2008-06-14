@@ -33,7 +33,7 @@
 		 *
 		 * @access public
 		 */
-		public function setData($data)
+		public function set_data($data)
 		{
 		  $this->data = $data;
 		}
@@ -49,7 +49,7 @@
             ob_start();
 
 			# Load template
-			require( AEOLUS_HOME.'/pub/theme/'.APP_TPL.'.php');
+			require( A_PREFIX.'/pub/theme/'.APP_TPL.'.php');
             
 			# Send buffered contents 
 			ob_end_flush();
@@ -64,17 +64,17 @@
         
         public function show_style()
         {
-            echo APP_SUB.'/pub/theme/'.APP_STYLE.'.css';
+            echo '/'.SUB_DIR.'/pub/theme/'.APP_STYLE.'.css';
         }
         
         public function show_jquery()
         {
-            echo APP_SUB.'/pub/script/jquery-1.2.6.min.js';
+            echo '/'.SUB_DIR.'/pub/script/jquery-1.2.6.min.js';
         }
         
         public function show_jcorner()
         {
-            echo APP_SUB.'/pub/script/jquery.corner-1.92.js';
+            echo '/'.SUB_DIR.'/pub/script/jquery.corner-1.92.js';
         }	
 	
 	    public function show_script(){}

@@ -36,6 +36,7 @@
 	  $this->result['group'] = 'index';
 	  $this->result['controller'] = 'index';
 	  $this->result['argv'] = array();
+	  $this->result['inter'] = array();
 	}
 
 	/**
@@ -46,7 +47,8 @@
 	 */
 	public function run()
 	{
-	  $this->launch($this->process());
+	  $this->process();
+	  $this->launch();
 	}
 
 	/**
@@ -58,7 +60,7 @@
 	private function process()
 	{
 	  # Remove the base url from the request
-	  $this->request = substr($this->request,strlen(APP_PREFIX));
+	  $this->request = substr($this->request,strlen(URL_BASE));
 	  $this->request = trim($this->request,'/\\');
 
 	  if( strpos($this->request,'(') || strpos($this->request,'%')){
@@ -73,9 +75,16 @@
 	    $seg = '/';
 	  }
 
+	  # Set intermedia data
+	  $this->result['inter']['seg'] = $seg;
+	  $this->result['inter']['grp'] = array();
+
 	  if( '/' !== $seg && is_array($seg) ){
 	    # Load valid groups
-	    require AEOLUS_HOME.'/etc/group.php';
+	    require A_PREFIX.'/etc/group.php';
+	    
+		# Set intermedia data
+		$this->result['inter']['grp'] = $group;
 
 		$size = count($seg);
 		switch( $size ){
@@ -115,8 +124,9 @@
 			}
 		    break;
 		}
+	    
       }
-	  return $seg;
+	  
     }
 
 	/**
@@ -125,59 +135,93 @@
 	 * @access private
 	 * @param array $seg Segment array(for debugging)
 	 */
-	private function launch($seg)
+	private function launch()
 	{
+	  # Flag
+	  $launched = false;
+
 	  extract($this->result);
-	  $path = AEOLUS_HOME."/app/$group/controller/$controller.php";    
+	  $path = A_PREFIX."/app/$group/controller/$controller.php";    
 
       if( file_exists($path) ){
-	    # Load factory methods
+	    # Load Assistant class
 	    require( 'A.php' );
 	    
 	    # Setup environment variable
 	    global $thisgrp;
-	    $thisgrp = $this->result['group'];
-	    require( $path );
+	    $thisgrp = $group;
 
+		# Load controller
+	    require( $path );
 	    if( function_exists( $controller ) ){
 	      # Launch this controller
+		  $launched = true;
           $controller($this->result['argv']);
-
-	    }else{
-	  	  if( APP_DEBUG ){
-		    # Error: controller not defined
-		    $error = "Fatal: function <i>'$controller'</i> not defined in <i>'$group'</i> group";
-		    die($error);
-		  }else{
-		    # Redirect to home page
-		    header('Location: /');
-		  }
 		}
-
-	  }else{
-	    if( APP_DEBUG ){
-	      require( AEOLUS_HOME.'/etc/group.php');
-		  if(in_array($seg[0], $group)){
-		    # Error: controller not found
-		    $error = "Fatal: Controller <i>'$controller'</i> not found in <i>'$seg[0]'</i> group";
-		    die($error);
-		  }else{
-		    if( file_exists( AEOLUS_HOME."/app/$seg[0]")){
-		      # Error: group exists in app but not defined
-			  $error = "Fatal: group '$seg[0]' exists but not defined";
-			  die($error);
-		    }else{
-		  	  $error = "Fatal: group <i>'$seg[0]'</i> not defined and controller <i>'$controller'</i> ";
-		  	  $error .= 'not found in <i>\'index\'</i> group';
-		      die($error);
-		    }
-		  }
-	    }else{
-	      # Redirect to home page
-	      header('Location: /');
-	    }
 	  }
-    }
+
+	  if(! $launched ){
+	    (APP_DEBUG) ? $this->debug() : $this->to_home();
+	  }
+	}
+
+	/**
+	 * Show debug info
+	 *
+	 * @access private
+	 */
+	private function debug()
+	{
+	  echo '<div style="background-color:#EEE;border:1px solid #CCC;">';
+	    echo '<h3 style="margin:10px;">AEOLUS DEBUG</h3>';
+	    echo '<div style="margin:10px;border-top:1px solid #CCC;">';
+		  # Subdir
+	      echo '<h4>Application subdirectory:';
+	      echo '<span style="font-style:italic;color:#666;padding:0px 10px;">\'';
+	      echo SUB_DIR.'\'</span></h4>';
+
+		  # Base URL
+	      echo '<h4>Base URL:';
+	      echo '<span style="font-style:italic;color:#666;padding:0px 10px;">\'';
+	      echo URL_BASE.'\'</span></h4>';
+
+		  # Request segments
+	      echo '<h4>Request segments:</h4>';
+	      echo '<div style="background-color:#F7F7F7;padding:0px 10px;border:1px solid #CCC;">';
+	      echo '<p>&nbsp;Group:&nbsp;<i>'.$this->result['group'].'</i></p>';
+	      echo '<p>&nbsp;Controller:&nbsp;<i>'.$this->result['controller'].'</i></p>';
+	      echo '<p>&nbsp;Arguments:&nbsp;';
+	      if( count($this->result['argv']) > 0 ){
+	        foreach($this->result['argv'] as $v){
+		    echo '<span style="font-style:italic;padding:0px 5px;border:1px dashed #999;">';
+		    echo $v.'</span>&nbsp;&nbsp;';
+		    }
+
+	      }else{
+	        echo '<span style="font-style:italic;">null</span>';
+	      }
+	      echo '</p></div>';
+	    
+		  # Valid groups
+		  echo '<h4>Valid groups:</h4>';
+		  echo '<p style="padding:10px;background-color:#F7F7F7;border:1px solid #CCC;">';
+		  foreach($this->result['inter']['grp'] as $v){
+		    echo '<span style="font-style:italic;padding:0px 5px;border:1px dashed #999;">';
+		    echo $v.'</span>&nbsp;&nbsp;';
+		  }
+	  echo '</p></div></div>';
+	} 
+
+	/**
+	 * Redirect to the home page
+	 *
+	 * @access private
+	 */
+	private function to_home()
+	{
+	  header('Location: ' . URL_BASE );
+	  die();
+	}
   }
 
 ?>
