@@ -21,5 +21,5 @@
   define('APP_STYLE','default');
 
   # Template
-  define('APP_TPL', 'aeolus');
+  define('APP_TPL', 'default');
 ?>

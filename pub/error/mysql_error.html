@@ -3,7 +3,17 @@
 <title>Database Error</title>
 </head>
 <body>
-<center><h3>Sorry, an error has arised </h3></center>
-<h4><?php if( APP_DEBUG ){echo mysql_error();}?></h4>
+<div style="background-color:#EEE;border:1px solid #CCC;padding:5px 20px;">
+<p>
+<?php
+  if( APP_DEBUG ){
+    echo '<h3>Database Error</h3>';
+	echo '<p>Error code:&nbsp;' . mysql_errno().'</p>';
+    echo '<p>Error message:&nbsp;' . mysql_error().'</p>';
+  }else{
+    echo 'This site is temporarily unavailable.';
+  }
+?>
+</p></div>
 </body>
 </html>

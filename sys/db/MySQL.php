@@ -26,14 +26,14 @@
       {
         # Try to connect to the MySQL server
         require( A_PREFIX.'etc/db/mysql.php');
-        $this->res = MYSQL_connect("$host:$port", $user, $passwd);
+        $this->res = @ mysql_connect("$host:$port", $user, $passwd);
 
-        if( !$this->res ){
+        if(! $this->res ){
           # Fatal error: can't connect to database 
           $this->server_error();
         }
     
-        if( !mysql_select_db($schema, $this->res)){
+        if(! @mysql_select_db($schema, $this->res)){
           $this->server_error();
         }
       }
