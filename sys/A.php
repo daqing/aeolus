@@ -13,11 +13,12 @@
 	 * @access private
 	 */
 	private static $loaded = array();
+
     /**
      * Load a generic PHP file once and only once
      * 
      * @access public
-     * @param string $path the absolute or relative path to the file
+     * @param string $path Path to the file
      * @return void
      */
     public function ld($path)
@@ -123,6 +124,5 @@
         A::ld($path);        
       }
 	}
-
   }
 ?>

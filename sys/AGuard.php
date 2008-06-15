@@ -11,11 +11,11 @@
     private static $engine = null;
 
     /**
-	 * Purify the user input
+	 * Purify The user input
 	 *
 	 * @access public
-	 * @param string $input the user input
-	 * @return string $purified the purified string
+	 * @param string $input The user input
+	 * @return string $purified The purified string
 	 */
 	public function pf($input)
 	{

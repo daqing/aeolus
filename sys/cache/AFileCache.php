@@ -23,30 +23,31 @@
 
 	/**
 	 * Constructor
+	 *
 	 */
 	function __construct()
 	{
 	  # Load configurations
 	  require A_PREFIX.'etc/cache/file.php';
 
-	  if(! is_writable( CACHE_DIR)){
+	  if(! is_writable( CACHE_DIR ) ){
 		$error = 'Fatal: directory <i>\''.CACHE_DIR.'\'</i> not writable, please chmod to 777';
 	    die($error);
 	  }
 	}
 
 	/**
-	 * Fetch data from cache
+	 * Fetch data from cache system
 	 *
 	 * @access public
-	 * @param string $id Cache id
+	 * @param string $id Cache ID
 	 */
 	public function fetch($id)
 	{
 	  if(!$metadata = $this->is_fresh($id)){ return false;}	  
 	  
-	  $file = $this->getPath($id) . $this->getFile($id);
-	  $data = $this->readFrom($file);
+	  $file = $this->get_path($id) . $this->get_file($id);
+	  $data = $this->read_from($file);
 	  
 	  # check sum
 	  $hash = crc32($data);
@@ -60,25 +61,28 @@
 	}
 	
 	/**
-	 * Remove a cache file and its related meta file
+	 * Remove cache data and metadata
 	 * 
 	 * @access private
-	 * @param string $id Cache id	 
+	 * @param string $id Cache ID
 	 */
 	private function remove($id)
 	{
-	  $metafile =  $this->getPath($id) . $this->getMetaFile($id);
-	  $file = $this->getPath($id) . $this->getFile($id);
-	  # Remove file
+	  $metafile =  $this->get_path($id) . $this->get_meta_file($id);
+	  $file = $this->get_path($id) . $this->get_file($id);
+
+	  # Remove cache data
       if(! is_file($metafile) || ! is_file($file)){
 	    return false;
 	  }
+
 	  if(!@unlink($file)){ return false;}
 	  
-	  # Remove meta file
+	  # Remove metadata
 	  if( isset($this->metadata[$id])){
 	    unset($this->metadata[$id]);
 	  }
+
 	  if(!@unlink($metafile)){
 	    return false;
 	  }
@@ -90,12 +94,12 @@
 	 * Test if the cache is still fresh
 	 * 
 	 * @access private
-	 * @param string $id Cache id
-	 * @return mixed $result Return meta data array or boolean false
+	 * @param string $id Cache ID
+	 * @return mixed $result Return metadata array or boolean false
 	 */
 	private function is_fresh($id)
 	{
-	  $meta = $this->getMetadata($id);
+	  $meta = $this->get_metadata($id);
 	  if(! $meta){ return false;}
 	  
 	  if( time() <= $meta['expire']){ return $meta;}
@@ -104,11 +108,11 @@
 	}
 
 	/**
-	 * Store data into file
+	 * Store data into files
 	 *
 	 * @access public
-	 * @param mixed $data Datas to cache
-	 * @param string $id Cache id
+	 * @param mixed $data Data to cache
+	 * @param string $id Cache Id
 	 * @param int $lifetime Time to live(in seconds)
 	 */
 	public function store($data, $id, $lifetime)
@@ -116,8 +120,8 @@
 	  $data = serialize($data);
 	  clearstatcache();
 
-	  $path = $this->getPath($id);	 
-	  $file = $path . $this->getFile($id);
+	  $path = $this->get_path($id);	 
+	  $file = $path . $this->get_file($id);
 
 	  # Build cache directory structure
 	  if( HASHED_DIR_LEVEL > 0 ){
@@ -132,39 +136,29 @@
 	  # Add read control hash
 	  $hash = crc32($data);
 
-	  # Meta data
+	  # Metadata
 	  $metadata = array(
 	    'hash' => $hash,
 		'expire' => time() + $lifetime
 	  );
 
-	  # Save meta data
-	  $res = $this->saveMetadata($id, $metadata);	  
+	  # Save metadata
+	  $res = $this->save_metadata($id, $metadata);	  
 	  if(! $res){ return false;}
 
       # Save data into file
-	  $res = $this->writeTo($file, $data);	  
+	  $res = $this->write_to($file, $data);	  
 	  
 	  return $res;
-	}
-
-	/**
-	 * Delete cache
-	 *
-	 * @access private
-	 * @param string $id Cache id
-	 */
-	private function delete($id)
-	{
 	}
 
 	/**
 	 * Set cache path
 	 *
 	 * @access private
-	 * @param string $id Cache id
+	 * @param string $id Cache ID
 	 */
-	private function getPath($id)
+	private function get_path($id)
 	{
 	  if( null == $this->path){
 	  	$this->path = CACHE_DIR;
@@ -184,10 +178,10 @@
 	 * Get cache file name
 	 * 
 	 * @access private 
-	 * @param string $id Cache id
+	 * @param string $id Cache ID
 	 * @return string $filename Cache filename
 	 */
-	private function getFile($id)
+	private function get_file($id)
 	{
 	  return DIRECTORY_SEPARATOR . CACHE_FILE_PREFIX . '-' . $id;
 	}
@@ -196,26 +190,26 @@
 	 * Get metadata file name
 	 * 
 	 * @access private
-	 * @param string $id Cache id
+	 * @param string $id Cache ID
 	 * @return string $filename Metadata filename
 	 */
-	private function getMetaFile($id)
+	private function get_meta_file($id)
 	{
 	  return DIRECTORY_SEPARATOR . CACHE_FILE_PREFIX . '-meta-' . $id;
 	}
 
 	/**
-	 * Save meta data
+	 * Save metadata
 	 * 
 	 * @access private
-	 * @param string $id Cache id
-	 * @param array $meta meta data array
+	 * @param string $id Cache ID
+	 * @param array $meta metadata array
 	 */
-	private function saveMetadata($id, $meta)
+	private function save_metadata($id, $meta)
 	{
-	  $metafile =  $this->getPath($id) . $this->getMetaFile($id);
+	  $metafile =  $this->get_path($id) . $this->get_meta_file($id);
 	  
-	  $res = $this->writeTo($metafile, serialize($meta));
+	  $res = $this->write_to($metafile, serialize($meta));
 	  if(! $res){ return false;}
 	  
 	  $this->metadata[$id] = $meta;
@@ -223,17 +217,17 @@
 	}
 	
 	/**
-	 * Get meta data
+	 * Get metadata
 	 * 
 	 * @access private
-	 * @param string $id Cache id
+	 * @param string $id Cache ID
 	 */
-	private function getMetadata($id)
+	private function get_metadata($id)
 	{
 	  if(isset($this->metadata[$id])){
 	  	return $this->metadata[$id];
 	  }else{
-	  	$meta = $this->loadMetadata($id);
+	  	$meta = $this->load_metadata($id);
 	  	if(! $meta){ return false;}
 	    
 	  	return $meta;
@@ -241,17 +235,17 @@
 	}
 	
 	/**
-	 * Load meta data from file
+	 * Load metadata from file
 	 * 
 	 * @access private
-	 * @param string $id Cache id
+	 * @param string $id Cache ID
 	 * @return mixed $data Return meta data array or boolean false
 	 */
-	private function loadMetadata($id)
+	private function load_metadata($id)
 	{
-	  $metafile =  $this->getPath($id) . $this->getMetaFile($id);
+	  $metafile =  $this->get_path($id) . $this->get_meta_file($id);
 	  
-	  $data = $this->readFrom($metafile);
+	  $data = $this->read_from($metafile);
 	  if(! $data){
 	  	return false;
 	  }
@@ -266,21 +260,21 @@
 	 * @param string $string String to write
 	 * @return boolean $result True if file was successfully created
 	 */
-	private function writeTo($file, $string)
+	private function write_to($file, $string)
 	{
 	  $result = false;
-	   
 	  $f = @fopen($file, 'wb');
+
 	  if($f){
 	  	# Lock file
 	  	@flock($f, LOCK_EX);
-	  	
 	  	$result = @fwrite($f, $string);
-	  		  	
+
 	  	# Unlock and close file
 	  	@flock($f, LOCK_UN);
 	  	@fclose($f);	  
 	  }
+
 	  @chmod($file, CACHE_FILE_UMASK);
 	  
 	  return $result;
@@ -292,7 +286,7 @@
 	 * @access private
 	 * @param string $file Path to the file 
 	 */
-	private function readFrom($file)
+	private function read_from($file)
 	{
 	  if(! is_file($file)){ return false;}
 	  $mqr = get_magic_quotes_runtime();

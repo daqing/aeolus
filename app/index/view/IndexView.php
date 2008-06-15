@@ -11,8 +11,9 @@
 
     public function show_content()
     {
+	  A::ld('AGuard');
 	  echo '<div class="section">';
-	  echo '<p>Hello, world</p>';
+	  echo AGuard::pf('<p>Hello, world</p>');
 	  echo '</div>';
     }
 

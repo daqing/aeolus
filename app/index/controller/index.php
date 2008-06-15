@@ -7,7 +7,7 @@
 	if(! $data = ACache::fetch('index') ){
 	  # Cache miss
 	  $model = A::m('IndexModel');
-	  $data = $model->getData();
+	  $data = $model->get_data();
 
 	  ACache::store($data, 'index', 60);
 	  $model = null;

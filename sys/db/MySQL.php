@@ -2,19 +2,17 @@
   /**
    * MySQL class
    *
-   * Database driver for MySQL
-   *
    * @author Kinch Zhang <kinch.zhang@gmail.com>
    */
   
   class MySQL
   {
     /**
-     * Resource
+     * Link identifier
      *
 	 * @access private
      */
-    private $res = null;  
+    private $link = null;  
    
     /**
      * Constructor
@@ -22,18 +20,18 @@
      */
     function __construct()
     {
-      if(!$this->res)
+      if(! $this->link )
       {
         # Try to connect to the MySQL server
         require( A_PREFIX.'etc/db/mysql.php');
-        $this->res = @ mysql_connect("$host:$port", $user, $passwd);
+        $this->link = @ mysql_connect("$host:$port", $user, $passwd);
 
-        if(! $this->res ){
+        if(! $this->link ){
           # Fatal error: can't connect to database 
           $this->server_error();
         }
     
-        if(! @mysql_select_db($schema, $this->res)){
+        if(! @ mysql_select_db($schema, $this->link) ){
           $this->server_error();
         }
       }
@@ -53,9 +51,11 @@
     }
     
     /**
-     * Query the database server
+     * Send a MySQL query
      *
 	 * @access public
+	 * @param string $sql The SQL query
+	 * @return resource $result The query result
      */
     public final function query($sql)
     {
@@ -64,16 +64,21 @@
       mysql_query("SET CHARACTER SET 'utf8'");
       mysql_query("SET COLLATION_CONNECTION='utf8_general_ci'");
       
-      if(!$result = mysql_query($sql,$this->res)){
+      if(! $result = mysql_query($sql,$this->link) ){
         $this->server_error();
       }
         	 	
       return $result;
     }  
 
-	public function getRes()
+	/**
+	 * Get the link identifier
+	 *
+	 * @access public
+	 */
+	public function get_link()
 	{
-	  return $this->res;
+	  return $this->link;
 	}
   }
 ?>

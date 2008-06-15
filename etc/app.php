@@ -17,7 +17,7 @@
   # if else, *don't* forget the slashes
   define('SUB_DIR','/aeolus/');
   
-  # Theme
+  # Style sheet
   define('APP_STYLE','default');
 
   # Template

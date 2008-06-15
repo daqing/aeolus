@@ -12,17 +12,15 @@
 	 * Database driver
 	 *
 	 * @access private
-	 *
 	 */
     private static $driver = null;
 
 	/**
-	 * Data set
+	 * Data set of an query result
 	 *
 	 * @access private
-	 *
 	 */
-	private $data;
+	private $data = array();
 	
 	/**
 	 * Constructor
@@ -38,6 +36,7 @@
         A::ld( "db/$driver");
 	    self::$driver = new $driver();
 	    
+		# Init.
 		$this->data = array(
 		  'affected' => 0,
 		  'lastInsertId' => 0,
@@ -49,6 +48,9 @@
 	/**
 	 * Insert data to database
 	 *
+	 * @access public
+	 * @param string $sql The SQL query
+	 * @return array $data The query result
 	 */
 	public final function insert($sql)
 	{
@@ -67,9 +69,8 @@
 	 * Update database tables
 	 *
 	 * @access public
-	 * @param string $sql SQL query string
-	 * @return array $data the result array
-	 *
+	 * @param string $sql The SQL query
+	 * @return array $data The query result
 	 */
 	public final function update($sql)
 	{
@@ -84,9 +85,8 @@
 	 * Delete data from database tables
 	 *
 	 * @access public
-	 * @param string $sql SQL query string
-	 * @return array $data the result data
-	 *
+	 * @param string $sql The SQL query
+	 * @return array $data The query result
 	 */
 	public final function delete($sql)
 	{
@@ -101,9 +101,8 @@
 	 * Select data from database
 	 *
 	 * @access public
-	 * @param string $sql SQL query string
-	 * @return array $data the result data
-	 *
+	 * @param string $sql The SQL query
+	 * @return array $data The query result
 	 */
 	public final function select($sql)
 	{			
@@ -111,10 +110,10 @@
 	    $this->data['affected'] = mysql_num_rows($result);
 	      
 	    if( $this->data['affected'] > 0 ){
+		  # Fetch data
 	      while( $dataset = mysql_fetch_assoc($result) ){
 	        $this->data['set'][] = $dataset;
 	      }
-
 		  $dataset = null;
 	    }
 	  }
@@ -128,12 +127,10 @@
 	 * @access public
 	 * @param string $value the string to be escaped
 	 * @return string $escaped the escaped string
-	 *
 	 */
 	public final function escape($value)
 	{
-	  return mysql_real_escape_string($value,self::$driver->getRes());
+	  return mysql_real_escape_string($value,self::$driver->get_link());
 	}	
-
   }
 ?>

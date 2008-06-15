@@ -5,17 +5,9 @@
    * @author Kinch Zhang <kinch.zhang@gmail.com>
    */
 
-  # Error reporting
-  if( APP_DEBUG ){
-    # Show all errors
-	error_reporting( E_ALL );
-  }else{
-    # Turn off error reporting
-	error_reporting(0);
-  }
+  (APP_DEBUG) ? error_reporting( E_ALL ) : error_reporting(0);
   
   if(! isset($GLOBALS['session_started']) ){
-    # Start session
     session_start();
 	$GLOBALS['session_started'] = true;
   }

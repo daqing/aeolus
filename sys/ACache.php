@@ -30,10 +30,11 @@
 	}
 
 	/**
-	 * Fetch data from cache
+	 * Fetch data from cache system
 	 *
 	 * @access public
-	 * @param $id 
+	 * @param string $id Unique ID of the cached data
+	 * @param mixed $result Return the cached data
 	 */
 	public function fetch($id)
 	{
@@ -45,11 +46,12 @@
 	}
 
 	/**
-	 * Store data into cache
+	 * Store data into cache system
 	 *
 	 * @access public
-	 * @param $data
-	 * @param $id
+	 * @param mixed $data Data to be cached
+	 * @param string $id Unique ID for this data
+	 * @param int $lifetime Time to live (in seconds)
 	 */
 	public function store($data, $id, $lifetime = 300)
 	{
