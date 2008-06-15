@@ -9,41 +9,29 @@ class HTMLPurifier
     protected $strategy, $generator;
     public $context;
     public function __construct($config = null) {
-        
         $this->config = HTMLPurifier_Config::create($config);
-        
         $this->strategy     = new HTMLPurifier_Strategy_Core();
-        
     }
     public function addFilter($filter) {
         trigger_error('HTMLPurifier->addFilter() is deprecated, use configuration directives in the Filter namespace or Filter.Custom', E_USER_WARNING);
         $this->filters[] = $filter;
     }
     public function purify($html, $config = null) {
-        
         $config = $config ? HTMLPurifier_Config::create($config) : $this->config;
-        
         $lexer = HTMLPurifier_Lexer::create($config);
-        
         $context = new HTMLPurifier_Context();
-        
         $this->generator = new HTMLPurifier_Generator($config, $context);
         $context->register('Generator', $this->generator);
-        
         if ($config->get('Core', 'CollectErrors')) {
             $language_factory = HTMLPurifier_LanguageFactory::instance();
             $language = $language_factory->create($config, $context);
             $context->register('Locale', $language);
-            
             $error_collector = new HTMLPurifier_ErrorCollector($context);
             $context->register('ErrorCollector', $error_collector);
         }
-        
         $id_accumulator = HTMLPurifier_IDAccumulator::build($config, $context);
         $context->register('IDAccumulator', $id_accumulator);
-        
         $html = HTMLPurifier_Encoder::convertToUTF8($html, $config, $context);
-        
         $filter_flags = $config->getBatch('Filter');
         $custom_filters = $filter_flags['Custom'];
         unset($filter_flags['Custom']);
@@ -57,11 +45,9 @@ class HTMLPurifier
             $filters[] = $filter;
         }
         $filters = array_merge($filters, $this->filters);
-        
         for ($i = 0, $filter_size = count($filters); $i < $filter_size; $i++) {
             $html = $filters[$i]->preFilter($html, $config, $context);
         }
-        
         $html = 
             $this->generator->generateFromTokens(
                 $this->strategy->execute(
@@ -71,11 +57,9 @@ class HTMLPurifier
                     $config, $context
                 )
             );
-        
         for ($i = $filter_size - 1; $i >= 0; $i--) {
             $html = $filters[$i]->postFilter($html, $config, $context);
         }
-        
         $html = HTMLPurifier_Encoder::convertFromUTF8($html, $config, $context);
         $this->context =& $context;
         return $html;
@@ -148,32 +132,24 @@ class HTMLPurifier_AttrCollections
         unset($attr[0]);
     }
     public function expandIdentifiers(&$attr, $attr_types) {
-        
         $processed = array();
-        
         foreach ($attr as $def_i => $def) {
             if ($def_i === 0) continue;
-            
             if (isset($processed[$def_i])) continue;
-            
             if ($required = (strpos($def_i, '*') !== false)) {
                 unset($attr[$def_i]);
                 $def_i = trim($def_i, '*');
                 $attr[$def_i] = $def;
             }
-            
             $processed[$def_i] = true;
-            
             if (is_object($def)) {
                 $attr[$def_i]->required = ($required || $attr[$def_i]->required);
                 continue;
             }
-            
             if ($def === false) {
                 unset($attr[$def_i]);
                 continue;
             }
-            
             if ($t = $attr_types->get($def)) {
                 $attr[$def_i] = $t;
                 $attr[$def_i]->required = $required;
@@ -181,7 +157,6 @@ class HTMLPurifier_AttrCollections
                 unset($attr[$def_i]);
             }
         }
-        
     }
 }
 abstract class HTMLPurifier_AttrDef
@@ -222,7 +197,6 @@ class HTMLPurifier_AttrTypes
     public function __construct() {
         $this->info['Enum']    = new HTMLPurifier_AttrDef_Enum();
         $this->info['Bool']    = new HTMLPurifier_AttrDef_HTML_Bool();
-        
         $this->info['CDATA']    = new HTMLPurifier_AttrDef_Text();
         $this->info['ID']       = new HTMLPurifier_AttrDef_HTML_ID();
         $this->info['Length']   = new HTMLPurifier_AttrDef_HTML_Length();
@@ -233,23 +207,17 @@ class HTMLPurifier_AttrTypes
         $this->info['URI']      = new HTMLPurifier_AttrDef_URI();
         $this->info['LanguageCode'] = new HTMLPurifier_AttrDef_Lang();
         $this->info['Color']    = new HTMLPurifier_AttrDef_HTML_Color();
-        
         $this->info['ContentType'] = new HTMLPurifier_AttrDef_Text();
-        
         $this->info['Number']   = new HTMLPurifier_AttrDef_Integer(false, false, true);
     }
     public function get($type) {
-        
         if (strpos($type, '#') !== false) list($type, $string) = explode('#', $type, 2);
         else $string = '';
-        
         if (!isset($this->info[$type])) {
             trigger_error('Cannot retrieve undefined attribute type ' . $type, E_USER_ERROR);
             return;
         }
-        
         return $this->info[$type]->make($string);
-        
     }
     public function set($type, $impl) {
         $this->info[$type] = $impl;
@@ -258,107 +226,71 @@ class HTMLPurifier_AttrTypes
 class HTMLPurifier_AttrValidator
 {
     public function validateToken(&$token, &$config, $context) {
-            
         $definition = $config->getHTMLDefinition();
         $e =& $context->get('ErrorCollector', true);
-        
         $ok =& $context->get('IDAccumulator', true);
         if (!$ok) {
             $id_accumulator = HTMLPurifier_IDAccumulator::build($config, $context);
             $context->register('IDAccumulator', $id_accumulator);
         }
-        
         $current_token =& $context->get('CurrentToken', true);
         if (!$current_token) $context->register('CurrentToken', $token);
-        
         if (
           !$token instanceof HTMLPurifier_Token_Start &&
           !$token instanceof HTMLPurifier_Token_Empty
         ) return $token;
-        
         $d_defs = $definition->info_global_attr;
-        
         $attr =& $token->attr;
-        
         foreach ($definition->info_attr_transform_pre as $transform) {
             $attr = $transform->transform($o = $attr, $config, $context);
             if ($e && ($attr != $o)) $e->send(E_NOTICE, 'AttrValidator: Attributes transformed', $o, $attr);
         }
-        
         foreach ($definition->info[$token->name]->attr_transform_pre as $transform) {
             $attr = $transform->transform($o = $attr, $config, $context);
             if ($e && ($attr != $o)) $e->send(E_NOTICE, 'AttrValidator: Attributes transformed', $o, $attr);
         }
-        
         $defs = $definition->info[$token->name]->attr;
-        
         $attr_key = false;
         $context->register('CurrentAttr', $attr_key);
-        
         foreach ($attr as $attr_key => $value) {
-            
             if ( isset($defs[$attr_key]) ) {
                 if ($defs[$attr_key] === false) {
                     $result = false;
                 } else {
-                     
                     $result = $defs[$attr_key]->validate(
                                     $value, $config, $context
                                );
                 }
             } elseif ( isset($d_defs[$attr_key]) ) {
-                 
-                 
                 $result = $d_defs[$attr_key]->validate(
                                 $value, $config, $context
                            );
             } else {
-                 
                 $result = false;
             }
-            
             if ($result === false || $result === null) {
-                 
-                 
                 if ($e) $e->send(E_ERROR, 'AttrValidator: Attribute removed');
-                
-                 
                 unset($attr[$attr_key]);
             } elseif (is_string($result)) {
-                 
-                 
-                 
-                
-                 
                 $attr[$attr_key] = $result;
             }
-            
         }
-        
         $context->destroy('CurrentAttr');
-        
-        
         foreach ($definition->info_attr_transform_post as $transform) {
             $attr = $transform->transform($o = $attr, $config, $context);
             if ($e && ($attr != $o)) $e->send(E_NOTICE, 'AttrValidator: Attributes transformed', $o, $attr);
         }
-        
         foreach ($definition->info[$token->name]->attr_transform_post as $transform) {
             $attr = $transform->transform($o = $attr, $config, $context);
             if ($e && ($attr != $o)) $e->send(E_NOTICE, 'AttrValidator: Attributes transformed', $o, $attr);
         }
-        
         if (!$current_token) $context->destroy('CurrentToken');
-        
     }
 }
- 
 if (!defined('HTMLPURIFIER_PREFIX')) {
     define('HTMLPURIFIER_PREFIX', dirname(__FILE__));
     set_include_path(HTMLPURIFIER_PREFIX . PATH_SEPARATOR . get_include_path());
 }
- 
- 
 if (!defined('PHP_EOL')) {
     switch (strtoupper(substr(PHP_OS, 0, 3))) {
         case 'WIN':
@@ -399,8 +331,6 @@ class HTMLPurifier_Bootstrap
                       version_compare(PHP_VERSION, '5.1.0', '>=');
             foreach ($funcs as $func) {
                 if (is_array($func)) {
-                     
-                     
                     $reflector = new ReflectionMethod($func[0], $func[1]);
                     if (!$reflector->isStatic()) {
                         throw new Exception('
@@ -412,8 +342,6 @@ class HTMLPurifier_Bootstrap
                             after your own autoloaders.
                         ');
                     }
-                     
-                     
                     if ($compat) $func = implode('::', $func);
                 }
                 spl_autoload_unregister($func);
@@ -439,10 +367,8 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
     public $type = 'CSS';
     public $info = array();
     protected function doSetup($config) {
-        
         $this->info['text-align'] = new HTMLPurifier_AttrDef_Enum(
             array('left', 'right', 'center', 'justify'), false);
-        
         $border_style =
         $this->info['border-bottom-style'] = 
         $this->info['border-right-style'] = 
@@ -450,9 +376,7 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
         $this->info['border-top-style'] =  new HTMLPurifier_AttrDef_Enum(
             array('none', 'hidden', 'dotted', 'dashed', 'solid', 'double',
             'groove', 'ridge', 'inset', 'outset'), false);
-        
         $this->info['border-style'] = new HTMLPurifier_AttrDef_CSS_Multiple($border_style);
-        
         $this->info['clear'] = new HTMLPurifier_AttrDef_Enum(
             array('none', 'left', 'right', 'both'), false);
         $this->info['float'] = new HTMLPurifier_AttrDef_Enum(
@@ -461,27 +385,22 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
             array('normal', 'italic', 'oblique'), false);
         $this->info['font-variant'] = new HTMLPurifier_AttrDef_Enum(
             array('normal', 'small-caps'), false);
-        
         $uri_or_none = new HTMLPurifier_AttrDef_CSS_Composite(
             array(
                 new HTMLPurifier_AttrDef_Enum(array('none')),
                 new HTMLPurifier_AttrDef_CSS_URI()
             )
         );
-        
         $this->info['list-style-position'] = new HTMLPurifier_AttrDef_Enum(
             array('inside', 'outside'), false);
         $this->info['list-style-type'] = new HTMLPurifier_AttrDef_Enum(
             array('disc', 'circle', 'square', 'decimal', 'lower-roman',
             'upper-roman', 'lower-alpha', 'upper-alpha', 'none'), false);
         $this->info['list-style-image'] = $uri_or_none;
-        
         $this->info['list-style'] = new HTMLPurifier_AttrDef_CSS_ListStyle($config);
-        
         $this->info['text-transform'] = new HTMLPurifier_AttrDef_Enum(
             array('capitalize', 'uppercase', 'lowercase', 'none'), false);
         $this->info['color'] = new HTMLPurifier_AttrDef_CSS_Color();
-        
         $this->info['background-image'] = $uri_or_none;
         $this->info['background-repeat'] = new HTMLPurifier_AttrDef_Enum(
             array('repeat', 'repeat-x', 'repeat-y', 'no-repeat')
@@ -490,7 +409,6 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
             array('scroll', 'fixed')
         );
         $this->info['background-position'] = new HTMLPurifier_AttrDef_CSS_BackgroundPosition();
-        
         $border_color = 
         $this->info['border-top-color'] = 
         $this->info['border-bottom-color'] = 
@@ -500,11 +418,8 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
             new HTMLPurifier_AttrDef_Enum(array('transparent')),
             new HTMLPurifier_AttrDef_CSS_Color()
         ));
-        
         $this->info['background'] = new HTMLPurifier_AttrDef_CSS_Background($config);
-        
         $this->info['border-color'] = new HTMLPurifier_AttrDef_CSS_Multiple($border_color);
-        
         $border_width = 
         $this->info['border-top-width'] = 
         $this->info['border-bottom-width'] = 
@@ -513,19 +428,15 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
             new HTMLPurifier_AttrDef_Enum(array('thin', 'medium', 'thick')),
             new HTMLPurifier_AttrDef_CSS_Length(true) 
         ));
-        
         $this->info['border-width'] = new HTMLPurifier_AttrDef_CSS_Multiple($border_width);
-        
         $this->info['letter-spacing'] = new HTMLPurifier_AttrDef_CSS_Composite(array(
             new HTMLPurifier_AttrDef_Enum(array('normal')),
             new HTMLPurifier_AttrDef_CSS_Length()
         ));
-        
         $this->info['word-spacing'] = new HTMLPurifier_AttrDef_CSS_Composite(array(
             new HTMLPurifier_AttrDef_Enum(array('normal')),
             new HTMLPurifier_AttrDef_CSS_Length()
         ));
-        
         $this->info['font-size'] = new HTMLPurifier_AttrDef_CSS_Composite(array(
             new HTMLPurifier_AttrDef_Enum(array('xx-small', 'x-small',
                 'small', 'medium', 'large', 'x-large', 'xx-large',
@@ -533,14 +444,12 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
             new HTMLPurifier_AttrDef_CSS_Percentage(),
             new HTMLPurifier_AttrDef_CSS_Length()
         ));
-        
         $this->info['line-height'] = new HTMLPurifier_AttrDef_CSS_Composite(array(
             new HTMLPurifier_AttrDef_Enum(array('normal')),
             new HTMLPurifier_AttrDef_CSS_Number(true), 
             new HTMLPurifier_AttrDef_CSS_Length(true),
             new HTMLPurifier_AttrDef_CSS_Percentage(true)
         ));
-        
         $margin =
         $this->info['margin-top'] = 
         $this->info['margin-bottom'] = 
@@ -550,9 +459,7 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
             new HTMLPurifier_AttrDef_CSS_Percentage(),
             new HTMLPurifier_AttrDef_Enum(array('auto'))
         ));
-        
         $this->info['margin'] = new HTMLPurifier_AttrDef_CSS_Multiple($margin);
-        
         $padding =
         $this->info['padding-top'] = 
         $this->info['padding-bottom'] = 
@@ -561,14 +468,11 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
             new HTMLPurifier_AttrDef_CSS_Length(true),
             new HTMLPurifier_AttrDef_CSS_Percentage(true)
         ));
-        
         $this->info['padding'] = new HTMLPurifier_AttrDef_CSS_Multiple($padding);
-        
         $this->info['text-indent'] = new HTMLPurifier_AttrDef_CSS_Composite(array(
             new HTMLPurifier_AttrDef_CSS_Length(),
             new HTMLPurifier_AttrDef_CSS_Percentage()
         ));
-        
         $this->info['width'] =
         $this->info['height'] =
         new HTMLPurifier_AttrDef_CSS_DenyElementDecorator(
@@ -577,56 +481,41 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
             new HTMLPurifier_AttrDef_CSS_Percentage(true),
             new HTMLPurifier_AttrDef_Enum(array('auto'))
         )), 'img');
-        
         $this->info['text-decoration'] = new HTMLPurifier_AttrDef_CSS_TextDecoration();
-        
         $this->info['font-family'] = new HTMLPurifier_AttrDef_CSS_FontFamily();
-        
         $this->info['font-weight'] = new HTMLPurifier_AttrDef_Enum(
             array('normal', 'bold', 'bolder', 'lighter', '100', '200', '300',
             '400', '500', '600', '700', '800', '900'), false);
-        
         $this->info['font'] = new HTMLPurifier_AttrDef_CSS_Font($config);
-        
         $this->info['border'] =
         $this->info['border-bottom'] = 
         $this->info['border-top'] = 
         $this->info['border-left'] = 
         $this->info['border-right'] = new HTMLPurifier_AttrDef_CSS_Border($config);
-        
         $this->info['border-collapse'] = new HTMLPurifier_AttrDef_Enum(array(
             'collapse', 'separate'));
-        
         $this->info['caption-side'] = new HTMLPurifier_AttrDef_Enum(array(
             'top', 'bottom'));
-        
         $this->info['table-layout'] = new HTMLPurifier_AttrDef_Enum(array(
             'auto', 'fixed'));
-        
         $this->info['vertical-align'] = new HTMLPurifier_AttrDef_CSS_Composite(array(
             new HTMLPurifier_AttrDef_Enum(array('baseline', 'sub', 'super',
                 'top', 'text-top', 'middle', 'bottom', 'text-bottom')),
             new HTMLPurifier_AttrDef_CSS_Length(),
             new HTMLPurifier_AttrDef_CSS_Percentage()
         ));
-        
         $this->info['border-spacing'] = new HTMLPurifier_AttrDef_CSS_Multiple(new HTMLPurifier_AttrDef_CSS_Length(), 2);
-        
         $this->info['white-space'] = new HTMLPurifier_AttrDef_Enum(array('nowrap'));
-        
         if ($config->get('CSS', 'Proprietary')) {
             $this->doSetupProprietary($config);
         }
-        
         if ($config->get('CSS', 'AllowTricky')) {
             $this->doSetupTricky($config);
         }
-        
         $allow_important = $config->get('CSS', 'AllowImportant');
         foreach ($this->info as $k => $v) {
             $this->info[$k] = new HTMLPurifier_AttrDef_CSS_ImportantDecorator($v, $allow_important);
         }
-        
         $this->setupConfigStuff($config);
     }
     protected function doSetupProprietary($config) {
@@ -636,13 +525,10 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
         $this->info['scrollbar-face-color']         = new HTMLPurifier_AttrDef_CSS_Color();
         $this->info['scrollbar-highlight-color']    = new HTMLPurifier_AttrDef_CSS_Color();
         $this->info['scrollbar-shadow-color']       = new HTMLPurifier_AttrDef_CSS_Color();
-        
         $this->info['opacity']          = new HTMLPurifier_AttrDef_CSS_AlphaValue();
         $this->info['-moz-opacity']     = new HTMLPurifier_AttrDef_CSS_AlphaValue();
         $this->info['-khtml-opacity']   = new HTMLPurifier_AttrDef_CSS_AlphaValue();
-        
         $this->info['filter'] = new HTMLPurifier_AttrDef_CSS_Filter();
-        
     }
     protected function doSetupTricky($config) {
         $this->info['display'] = new HTMLPurifier_AttrDef_Enum(array(
@@ -656,7 +542,6 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
         ));
     }
     protected function setupConfigStuff($config) {
-        
         $support = "(for information on implementing this, see the ".
                    "support forums) ";
         $allowed_attributes = $config->get('CSS', 'AllowedProperties');
@@ -666,12 +551,10 @@ class HTMLPurifier_CSSDefinition extends HTMLPurifier_Definition
                 unset($allowed_attributes[$name]);
             }
             foreach ($allowed_attributes as $name => $d) {
-                 
                 $name = htmlspecialchars($name);
                 trigger_error("Style attribute '$name' is not supported $support", E_USER_WARNING);
             }
         }
-        
     }
 }
 abstract class HTMLPurifier_ChildDef
@@ -685,7 +568,6 @@ class HTMLPurifier_Config
 {
     public $version = '3.1.0';
     public $autoFinalize = true;
-     
     protected $serials = array();
     protected $serial;
     protected $conf;
@@ -792,7 +674,6 @@ class HTMLPurifier_Config
                 $value = $this->def->info[$namespace][$key]->aliases[$value];
             }
             if ($this->def->info[$namespace][$key]->allowed !== true) {
-                 
                 if (!isset($this->def->info[$namespace][$key]->allowed[$value])) {
                     trigger_error('Value not supported, valid values are: ' .
                         $this->_listify($this->def->info[$namespace][$key]->allowed), E_USER_WARNING);
@@ -801,11 +682,9 @@ class HTMLPurifier_Config
             }
         }
         $this->conf[$namespace][$key] = $value;
-        
         if ($namespace == 'HTML' || $namespace == 'CSS') {
             $this->definitions[$namespace] = null;
         }
-        
         $this->serials[$namespace] = false;
     }
     private function _listify($lookup) {
@@ -833,7 +712,6 @@ class HTMLPurifier_Config
             }
             $this->definitions[$type] = $cache->get($this);
             if ($this->definitions[$type]) {
-                 
                 return $this->definitions[$type];
             }
         } elseif (
@@ -853,7 +731,6 @@ class HTMLPurifier_Config
         }
         if ($raw) {
             if (is_null($this->get($type, 'DefinitionID'))) {
-                 
                 throw new HTMLPurifier_Exception("Cannot retrieve raw version without specifying %$type.DefinitionID");
             }
             return $this->definitions[$type];
@@ -867,7 +744,6 @@ class HTMLPurifier_Config
         foreach ($config_array as $key => $value) {
             $key = str_replace('_', '.', $key);
             if (strpos($key, '.') !== false) {
-                 
                 list($namespace, $directive) = explode('.', $key);
                 $this->set($namespace, $directive, $value);
             } else {
@@ -890,14 +766,12 @@ class HTMLPurifier_Config
              $blacklisted_directives = array();
              foreach ($allowed as $ns_or_directive) {
                  if (strpos($ns_or_directive, '.') !== false) {
-                      
                      if ($ns_or_directive[0] == '-') {
                          $blacklisted_directives[substr($ns_or_directive, 1)] = true;
                      } else {
                          $allowed_directives[$ns_or_directive] = true;
                      }
                  } else {
-                      
                      $allowed_ns[$ns_or_directive] = true;
                  }
              }
@@ -928,7 +802,6 @@ class HTMLPurifier_Config
     public static function prepareArrayFromForm($array, $index = false, $allowed = true, $mq_fix = true, $schema = null) {
         if ($index !== false) $array = (isset($array[$index]) && is_array($array[$index])) ? $array[$index] : array();
         $mq = $mq_fix && function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc();
-        
         $allowed = HTMLPurifier_Config::getAllowedDirectivesForForm($allowed, $schema);
         $ret = array();
         foreach ($allowed as $key) {
@@ -1007,7 +880,6 @@ class HTMLPurifier_ConfigSchema {
     public function addAlias($namespace, $name, $new_namespace, $new_name) {
         $this->info[$namespace][$name] = new HTMLPurifier_ConfigDef_DirectiveAlias($new_namespace, $new_name);
     }
-     
     /** @see HTMLPurifier_ConfigSchema->set() */
     public static function define($namespace, $name, $default, $type, $description) {
         HTMLPurifier_ConfigSchema::deprecated(__METHOD__);
@@ -1066,7 +938,6 @@ class HTMLPurifier_ContentSets
         foreach ($modules as $module_i => $module) {
             foreach ($module->content_sets as $key => $value) {
                 if (isset($this->info[$key])) {
-                     
                     $this->info[$key] = $this->info[$key] . ' | ' . $value;
                 } else {
                     $this->info[$key] = $value;
@@ -1078,13 +949,10 @@ class HTMLPurifier_ContentSets
             $this->info[$i] =
                 str_replace(
                     $this->keys,
-                     
-                     
                     array_values($this->info),
                 $set);
         }
         $this->values = array_values($this->info);
-        
         foreach ($this->info as $name => $set) {
             $this->lookup[$name] = $this->convertToLookup($set);
         }
@@ -1365,11 +1233,8 @@ class HTMLPurifier_ElementDef
         return $def;
     }
     public function mergeIn($def) {
-        
         foreach($def->attr as $k => $v) {
             if ($k === 0) {
-                 
-                 
                 foreach ($v as $v2) {
                     $this->attr[0][] = $v2;
                 }
@@ -1384,7 +1249,6 @@ class HTMLPurifier_ElementDef
         $this->_mergeAssocArray($this->attr_transform_pre, $def->attr_transform_pre);
         $this->_mergeAssocArray($this->attr_transform_post, $def->attr_transform_post);
         $this->_mergeAssocArray($this->excludes, $def->excludes);
-        
         if(!empty($def->content_model)) {
             $this->content_model .= ' | ' . $def->content_model;
             $this->child = false;
@@ -1395,7 +1259,6 @@ class HTMLPurifier_ElementDef
         }
         if(!is_null($def->child)) $this->child = $def->child;
         if($def->descendants_are_inline) $this->descendants_are_inline = $def->descendants_are_inline;
-        
     }
     private function _mergeAssocArray(&$a1, $a2) {
         foreach ($a2 as $k => $v) {
@@ -1414,12 +1277,9 @@ class HTMLPurifier_Encoder
     }
     private static function muteErrorHandler() {}
     public static function cleanUTF8($str, $force_php = false) {
-        
         static $non_sgml_chars = array();
         if (empty($non_sgml_chars)) {
             for ($i = 0; $i <= 31; $i++) {
-                 
-                 
                 if ($i == 9 || $i == 13 || $i == 10) continue;
                 $non_sgml_chars[chr($i)] = '';
             }
@@ -1427,138 +1287,92 @@ class HTMLPurifier_Encoder
                 $non_sgml_chars[HTMLPurifier_Encoder::unichr($i)] = '';
             }
         }
-        
         static $iconv = null;
         if ($iconv === null) $iconv = function_exists('iconv');
-        
         if (preg_match('/^.{1}/us', $str)) {
             return strtr($str, $non_sgml_chars);
         }
-        
         if ($iconv && !$force_php) {
             set_error_handler(array('HTMLPurifier_Encoder', 'muteErrorHandler'));
             $str = iconv('UTF-8', 'UTF-8//IGNORE', $str);
             restore_error_handler();
             return strtr($str, $non_sgml_chars);
         }
-        
         $mState = 0;  
-                      
         $mUcs4  = 0;  
         $mBytes = 1;  
-        
-        
         $out = '';
         $char = '';
-        
         $len = strlen($str);
         for($i = 0; $i < $len; $i++) {
             $in = ord($str{$i});
             $char .= $str[$i];  
             if (0 == $mState) {
-                 
-                 
                 if (0 == (0x80 & ($in))) {
-                     
                     if (($in <= 31 || $in == 127) && 
                         !($in == 9 || $in == 13 || $in == 10)  
                     ) {
-                         
                     } else {
                         $out .= $char;
                     }
-                     
                     $char = '';
                     $mBytes = 1;
                 } elseif (0xC0 == (0xE0 & ($in))) {
-                     
                     $mUcs4 = ($in);
                     $mUcs4 = ($mUcs4 & 0x1F) << 6;
                     $mState = 1;
                     $mBytes = 2;
                 } elseif (0xE0 == (0xF0 & ($in))) {
-                     
                     $mUcs4 = ($in);
                     $mUcs4 = ($mUcs4 & 0x0F) << 12;
                     $mState = 2;
                     $mBytes = 3;
                 } elseif (0xF0 == (0xF8 & ($in))) {
-                     
                     $mUcs4 = ($in);
                     $mUcs4 = ($mUcs4 & 0x07) << 18;
                     $mState = 3;
                     $mBytes = 4;
                 } elseif (0xF8 == (0xFC & ($in))) {
-                     
-                     
-                     
-                     
-                     
-                     
-                     
-                     
-                     
                     $mUcs4 = ($in);
                     $mUcs4 = ($mUcs4 & 0x03) << 24;
                     $mState = 4;
                     $mBytes = 5;
                 } elseif (0xFC == (0xFE & ($in))) {
-                     
-                     
                     $mUcs4 = ($in);
                     $mUcs4 = ($mUcs4 & 1) << 30;
                     $mState = 5;
                     $mBytes = 6;
                 } else {
-                     
-                     
                     $mState = 0;
                     $mUcs4  = 0;
                     $mBytes = 1;
                     $char = '';
                 }
             } else {
-                 
-                 
                 if (0x80 == (0xC0 & ($in))) {
-                     
                     $shift = ($mState - 1) * 6;
                     $tmp = $in;
                     $tmp = ($tmp & 0x0000003F) << $shift;
                     $mUcs4 |= $tmp;
-                    
                     if (0 == --$mState) {
-                         
-                         
-                        
-                         
-                        
-                         
                         if (((2 == $mBytes) && ($mUcs4 < 0x0080)) ||
                             ((3 == $mBytes) && ($mUcs4 < 0x0800)) ||
                             ((4 == $mBytes) && ($mUcs4 < 0x10000)) ||
                             (4 < $mBytes) ||
-                             
                             (($mUcs4 & 0xFFFFF800) == 0xD800) ||
-                             
                             ($mUcs4 > 0x10FFFF)
                         ) {
-                            
                         } elseif (0xFEFF != $mUcs4 &&  
                             !($mUcs4 >= 128 && $mUcs4 <= 159)  
                         ) {
                             $out .= $char;
                         }
-                         
                         $mState = 0;
                         $mUcs4  = 0;
                         $mBytes = 1;
                         $char = '';
                     }
                 } else {
-                     
-                     
-                     
                     $mState = 0;
                     $mUcs4  = 0;
                     $mBytes = 1;
@@ -1568,24 +1382,11 @@ class HTMLPurifier_Encoder
         }
         return $out;
     }
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
     public static function unichr($code) {
         if($code > 1114111 or $code < 0 or
           ($code >= 55296 and $code <= 57343) ) {
             return '';
         }
-        
         $x = $y = $z = $w = 0; 
         if ($code < 128) {
             $x = $code;
@@ -1608,7 +1409,6 @@ class HTMLPurifier_Encoder
         if($z) $ret .= chr($z);
         if($y) $ret .= chr($y);
         $ret .= chr($x); 
-        
         return $ret;
     }
     public static function convertToUTF8($str, $config, $context) {
@@ -1700,15 +1500,11 @@ class HTMLPurifier_EntityLookup {
         return $instance;
     }
 }
- 
- 
- 
 class HTMLPurifier_EntityParser
 {
     protected $_entity_lookup;
     protected $_substituteEntitiesRegex =
 '/&(?:[#]x([a-fA-F0-9]+)|[#]0*(\d+)|([A-Za-z_:][A-Za-z0-9.\-_:]*));?/';
- 
     protected $_special_dec2str =
             array(
                     34 => '"',
@@ -1737,9 +1533,7 @@ class HTMLPurifier_EntityParser
         if ($is_num) {
             $is_hex = (@$entity[2] === 'x');
             $code = $is_hex ? hexdec($matches[1]) : (int) $matches[2];
-            
             if (isset($this->_special_dec2str[$code]))  return $entity;
-            
             return HTMLPurifier_Encoder::unichr($code);
         } else {
             if (isset($this->_special_ent2dec[$matches[3]])) return $entity;
@@ -1787,18 +1581,15 @@ class HTMLPurifier_ErrorCollector
         $this->context   = $context;
     }
     public function send($severity, $msg) {
-        
         $args = array();
         if (func_num_args() > 2) {
             $args = func_get_args();
             array_shift($args);
             unset($args[0]);
         }
-        
         $token = $this->context->get('CurrentToken', true);
         $line  = $token ? $token->line : $this->context->get('CurrentLine', true);
         $attr  = $this->context->get('CurrentAttr', true);
-        
         $subst = array();
         if (!is_null($token)) {
             $args['CurrentToken'] = $token;
@@ -1807,15 +1598,12 @@ class HTMLPurifier_ErrorCollector
             $subst['$CurrentAttr.Name'] = $attr;
             if (isset($token->attr[$attr])) $subst['$CurrentAttr.Value'] = $token->attr[$attr];
         }
-        
         if (empty($args)) {
             $msg = $this->locale->getMessage($msg);
         } else {
             $msg = $this->locale->formatMessage($msg, $args);
         }
-        
         if (!empty($subst)) $msg = strtr($msg, $subst);
-        
         $this->errors[] = array($line, $severity, $msg);
     }
     public function getRaw() {
@@ -1823,9 +1611,7 @@ class HTMLPurifier_ErrorCollector
     }
     public function getHTMLFormatted($config) {
         $ret = array();
-        
         $errors = $this->errors;
-        
         if ($config->get('Core', 'MaintainLineNumbers') !== false) {
             $has_line       = array();
             $lines          = array();
@@ -1837,27 +1623,22 @@ class HTMLPurifier_ErrorCollector
             }
             array_multisort($has_line, SORT_DESC, $lines, SORT_ASC, $original_order, SORT_ASC, $errors);
         }
-        
         foreach ($errors as $error) {
             list($line, $severity, $msg) = $error;
             $string = '';
             $string .= '<strong>' . $this->locale->getErrorName($severity) . '</strong>: ';
             $string .= $this->generator->escape($msg); 
             if ($line) {
-                 
-                 
                 $string .= $this->locale->formatMessage(
                     'ErrorCollector: At line', array('line' => $line));
             }
             $ret[] = $string;
         }
-        
         if (empty($errors)) {
             return '<p>' . $this->locale->getMessage('ErrorCollector: No errors') . '</p>';
         } else {
             return '<ul><li>' . implode('</li><li>', $ret) . '</li></ul>';
         }
-        
     }
 }
 class HTMLPurifier_Exception extends Exception
@@ -1888,20 +1669,15 @@ class HTMLPurifier_Generator
     }
     public function generateFromTokens($tokens) {
         if (!$tokens) return '';
-        
         $html = '';
         for ($i = 0, $size = count($tokens); $i < $size; $i++) {
             if ($this->_scriptFix && $tokens[$i]->name === 'script'
                 && $i + 2 < $size && $tokens[$i+2] instanceof HTMLPurifier_Token_End) {
-                 
-                 
-                 
                 $html .= $this->generateFromToken($tokens[$i++]);
                 $html .= $this->generateScriptFromToken($tokens[$i++]);
             }
             $html .= $this->generateFromToken($tokens[$i]);
         }
-        
         if (extension_loaded('tidy') && $this->config->get('Output', 'TidyFormat')) {
             $tidy = new Tidy;
             $tidy->parseString($html, array(
@@ -1914,7 +1690,6 @@ class HTMLPurifier_Generator
             $tidy->cleanRepair();
             $html = (string) $tidy;  
         }
-        
         $nl = $this->config->get('Output', 'Newline');
         if ($nl === null) $nl = PHP_EOL;
         if ($nl !== "\n") $html = str_replace("\n", $nl, $html);
@@ -1924,28 +1699,22 @@ class HTMLPurifier_Generator
         if (!$token instanceof HTMLPurifier_Token) {
             trigger_error('Cannot generate HTML from non-HTMLPurifier_Token object', E_USER_WARNING);
             return '';
-            
         } elseif ($token instanceof HTMLPurifier_Token_Start) {
             $attr = $this->generateAttributes($token->attr, $token->name);
             return '<' . $token->name . ($attr ? ' ' : '') . $attr . '>';
-            
         } elseif ($token instanceof HTMLPurifier_Token_End) {
             return '</' . $token->name . '>';
-            
         } elseif ($token instanceof HTMLPurifier_Token_Empty) {
             $attr = $this->generateAttributes($token->attr, $token->name);
              return '<' . $token->name . ($attr ? ' ' : '') . $attr .
                 ( $this->_xhtml ? ' /': '' )  
                 . '>';
-            
         } elseif ($token instanceof HTMLPurifier_Token_Text) {
             return $this->escape($token->data, ENT_NOQUOTES);
-            
         } elseif ($token instanceof HTMLPurifier_Token_Comment) {
             return '<!--' . $token->data . '-->';
         } else {
             return '';
-            
         }
     }
     public function generateScriptFromToken($token) {
@@ -1957,9 +1726,7 @@ class HTMLPurifier_Generator
         $html = '';
         foreach ($assoc_array_of_attributes as $key => $value) {
             if (!$this->_xhtml) {
-                 
                 if (strpos($key, ':') !== false) continue;
-                 
                 if ($element && !empty($this->_def->info[$element]->attr[$key]->minimized)) {
                     $html .= $key . ' ';
                     continue;
@@ -1975,7 +1742,6 @@ class HTMLPurifier_Generator
 }
 class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
 {
-     
     public $info = array();
     public $info_global_attr = array();
     public $info_parent = 'div';
@@ -1986,7 +1752,6 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
     public $info_attr_transform_post = array();
     public $info_content_sets = array();
     public $doctype;
-     
     public function addAttribute($element_name, $attr_name, $def) {
         $module = $this->getAnonymousModule();
         if (!isset($module->info[$element_name])) {
@@ -2014,7 +1779,6 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
         return $this->_anonModule;
     }
     private $_anonModule;
-     
     public $type = 'HTML';
     public $manager; /**< Instance of HTMLPurifier_HTMLModuleManager */
     public function __construct() {
@@ -2024,22 +1788,18 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
         $this->processModules($config);
         $this->setupConfigStuff($config);
         unset($this->manager);
-        
         foreach ($this->info as $k => $v) {
             unset($this->info[$k]->content_model);
             unset($this->info[$k]->content_model_type);
         }
     }
     protected function processModules($config) {
-        
         if ($this->_anonModule) {
             $this->manager->addModule($this->_anonModule);
             unset($this->_anonModule);
         }
-        
         $this->manager->setup($config);
         $this->doctype = $this->manager->doctype;
-        
         foreach ($this->manager->modules as $module) {
             foreach($module->info_tag_transform         as $k => $v) {
                 if ($v === false) unset($this->info_tag_transform[$k]);
@@ -2054,13 +1814,10 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
                 else $this->info_attr_transform_post[$k] = $v;
             }
         }
-        
         $this->info = $this->manager->getElements();
         $this->info_content_sets = $this->manager->contentSets->lookup;
-        
     }
     protected function setupConfigStuff($config) {
-        
         $block_wrapper = $config->get('HTML', 'BlockWrapper');
         if (isset($this->info_content_sets['Block'][$block_wrapper])) {
             $this->info_block_wrapper = $block_wrapper;
@@ -2068,7 +1825,6 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
             trigger_error('Cannot use non-block element as block wrapper',
                 E_USER_ERROR);
         }
-        
         $parent = $config->get('HTML', 'Parent');
         $def = $this->manager->getElement($parent, true);
         if ($def) {
@@ -2079,21 +1835,16 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
                 E_USER_ERROR);
             $this->info_parent_def = $this->manager->getElement($this->info_parent, true);
         }
-        
         $support = "(for information on implementing this, see the ".
                    "support forums) ";
-        
-        
         $allowed_elements = $config->get('HTML', 'AllowedElements');
         $allowed_attributes = $config->get('HTML', 'AllowedAttributes');  
-        
         if (!is_array($allowed_elements) && !is_array($allowed_attributes)) {
             $allowed = $config->get('HTML', 'Allowed');
             if (is_string($allowed)) {
                 list($allowed_elements, $allowed_attributes) = $this->parseTinyMCEAllowedList($allowed);
             }
         }
-        
         if (is_array($allowed_elements)) {
             foreach ($this->info as $name => $d) {
                 if(!isset($allowed_elements[$name])) unset($this->info[$name]);
@@ -2104,11 +1855,8 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
                 trigger_error("Element '$element' is not supported $support", E_USER_WARNING);
             }
         }
-        
-        
         $allowed_attributes_mutable = $allowed_attributes;  
         if (is_array($allowed_attributes)) {
-            
             foreach ($this->info_global_attr as $attr => $x) {
                 $keys = array($attr, "*@$attr", "*.$attr");
                 $delete = true;
@@ -2122,7 +1870,6 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
                 }
                 if ($delete) unset($this->info_global_attr[$attr]);
             }
-            
             foreach ($this->info as $tag => $info) {
                 foreach ($info->attr as $attr => $x) {
                     $keys = array("$tag@$attr", $attr, "*@$attr", "$tag.$attr", "*.$attr");
@@ -2154,7 +1901,6 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
                             }
                             break;
                         }
-                         
                     case 1:
                         $attribute = htmlspecialchars($bits[0]);
                         trigger_error("Global attribute '$attribute' is not ".
@@ -2163,13 +1909,9 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
                         break;
                 }
             }
-            
         }
-        
-        
         $forbidden_elements   = $config->get('HTML', 'ForbiddenElements');
         $forbidden_attributes = $config->get('HTML', 'ForbiddenAttributes');
-        
         foreach ($this->info as $tag => $info) {
             if (isset($forbidden_elements[$tag])) {
                 unset($this->info[$tag]);
@@ -2185,7 +1927,6 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
                     continue;
                 }  
                 elseif (isset($forbidden_attributes["$tag.$attr"])) {
-                     
                     trigger_error("Error with $tag.$attr: tag.attr syntax not supported for HTML.ForbiddenAttributes; use tag@attr instead", E_USER_WARNING);
                 }
             }
@@ -2197,15 +1938,11 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
                 trigger_error("Error with $key: *.attr syntax not supported for HTML.ForbiddenAttributes; use attr instead", E_USER_WARNING);
             }
         }
-        
     }
     public function parseTinyMCEAllowedList($list) {
-        
         $list = str_replace(array(' ', "\t"), '', $list);
-        
         $elements = array();
         $attributes = array();
-        
         $chunks = preg_split('/(,|[\n\r]+)/', $list);
         foreach ($chunks as $chunk) {
             if (empty($chunk)) continue;
@@ -2223,14 +1960,11 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
                 $attributes["$element.$key"] = true;
             }
         }
-        
         return array($elements, $attributes);
-        
     }
 }
 class HTMLPurifier_HTMLModule
 {
-     
     public $name;
     public $elements = array();
     public $info = array();
@@ -2242,7 +1976,6 @@ class HTMLPurifier_HTMLModule
     public $defines_child_def = false;
     public $safe = true;
     public function getChildDef($def) {return false;}
-     
     public function addElement($element, $type, $contents, $attr_includes = array(), $attr = array()) {
         $this->elements[] = $element;
         list($content_model_type, $content_model) = $this->parseContents($contents);
@@ -2317,10 +2050,8 @@ class HTMLPurifier_HTMLModuleManager
     /** If set to true, unsafe elements and attributes will be allowed */
     public $trusted = false;
     public function __construct() {
-        
         $this->attrTypes = new HTMLPurifier_AttrTypes();
         $this->doctypes  = new HTMLPurifier_DoctypeRegistry();
-        
         $common = array(
             'CommonAttributes', 'Text', 'Hypertext', 'List',
             'Presentation', 'Edit', 'Bdo', 'Tables', 'Image',
@@ -2329,7 +2060,6 @@ class HTMLPurifier_HTMLModuleManager
         $transitional = array('Legacy', 'Target');
         $xml = array('XMLCommonAttributes');
         $non_xml = array('NonXMLCommonAttributes');
-        
         $this->doctypes->register(
             'HTML 4.01 Transitional', false,
             array_merge($common, $transitional, $non_xml),
@@ -2338,7 +2068,6 @@ class HTMLPurifier_HTMLModuleManager
             '-//W3C//DTD HTML 4.01 Transitional//EN',
             'http://www.w3.org/TR/html4/loose.dtd'
         );
-        
         $this->doctypes->register(
             'HTML 4.01 Strict', false,
             array_merge($common, $non_xml),
@@ -2347,7 +2076,6 @@ class HTMLPurifier_HTMLModuleManager
             '-//W3C//DTD HTML 4.01//EN',
             'http://www.w3.org/TR/html4/strict.dtd'
         );
-        
         $this->doctypes->register(
             'XHTML 1.0 Transitional', true,
             array_merge($common, $transitional, $xml, $non_xml),
@@ -2356,7 +2084,6 @@ class HTMLPurifier_HTMLModuleManager
             '-//W3C//DTD XHTML 1.0 Transitional//EN',
             'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'
         );
-        
         $this->doctypes->register(
             'XHTML 1.0 Strict', true,
             array_merge($common, $xml, $non_xml),
@@ -2365,7 +2092,6 @@ class HTMLPurifier_HTMLModuleManager
             '-//W3C//DTD XHTML 1.0 Strict//EN',
             'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'
         );
-        
         $this->doctypes->register(
             'XHTML 1.1', true,
             array_merge($common, $xml, array('Ruby')),
@@ -2374,7 +2100,6 @@ class HTMLPurifier_HTMLModuleManager
             '-//W3C//DTD XHTML 1.1//EN',
             'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'
         );
-        
     }
     public function registerModule($module, $overload = false) {
         if (is_string($module)) {
@@ -2415,39 +2140,30 @@ class HTMLPurifier_HTMLModuleManager
         $this->prefixes[] = $prefix;
     }
     public function setup($config) {
-        
         $this->trusted = $config->get('HTML', 'Trusted');
-        
         $this->doctype = $this->doctypes->make($config);
         $modules = $this->doctype->modules;
-        
         $lookup = $config->get('HTML', 'AllowedModules');
         $special_cases = $config->get('HTML', 'CoreModules');
-        
         if (is_array($lookup)) {
             foreach ($modules as $k => $m) {
                 if (isset($special_cases[$m])) continue;
                 if (!isset($lookup[$m])) unset($modules[$k]);
             }
         }
-        
         $modules = array_merge($modules, $this->userModules);
-        
         if ($config->get('HTML', 'Proprietary')) {
             $modules[] = 'Proprietary';
         }
-        
         foreach ($modules as $module) {
             $this->processModule($module);
         }
-        
         foreach ($this->doctype->tidyModules as $module) {
             $this->processModule($module);
             if (method_exists($this->modules[$module], 'construct')) {
                 $this->modules[$module]->construct($config);
             }
         }
-        
         foreach ($this->modules as $module) {
             foreach ($module->info as $name => $def) {
                 if (!isset($this->elementLookup[$name])) {
@@ -2456,7 +2172,6 @@ class HTMLPurifier_HTMLModuleManager
                 $this->elementLookup[$name][] = $module->name;
             }
         }
-        
         $this->contentSets = new HTMLPurifier_ContentSets(
             $this->modules
         );
@@ -2472,7 +2187,6 @@ class HTMLPurifier_HTMLModuleManager
         $this->modules[$module] = $this->registeredModules[$module];
     }
     public function getElements() {
-        
         $elements = array();
         foreach ($this->modules as $module) {
             if (!$this->trusted && !$module->safe) continue;
@@ -2481,68 +2195,46 @@ class HTMLPurifier_HTMLModuleManager
                 $elements[$name] = $this->getElement($name);
             }
         }
-        
         foreach ($elements as $n => $v) {
             if ($v === false) unset($elements[$n]);
         }
-        
         return $elements;
-        
     }
     public function getElement($name, $trusted = null) {
-        
         if (!isset($this->elementLookup[$name])) {
             return false;
         }
-        
         $def = false;
         if ($trusted === null) $trusted = $this->trusted;
-        
         foreach($this->elementLookup[$name] as $module_name) {
-            
             $module = $this->modules[$module_name];
-            
             if (!$trusted && !$module->safe) {
                 continue;
             }
-            
             $new_def = clone $module->info[$name];
-            
             if (!$def && $new_def->standalone) {
                 $def = $new_def;
             } elseif ($def) {
-                 
-                 
                 $def->mergeIn($new_def);
             } else {
-                 
-                 
-                 
                 continue;
             }
-            
             $this->attrCollections->performInclusions($def->attr);
             $this->attrCollections->expandIdentifiers($def->attr, $this->attrTypes);
-            
             if (is_string($def->content_model) &&
                 strpos($def->content_model, 'Inline') !== false) {
                 if ($name != 'del' && $name != 'ins') {
-                     
                     $def->descendants_are_inline = true;
                 }
             }
-            
             $this->contentSets->generateChildDef($def, $module);
         }
-            
         foreach ($def->attr as $attr_name => $attr_def) {
             if ($attr_def->required) {
                 $def->required_attr[] = $attr_name;
             }
         }
-        
         return $def;
-        
     }
 }
 class HTMLPurifier_IDAccumulator
@@ -2660,15 +2352,11 @@ class HTMLPurifier_Language
         foreach ($args as $i => $value) {
             if (is_object($value)) {
                 if ($value instanceof HTMLPurifier_Token) {
-                     
                     if (!$generator) $generator = $this->context->get('Generator');
                     if (isset($value->name)) $subst['$'.$i.'.Name'] = $value->name;
                     if (isset($value->data)) $subst['$'.$i.'.Data'] = $value->data;
                     $subst['$'.$i.'.Compact'] = 
                     $subst['$'.$i.'.Serialized'] = $generator->generateFromToken($value);
-                     
-                     
-                     
                     if (!empty($value->attr)) {
                         $stripped_token = clone $value;
                         $stripped_token->attr = array();
@@ -2680,11 +2368,8 @@ class HTMLPurifier_Language
             } elseif (is_array($value)) {
                 $keys = array_keys($value);
                 if (array_keys($keys) === $keys) {
-                     
                     $subst['$'.$i] = $this->listify($value);
                 } else {
-                     
-                     
                     $subst['$'.$i.'.Keys'] = $this->listify($keys);
                     $subst['$'.$i.'.Values'] = $this->listify(array_values($value));
                 }
@@ -2718,7 +2403,6 @@ class HTMLPurifier_LanguageFactory
         $this->dir = HTMLPURIFIER_PREFIX . '/HTMLPurifier';
     }
     public function create($config, $context, $code = false) {
-        
         if ($code === false) {
             $code = $this->validator->validate(
               $config->get('Core', 'Language'), $config, $context
@@ -2727,10 +2411,8 @@ class HTMLPurifier_LanguageFactory
             $code = $this->validator->validate($code, $config, $context);
         }
         if ($code === false) $code = 'en';  
-        
         $pcode = str_replace('-', '_', $code);  
         static $depth = 0;  
-        
         if ($code == 'en') {
             $lang = new HTMLPurifier_Language($config, $context);
         } else {
@@ -2739,7 +2421,6 @@ class HTMLPurifier_LanguageFactory
             if (file_exists($file) || class_exists($class, false)) {
                 $lang = new $class($config, $context);
             } else {
-                 
                 $raw_fallback = $this->getFallbackFor($code);
                 $fallback = $raw_fallback ? $raw_fallback : 'en';
                 $depth++;
@@ -2750,11 +2431,8 @@ class HTMLPurifier_LanguageFactory
                 $depth--;
             }
         }
-        
         $lang->code = $code;
-        
         return $lang;
-        
     }
     public function getFallbackFor($code) {
         $this->loadLanguage($code);
@@ -2762,13 +2440,9 @@ class HTMLPurifier_LanguageFactory
     }
     public function loadLanguage($code) {
         static $languages_seen = array();  
-        
         if (isset($this->cache[$code])) return;
-        
         $filename = $this->dir . '/Language/messages/' . $code . '.php';
-        
         $fallback = ($code != 'en') ? 'en' : false;
-        
         if (!file_exists($filename)) {
             $filename = $this->dir . '/Language/messages/en.php';
             $cache = array();
@@ -2776,19 +2450,15 @@ class HTMLPurifier_LanguageFactory
             include $filename;
             $cache = compact($this->keys);
         }
-        
         if (!empty($fallback)) {
-            
             if (isset($languages_seen[$code])) {
                 trigger_error('Circular fallback reference in language ' .
                     $code, E_USER_ERROR);
                 $fallback = 'en';
             }
             $language_seen[$code] = true;
-            
             $this->loadLanguage($fallback);
             $fallback_cache = $this->cache[$fallback];
-            
             foreach ( $this->keys as $key ) {
                 if (isset($cache[$key]) && isset($fallback_cache[$key])) {
                     if (isset($this->mergeable_keys_map[$key])) {
@@ -2800,19 +2470,14 @@ class HTMLPurifier_LanguageFactory
                     $cache[$key] = $fallback_cache[$key];
                 }
             }
-            
         }
-        
         $this->cache[$code] = $cache;
-        
         return;
     }
 }
 class HTMLPurifier_Lexer
 {
-     
     public static function create($config) {
-        
         if (!($config instanceof HTMLPurifier_Config)) {
             $lexer = $config;
             trigger_error("Passing a prototype to 
@@ -2821,13 +2486,10 @@ class HTMLPurifier_Lexer
         } else {
             $lexer = $config->get('Core', 'LexerImpl');
         }
-        
         if (is_object($lexer)) {
             return $lexer;
         }
-        
         if (is_null($lexer)) { do {
-            
             $line_numbers = $config->get('Core', 'MaintainLineNumbers');
             if (
                 $line_numbers === true ||
@@ -2836,17 +2498,12 @@ class HTMLPurifier_Lexer
                 $lexer = 'DirectLex';
                 break;
             }
-            
             if (class_exists('DOMDocument')) {
-                 
-                 
                 $lexer = 'DOMLex';
             } else {
                 $lexer = 'DirectLex';
             }
-            
         } while(0); }  
-        
         switch ($lexer) {
             case 'DOMLex':
                 return new HTMLPurifier_Lexer_DOMLex();
@@ -2857,9 +2514,7 @@ class HTMLPurifier_Lexer
             default:
                 trigger_error("Cannot instantiate unrecognized Lexer type " . htmlspecialchars($lexer), E_USER_ERROR);
         }
-        
     }
-     
     public function __construct() {
         $this->_entity_parser = new HTMLPurifier_EntityParser();
     }
@@ -2874,21 +2529,15 @@ class HTMLPurifier_Lexer
                     '&#x27;' => "'"
             );
     public function parseData($string) {
-        
         if ($string === '') return '';
-        
         $num_amp = substr_count($string, '&') - substr_count($string, '& ') -
             ($string[strlen($string)-1] === '&' ? 1 : 0);
-        
         if (!$num_amp) return $string;  
         $num_esc_amp = substr_count($string, '&amp;');
         $string = strtr($string, $this->_special_entity2str);
-        
         $num_amp_2 = substr_count($string, '&') - substr_count($string, '& ') -
             ($string[strlen($string)-1] === '&' ? 1 : 0);
-        
         if ($num_amp_2 <= $num_esc_amp) return $string;
-        
         $string = $this->_entity_parser->substituteSpecialEntities($string);
         return $string;
     }
@@ -2913,24 +2562,17 @@ class HTMLPurifier_Lexer
         return htmlspecialchars($matches[1], ENT_COMPAT, 'UTF-8');
     }
     public function normalize($html, $config, $context) {
-        
         if ($config->get('Core', 'ConvertDocumentToFragment')) {
             $html = $this->extractBody($html);
         }
-        
         $html = str_replace("\r\n", "\n", $html);
         $html = str_replace("\r", "\n", $html);
-        
         if ($config->get('HTML', 'Trusted')) {
             $html = $this->escapeCommentedCDATA($html);
         }
-        
         $html = $this->escapeCDATA($html);
-        
         $html = $this->_entity_parser->substituteNonSpecialEntities($html);
-        
         $html = HTMLPurifier_Encoder::cleanUTF8($html);
-        
         return $html;
     }
     public function extractBody($html) {
@@ -2954,7 +2596,6 @@ class HTMLPurifier_PercentEncoder
         $this->preserve[46] = true;  
         $this->preserve[95] = true;  
         $this->preserve[126]= true;  
-        
         if ($preserve !== false) {
             for ($i = 0, $c = strlen($preserve); $i < $c; $i++) {
                 $this->preserve[ord($preserve[$i])] = true;
@@ -2999,7 +2640,6 @@ class HTMLPurifier_PercentEncoder
         return $ret;
     }
 }
- 
 abstract class HTMLPurifier_Strategy
 {
     abstract public function execute($tokens, $config, $context);
@@ -3051,16 +2691,13 @@ class HTMLPurifier_StringHashParser
             if (!$state && $line === '') continue;
             if ($line === '----') break;
             if (strncmp('--', $line, 2) === 0) {
-                 
                 $state = trim($line, '- ');
                 continue;
             } elseif (!$state) {
                 $single = true;
                 if (strpos($line, ':') !== false) {
-                     
                     list($state, $line) = explode(': ', $line, 2);
                 } else {
-                     
                     $state  = $this->default;
                 }
             }
@@ -3105,7 +2742,6 @@ class HTMLPurifier_Token {
 }
 class HTMLPurifier_TokenFactory
 {
-     
     private $p_start, $p_end, $p_empty, $p_text, $p_comment;
     public function __construct() {
         $this->p_start  = new HTMLPurifier_Token_Start('', array());
@@ -3161,7 +2797,6 @@ class HTMLPurifier_URI
             $def = $config->getDefinition('URI');
             $scheme_obj = $registry->getScheme($def->defaultScheme, $config, $context);
             if (!$scheme_obj) {
-                 
                 trigger_error(
                     'Default scheme object "' . $def->defaultScheme . '" was not readable',
                     E_USER_WARNING
@@ -3172,40 +2807,33 @@ class HTMLPurifier_URI
         return $scheme_obj;
     }
     public function validate($config, $context) {
-        
         $chars_sub_delims = '!$&\'()*+,;=';
         $chars_gen_delims = ':/?#[]@';
         $chars_pchar = $chars_sub_delims . ':@';
-        
         if (!is_null($this->scheme) && is_null($this->host)) {
             $def = $config->getDefinition('URI');
             if ($def->defaultScheme === $this->scheme) {
                 $this->scheme = null;
             }
         }
-        
         if (!is_null($this->host)) {
             $host_def = new HTMLPurifier_AttrDef_URI_Host();
             $this->host = $host_def->validate($this->host, $config, $context);
             if ($this->host === false) $this->host = null;
         }
-        
         if (!is_null($this->userinfo)) {
             $encoder = new HTMLPurifier_PercentEncoder($chars_sub_delims . ':');
             $this->userinfo = $encoder->encode($this->userinfo);
         }
-        
         if (!is_null($this->port)) {
             if ($this->port < 1 || $this->port > 65535) $this->port = null;
         }
-        
         $path_parts = array();
         $segments_encoder = new HTMLPurifier_PercentEncoder($chars_pchar . '/');
         if (!is_null($this->host)) {
             $this->path = $segments_encoder->encode($this->path);
         } elseif ($this->path !== '' && $this->path[0] === '/') {
             if (strlen($this->path) >= 2 && $this->path[1] === '/') {
-                 
                 $this->path = '';
             } else {
                 $this->path = $segments_encoder->encode($this->path);
@@ -3225,9 +2853,7 @@ class HTMLPurifier_URI
         } else {
             $this->path = '';  
         }
-        
         return true;
-        
     }
     public function toString() {
         $authority = null;
@@ -3237,14 +2863,12 @@ class HTMLPurifier_URI
             $authority .= $this->host;
             if(!is_null($this->port))     $authority .= ':' . $this->port;
         }
-        
         $result = '';
         if (!is_null($this->scheme))    $result .= $this->scheme . ':';
         if (!is_null($authority))       $result .=  '//' . $authority;
         $result .= $this->path;
         if (!is_null($this->query))     $result .= '?' . $this->query;
         if (!is_null($this->fragment))  $result .= '#' . $this->fragment;
-        
         return $result;
     }
 }
@@ -3314,9 +2938,7 @@ class HTMLPurifier_URIParser
         $this->percentEncoder = new HTMLPurifier_PercentEncoder();
     }
     public function parse($uri) {
-        
         $uri = $this->percentEncoder->normalize($uri);
-        
         $r_URI = '!'.
             '(([^:/?#"<>]+):)?'.  
             '(//([^/?#"<>]*))?'.  
@@ -3324,18 +2946,14 @@ class HTMLPurifier_URIParser
             '(\?([^#"<>]*))?'.    
             '(#([^"<>]*))?'.      
             '!';
-        
         $matches = array();
         $result = preg_match($r_URI, $uri, $matches);
-        
         if (!$result) return false;  
-        
         $scheme     = !empty($matches[1]) ? $matches[2] : null;
         $authority  = !empty($matches[3]) ? $matches[4] : null;
         $path       = $matches[5];  
         $query      = !empty($matches[6]) ? $matches[7] : null;
         $fragment   = !empty($matches[8]) ? $matches[9] : null;
-        
         if ($authority !== null) {
             $r_authority = "/^((.+?)@)?(\[[^\]]+\]|[^:]*)(:(\d*))?/";
             $matches = array();
@@ -3346,7 +2964,6 @@ class HTMLPurifier_URIParser
         } else {
             $port = $host = $userinfo = null;
         }
-        
         return new HTMLPurifier_URI(
             $scheme, $userinfo, $host, $port, $path, $query, $fragment);
     }
@@ -3376,17 +2993,14 @@ class HTMLPurifier_URISchemeRegistry
     public function getScheme($scheme, $config, $context) {
         if (!$config) $config = HTMLPurifier_Config::createDefault();
         $null = null;  
-        
         $allowed_schemes = $config->get('URI', 'AllowedSchemes');
         if (!$config->get('URI', 'OverrideAllowedSchemes') &&
             !isset($allowed_schemes[$scheme])
         ) {
             return $null;
         }
-        
         if (isset($this->schemes[$scheme])) return $this->schemes[$scheme];
         if (!isset($allowed_schemes[$scheme])) return $null;
-        
         $class = 'HTMLPurifier_URIScheme_' . $scheme;
         if (!class_exists($class)) return $null;
         $this->schemes[$scheme] = new $class();
@@ -3478,15 +3092,10 @@ class HTMLPurifier_VarParserException extends HTMLPurifier_Exception
 class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
 {
     public function validate($css, $config, $context) {
-        
         $css = $this->parseCDATA($css);
-        
         $definition = $config->getCSSDefinition();
-        
-        
         $declarations = explode(';', $css);
         $propvalues = array();
-        
         foreach ($declarations as $declaration) {
             if (!$declaration) continue;
             if (!strpos($declaration, ':')) continue;
@@ -3508,7 +3117,6 @@ class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
             } while(0);
             if (!$ok) continue;
             if (strtolower(trim($value)) !== 'inherit') {
-                 
                 $result = $definition->info[$property]->validate(
                     $value, $config, $context );
             } else {
@@ -3517,18 +3125,13 @@ class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
             if ($result === false) continue;
             $propvalues[$property] = $result;
         }
-        
-        
         $new_declarations = '';
         foreach ($propvalues as $prop => $value) {
             $new_declarations .= "$prop:$value;";
         }
-        
         return $new_declarations ? $new_declarations : false;
-        
     }
 }
- 
 class HTMLPurifier_AttrDef_Enum extends HTMLPurifier_AttrDef
 {
     public $valid_values   = array();
@@ -3545,7 +3148,6 @@ class HTMLPurifier_AttrDef_Enum extends HTMLPurifier_AttrDef
             $string = ctype_lower($string) ? $string : strtolower($string);
         }
         $result = isset($this->valid_values[$string]);
-        
         return $result ? $string : false;
     }
     public function make($string) {
@@ -3572,11 +3174,8 @@ class HTMLPurifier_AttrDef_Integer extends HTMLPurifier_AttrDef
         $this->positive = $positive;
     }
     public function validate($integer, $config, $context) {
-        
         $integer = $this->parseCDATA($integer);
         if ($integer === '') return false;
-        
-        
         if ( $this->negative && $integer[0] === '-' ) {
             $digits = substr($integer, 1);
             if ($digits === '0') $integer = '0';  
@@ -3585,29 +3184,21 @@ class HTMLPurifier_AttrDef_Integer extends HTMLPurifier_AttrDef
         } else {
             $digits = $integer;
         }
-        
         if (!ctype_digit($digits)) return false;
-        
         if (!$this->zero     && $integer == 0) return false;
         if (!$this->positive && $integer > 0) return false;
         if (!$this->negative && $integer < 0) return false;
-        
         return $integer;
-        
     }
 }
 class HTMLPurifier_AttrDef_Lang extends HTMLPurifier_AttrDef
 {
     public function validate($string, $config, $context) {
-        
         $string = trim($string);
         if (!$string) return false;
-        
         $subtags = explode('-', $string);
         $num_subtags = count($subtags);
-        
         if ($num_subtags == 0) return false;  
-        
         $length = strlen($subtags[0]);
         switch ($length) {
             case 0:
@@ -3628,19 +3219,15 @@ class HTMLPurifier_AttrDef_Lang extends HTMLPurifier_AttrDef
             default:
                 return false;
         }
-        
         $new_string = $subtags[0];
         if ($num_subtags == 1) return $new_string;
-        
         $length = strlen($subtags[1]);
         if ($length == 0 || ($length == 1 && $subtags[1] != 'x') || $length > 8 || !ctype_alnum($subtags[1])) {
             return $new_string;
         }
         if (!ctype_lower($subtags[1])) $subtags[1] = strtolower($subtags[1]);
-        
         $new_string .= '-' . $subtags[1];
         if ($num_subtags == 2) return $new_string;
-        
         for ($i = 2; $i < $num_subtags; $i++) {
             $length = strlen($subtags[$i]);
             if ($length == 0 || $length > 8 || !ctype_alnum($subtags[$i])) {
@@ -3651,9 +3238,7 @@ class HTMLPurifier_AttrDef_Lang extends HTMLPurifier_AttrDef
             }
             $new_string .= '-' . $subtags[$i];
         }
-        
         return $new_string;
-        
     }
 }
 class HTMLPurifier_AttrDef_Text extends HTMLPurifier_AttrDef
@@ -3671,41 +3256,28 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         $this->embedsResource = (bool) $embeds_resource;
     }
     public function validate($uri, $config, $context) {
-        
         if ($config->get('URI', 'Disable')) return false;
-        
         $uri = $this->parseCDATA($uri);
-        
         $uri = $this->parser->parse($uri);
         if ($uri === false) return false;
-        
         $context->register('EmbeddedURI', $this->embedsResource); 
-        
         $ok = false;
         do {
-            
             $result = $uri->validate($config, $context);
             if (!$result) break;
-            
             $uri_def = $config->getDefinition('URI');
             $result = $uri_def->filter($uri, $config, $context);
             if (!$result) break;
-            
             $scheme_obj = $uri->getSchemeObj($config, $context);
             if (!$scheme_obj) break;
             if ($this->embedsResource && !$scheme_obj->browsable) break;
             $result = $scheme_obj->validate($uri, $config, $context);
             if (!$result) break;
-            
             $ok = true;
-            
         } while (false);
-        
         $context->destroy('EmbeddedURI');
         if (!$ok) return false;
-        
         $result = $uri->toString();
-        
         if (
             !is_null($uri->host) &&  
             !empty($scheme_obj->browsable) &&
@@ -3713,9 +3285,7 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
         ) {
             $result = str_replace('%s', rawurlencode($result), $munge);
         }
-        
         return $result;
-        
     }
 }
 class HTMLPurifier_AttrDef_CSS_Number extends HTMLPurifier_AttrDef
@@ -3725,12 +3295,9 @@ class HTMLPurifier_AttrDef_CSS_Number extends HTMLPurifier_AttrDef
         $this->non_negative = $non_negative;
     }
     public function validate($number, $config, $context) {
-        
         $number = $this->parseCDATA($number);
-        
         if ($number === '') return false;
         if ($number === '0') return '0';
-        
         $sign = '';
         switch ($number[0]) {
             case '-':
@@ -3739,30 +3306,22 @@ class HTMLPurifier_AttrDef_CSS_Number extends HTMLPurifier_AttrDef
             case '+':
                 $number = substr($number, 1);
         }
-        
         if (ctype_digit($number)) {
             $number = ltrim($number, '0');
             return $number ? $sign . $number : '0';
         }
-        
         if (strpos($number, '.') === false) return false;
-        
         list($left, $right) = explode('.', $number, 2);
-        
         if ($left === '' && $right === '') return false;
         if ($left !== '' && !ctype_digit($left)) return false;
-        
         $left  = ltrim($left,  '0');
         $right = rtrim($right, '0');
-        
         if ($right === '') {
             return $left ? $sign . $left : '0';
         } elseif (!ctype_digit($right)) {
             return false;
         }
-        
         return $sign . $left . '.' . $right;
-        
     }
 }
 class HTMLPurifier_AttrDef_CSS_AlphaValue extends HTMLPurifier_AttrDef_CSS_Number
@@ -3791,24 +3350,18 @@ class HTMLPurifier_AttrDef_CSS_Background extends HTMLPurifier_AttrDef
         $this->info['background-position'] = $def->info['background-position'];
     }
     public function validate($string, $config, $context) {
-        
         $string = $this->parseCDATA($string);
         if ($string === '') return false;
-        
         $string = $this->mungeRgb($string);
-        
         $bits = explode(' ', strtolower($string));  
-        
         $caught = array();
         $caught['color']    = false;
         $caught['image']    = false;
         $caught['repeat']   = false;
         $caught['attachment'] = false;
         $caught['position'] = false;
-        
         $i = 0;  
         $none = false;
-        
         foreach ($bits as $bit) {
             if ($bit === '') continue;
             foreach ($caught as $key => $status) {
@@ -3829,22 +3382,18 @@ class HTMLPurifier_AttrDef_CSS_Background extends HTMLPurifier_AttrDef
                 break;
             }
         }
-        
         if (!$i) return false;
         if ($caught['position'] !== false) {
             $caught['position'] = $this->info['background-position']->
                 validate($caught['position'], $config, $context);
         }
-        
         $ret = array();
         foreach ($caught as $value) {
             if ($value === false) continue;
             $ret[] = $value;
         }
-        
         if (empty($ret)) return false;
         return implode(' ', $ret);
-        
     }
 }
 class HTMLPurifier_AttrDef_CSS_BackgroundPosition extends HTMLPurifier_AttrDef
@@ -3858,15 +3407,12 @@ class HTMLPurifier_AttrDef_CSS_BackgroundPosition extends HTMLPurifier_AttrDef
     public function validate($string, $config, $context) {
         $string = $this->parseCDATA($string);
         $bits = explode(' ', $string);
-        
         $keywords = array();
         $keywords['h'] = false;  
         $keywords['v'] = false;  
         $keywords['c'] = false;  
         $measures = array();
-        
         $i = 0;
-        
         $lookup = array(
             'top' => 'v',
             'bottom' => 'v',
@@ -3874,50 +3420,38 @@ class HTMLPurifier_AttrDef_CSS_BackgroundPosition extends HTMLPurifier_AttrDef
             'right' => 'h',
             'center' => 'c'
         );
-        
         foreach ($bits as $bit) {
             if ($bit === '') continue;
-            
             $lbit = ctype_lower($bit) ? $bit : strtolower($bit);
             if (isset($lookup[$lbit])) {
                 $status = $lookup[$lbit];
                 $keywords[$status] = $lbit;
                 $i++;
             }
-            
             $r = $this->length->validate($bit, $config, $context);
             if ($r !== false) {
                 $measures[] = $r;
                 $i++;
             }
-            
             $r = $this->percentage->validate($bit, $config, $context);
             if ($r !== false) {
                 $measures[] = $r;
                 $i++;
             }
-            
         }
-        
         if (!$i) return false;  
-        
-        
         $ret = array();
-        
         if     ($keywords['h'])     $ret[] = $keywords['h'];
         elseif (count($measures))   $ret[] = array_shift($measures);
         elseif ($keywords['c']) {
             $ret[] = $keywords['c'];
             $keywords['c'] = false;  
         }
-        
         if     ($keywords['v'])     $ret[] = $keywords['v'];
         elseif (count($measures))   $ret[] = array_shift($measures);
         elseif ($keywords['c'])     $ret[] = $keywords['c'];
-        
         if (empty($ret)) return false;
         return implode(' ', $ret);
-        
     }
 }
 class HTMLPurifier_AttrDef_CSS_Border extends HTMLPurifier_AttrDef
@@ -3952,16 +3486,12 @@ class HTMLPurifier_AttrDef_CSS_Border extends HTMLPurifier_AttrDef
 class HTMLPurifier_AttrDef_CSS_Color extends HTMLPurifier_AttrDef
 {
     public function validate($color, $config, $context) {
-        
         static $colors = null;
         if ($colors === null) $colors = $config->get('Core', 'ColorKeywords');
-        
         $color = trim($color);
         if ($color === '') return false;
-        
         $lower = strtolower($color);
         if (isset($colors[$lower])) return $colors[$lower];
-        
         if (strpos($color, 'rgb(') !== false) {
             $length = strlen($color);
             if (strpos($color, ')') !== $length - 1) return false;
@@ -3975,7 +3505,6 @@ class HTMLPurifier_AttrDef_CSS_Color extends HTMLPurifier_AttrDef
                 if ($part === '') return false;
                 $length = strlen($part);
                 if ($part[$length - 1] === '%') {
-                     
                     if (!$type) {
                         $type = 'percentage';
                     } elseif ($type !== 'percentage') {
@@ -3986,7 +3515,6 @@ class HTMLPurifier_AttrDef_CSS_Color extends HTMLPurifier_AttrDef
                     if ($num > 100) $num = 100;
                     $new_parts[] = "$num%";
                 } else {
-                     
                     if (!$type) {
                         $type = 'integer';
                     } elseif ($type !== 'integer') {
@@ -4011,9 +3539,7 @@ class HTMLPurifier_AttrDef_CSS_Color extends HTMLPurifier_AttrDef
             if ($length !== 3 && $length !== 6) return false;
             if (!ctype_xdigit($hex)) return false;
         }
-        
         return $color;
-        
     }
 }
 class HTMLPurifier_AttrDef_CSS_Composite extends HTMLPurifier_AttrDef
@@ -4096,7 +3622,6 @@ class HTMLPurifier_AttrDef_CSS_Font extends HTMLPurifier_AttrDef
         $this->info['font-family']  = $def->info['font-family'];
     }
     public function validate($string, $config, $context) {
-        
         static $system_fonts = array(
             'caption' => true,
             'icon' => true,
@@ -4105,26 +3630,20 @@ class HTMLPurifier_AttrDef_CSS_Font extends HTMLPurifier_AttrDef
             'small-caption' => true,
             'status-bar' => true
         );
-        
         $string = $this->parseCDATA($string);
         if ($string === '') return false;
-        
         $lowercase_string = strtolower($string);
         if (isset($system_fonts[$lowercase_string])) {
             return $lowercase_string;
         }
-        
         $bits = explode(' ', $string);  
         $stage = 0;  
         $caught = array();  
         $stage_1 = array('font-style', 'font-variant', 'font-weight');
         $final = '';  
-        
         for ($i = 0, $size = count($bits); $i < $size; $i++) {
             if ($bits[$i] === '') continue;
             switch ($stage) {
-                
-                 
                 case 0:
                     foreach ($stage_1 as $validator_name) {
                         if (isset($caught[$validator_name])) continue;
@@ -4136,18 +3655,14 @@ class HTMLPurifier_AttrDef_CSS_Font extends HTMLPurifier_AttrDef
                             break;
                         }
                     }
-                     
                     if (count($caught) >= 3) $stage = 1;
                     if ($r !== false) break;
-                
-                 
                 case 1:
                     $found_slash = false;
                     if (strpos($bits[$i], '/') !== false) {
                         list($font_size, $line_height) =
                                                     explode('/', $bits[$i]);
                         if ($line_height === '') {
-                             
                             $line_height = false;
                             $found_slash = true;
                         }
@@ -4159,9 +3674,7 @@ class HTMLPurifier_AttrDef_CSS_Font extends HTMLPurifier_AttrDef
                                               $font_size, $config, $context);
                     if ($r !== false) {
                         $final .= $r;
-                         
                         if ($line_height === false) {
-                             
                             for ($j = $i + 1; $j < $size; $j++) {
                                 if ($bits[$j] === '') continue;
                                 if ($bits[$j] === '/') {
@@ -4176,7 +3689,6 @@ class HTMLPurifier_AttrDef_CSS_Font extends HTMLPurifier_AttrDef
                                 break;
                             }
                         } else {
-                             
                             $found_slash = true;
                             $j = $i;
                         }
@@ -4193,8 +3705,6 @@ class HTMLPurifier_AttrDef_CSS_Font extends HTMLPurifier_AttrDef
                         break;
                     }
                     return false;
-                
-                 
                 case 2:
                     $font_family =
                         implode(' ', array_slice($bits, $i, $size - $i));
@@ -4202,7 +3712,6 @@ class HTMLPurifier_AttrDef_CSS_Font extends HTMLPurifier_AttrDef
                                               $font_family, $config, $context);
                     if ($r !== false) {
                         $final .= $r . ' ';
-                         
                         return rtrim($final);
                     }
                     return false;
@@ -4221,7 +3730,6 @@ class HTMLPurifier_AttrDef_CSS_FontFamily extends HTMLPurifier_AttrDef
             'fantasy' => true,
             'cursive' => true
         );
-        
         $string = $this->parseCDATA($string);
         $fonts = explode(',', $string);
         $final = '';
@@ -4238,18 +3746,13 @@ class HTMLPurifier_AttrDef_CSS_FontFamily extends HTMLPurifier_AttrDef
                 $quote = $font[0];
                 if ($font[$length - 1] !== $quote) continue;
                 $font = substr($font, 1, $length - 2);
-                 
                 $font = str_replace("\\$quote", $quote, $font);  
                 $font = str_replace("\\\n", "\n", $font);        
             }
-            
             if (ctype_alnum($font)) {
-                 
                 $final .= $font . ', ';
                 continue;
             }
-            
-            
             $font = str_replace("'", "\\'", $font);
             $font = str_replace("\n", "\\\n", $font);
             $final .= "'$font', ";
@@ -4290,24 +3793,18 @@ class HTMLPurifier_AttrDef_CSS_Length extends HTMLPurifier_AttrDef
         $this->number_def = new HTMLPurifier_AttrDef_CSS_Number($non_negative);
     }
     public function validate($length, $config, $context) {
-        
         $length = $this->parseCDATA($length);
         if ($length === '') return false;
         if ($length === '0') return '0';
         $strlen = strlen($length);
         if ($strlen === 1) return false;  
-        
         $unit = substr($length, $strlen - 2);
         if (!ctype_lower($unit)) $unit = strtolower($unit);
         $number = substr($length, 0, $strlen - 2);
-        
         if (!isset($this->units[$unit])) return false;
-        
         $number = $this->number_def->validate($number, $config, $context);
         if ($number === false) return false;
-        
         return $number . $unit;
-        
     }
 }
 class HTMLPurifier_AttrDef_CSS_ListStyle extends HTMLPurifier_AttrDef
@@ -4320,20 +3817,15 @@ class HTMLPurifier_AttrDef_CSS_ListStyle extends HTMLPurifier_AttrDef
         $this->info['list-style-image'] = $def->info['list-style-image'];
     }
     public function validate($string, $config, $context) {
-        
         $string = $this->parseCDATA($string);
         if ($string === '') return false;
-        
         $bits = explode(' ', strtolower($string));  
-        
         $caught = array();
         $caught['type']     = false;
         $caught['position'] = false;
         $caught['image']    = false;
-        
         $i = 0;  
         $none = false;
-        
         foreach ($bits as $bit) {
             if ($i >= 3) return;  
             if ($bit === '') continue;
@@ -4351,20 +3843,13 @@ class HTMLPurifier_AttrDef_CSS_ListStyle extends HTMLPurifier_AttrDef
                 break;
             }
         }
-        
         if (!$i) return false;
-        
         $ret = array();
-        
         if ($caught['type']) $ret[] = $caught['type'];
-        
         if ($caught['image']) $ret[] = $caught['image'];
-        
         if ($caught['position']) $ret[] = $caught['position'];
-        
         if (empty($ret)) return false;
         return implode(' ', $ret);
-        
     }
 }
 class HTMLPurifier_AttrDef_CSS_Multiple extends HTMLPurifier_AttrDef
@@ -4400,32 +3885,25 @@ class HTMLPurifier_AttrDef_CSS_Percentage extends HTMLPurifier_AttrDef
         $this->number_def = new HTMLPurifier_AttrDef_CSS_Number($non_negative);
     }
     public function validate($string, $config, $context) {
-        
         $string = $this->parseCDATA($string);
-        
         if ($string === '') return false;
         $length = strlen($string);
         if ($length === 1) return false;
         if ($string[$length - 1] !== '%') return false;
-        
         $number = substr($string, 0, $length - 1);
         $number = $this->number_def->validate($number, $config, $context);
-        
         if ($number === false) return false;
         return "$number%";
-        
     }
 }
 class HTMLPurifier_AttrDef_CSS_TextDecoration extends HTMLPurifier_AttrDef
 {
     public function validate($string, $config, $context) {
-        
         static $allowed_values = array(
             'line-through' => true,
             'overline' => true,
             'underline' => true
         );
-        
         $string = strtolower($this->parseCDATA($string));
         $parts = explode(' ', $string);
         $final = '';
@@ -4437,7 +3915,6 @@ class HTMLPurifier_AttrDef_CSS_TextDecoration extends HTMLPurifier_AttrDef
         $final = rtrim($final);
         if ($final === '') return false;
         return $final;
-        
     }
 }
 class HTMLPurifier_AttrDef_CSS_URI extends HTMLPurifier_AttrDef_URI
@@ -4446,33 +3923,25 @@ class HTMLPurifier_AttrDef_CSS_URI extends HTMLPurifier_AttrDef_URI
         parent::__construct(true);  
     }
     public function validate($uri_string, $config, $context) {
-        
         $uri_string = $this->parseCDATA($uri_string);
         if (strpos($uri_string, 'url(') !== 0) return false;
         $uri_string = substr($uri_string, 4);
         $new_length = strlen($uri_string) - 1;
         if ($uri_string[$new_length] != ')') return false;
         $uri = trim(substr($uri_string, 0, $new_length));
-        
         if (!empty($uri) && ($uri[0] == "'" || $uri[0] == '"')) {
             $quote = $uri[0];
             $new_length = strlen($uri) - 1;
             if ($uri[$new_length] !== $quote) return false;
             $uri = substr($uri, 1, $new_length - 1);
         }
-        
         $keys   = array(  '(',   ')',   ',',   ' ',   '"',   "'");
         $values = array('\\(', '\\)', '\\,', '\\ ', '\\"', "\\'");
         $uri = str_replace($values, $keys, $uri);
-        
         $result = parent::validate($uri, $config, $context);
-        
         if ($result === false) return false;
-        
         $result = str_replace($keys, $values, $result);
-        
         return "url($result)";
-        
     }
 }
 class HTMLPurifier_AttrDef_HTML_Bool extends HTMLPurifier_AttrDef
@@ -4491,24 +3960,18 @@ class HTMLPurifier_AttrDef_HTML_Bool extends HTMLPurifier_AttrDef
 class HTMLPurifier_AttrDef_HTML_Color extends HTMLPurifier_AttrDef
 {
     public function validate($string, $config, $context) {
-        
         static $colors = null;
         if ($colors === null) $colors = $config->get('Core', 'ColorKeywords');
-        
         $string = trim($string);
-        
         if (empty($string)) return false;
         if (isset($colors[$string])) return $colors[$string];
         if ($string[0] === '#') $hex = substr($string, 1);
         else $hex = $string;
-        
         $length = strlen($hex);
         if ($length !== 3 && $length !== 6) return false;
         if (!ctype_xdigit($hex)) return false;
         if ($length === 3) $hex = $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2];
-        
         return "#$hex";
-        
     }
 }
 class HTMLPurifier_AttrDef_HTML_FrameTarget extends HTMLPurifier_AttrDef_Enum
@@ -4523,16 +3986,10 @@ class HTMLPurifier_AttrDef_HTML_FrameTarget extends HTMLPurifier_AttrDef_Enum
 }
 class HTMLPurifier_AttrDef_HTML_ID extends HTMLPurifier_AttrDef
 {
-     
-     
     public function validate($id, $config, $context) {
-        
         if (!$config->get('Attr', 'EnableID')) return false;
-        
         $id = trim($id);  
-        
         if ($id === '') return false;
-        
         $prefix = $config->get('Attr', 'IDPrefix');
         if ($prefix !== '') {
             $prefix .= $config->get('Attr', 'IDPrefixLocal');
@@ -4541,10 +3998,8 @@ class HTMLPurifier_AttrDef_HTML_ID extends HTMLPurifier_AttrDef
             trigger_error('%Attr.IDPrefixLocal cannot be used unless '.
                 '%Attr.IDPrefix is set', E_USER_WARNING);
         }
-        
        $id_accumulator =& $context->get('IDAccumulator');
        if (isset($id_accumulator->ids[$id])) return false;
-        
         if (ctype_alpha($id)) {
             $result = true;
         } else {
@@ -4555,22 +4010,17 @@ class HTMLPurifier_AttrDef_HTML_ID extends HTMLPurifier_AttrDef
               );
             $result = ($trim === '');
         }
-        
         $regexp = $config->get('Attr', 'IDBlacklistRegexp');
         if ($regexp && preg_match($regexp, $id)) {
             return false;
         }
-        
         if (/*!$this->ref && */$result) $id_accumulator->add($id);
-        
         return $result ? $id : false;
-        
     }
 }
 class HTMLPurifier_AttrDef_HTML_Pixels extends HTMLPurifier_AttrDef
 {
     public function validate($string, $config, $context) {
-        
         $string = trim($string);
         if ($string === '0') return $string;
         if ($string === '')  return false;
@@ -4580,42 +4030,27 @@ class HTMLPurifier_AttrDef_HTML_Pixels extends HTMLPurifier_AttrDef
         }
         if (!is_numeric($string)) return false;
         $int = (int) $string;
-        
         if ($int < 0) return '0';
-        
-        
         if ($int > 1200) return '1200';
-        
         return (string) $int;
-        
     }
 }
 class HTMLPurifier_AttrDef_HTML_Length extends HTMLPurifier_AttrDef_HTML_Pixels
 {
     public function validate($string, $config, $context) {
-        
         $string = trim($string);
         if ($string === '') return false;
-        
         $parent_result = parent::validate($string, $config, $context);
         if ($parent_result !== false) return $parent_result;
-        
         $length = strlen($string);
         $last_char = $string[$length - 1];
-        
         if ($last_char !== '%') return false;
-        
         $points = substr($string, 0, $length - 1);
-        
         if (!is_numeric($points)) return false;
-        
         $points = (int) $points;
-        
         if ($points < 0) return '0%';
         if ($points > 100) return '100%';
-        
         return ((string) $points) . '%';
-        
     }
 }
 class HTMLPurifier_AttrDef_HTML_LinkTypes extends HTMLPurifier_AttrDef
@@ -4635,84 +4070,60 @@ class HTMLPurifier_AttrDef_HTML_LinkTypes extends HTMLPurifier_AttrDef
         $this->name = $configLookup[$name];
     }
     public function validate($string, $config, $context) {
-        
         $allowed = $config->get('Attr', $this->name);
         if (empty($allowed)) return false;
-        
         $string = $this->parseCDATA($string);
         $parts = explode(' ', $string);
-        
         $ret_lookup = array();
         foreach ($parts as $part) {
             $part = strtolower(trim($part));
             if (!isset($allowed[$part])) continue;
             $ret_lookup[$part] = true;
         }
-        
         if (empty($ret_lookup)) return false;
-        
         $ret_array = array();
         foreach ($ret_lookup as $part => $bool) $ret_array[] = $part;
         $string = implode(' ', $ret_array);
-        
         return $string;
-        
     }
 }
 class HTMLPurifier_AttrDef_HTML_MultiLength extends HTMLPurifier_AttrDef_HTML_Length
 {
     public function validate($string, $config, $context) {
-        
         $string = trim($string);
         if ($string === '') return false;
-        
         $parent_result = parent::validate($string, $config, $context);
         if ($parent_result !== false) return $parent_result;
-        
         $length = strlen($string);
         $last_char = $string[$length - 1];
-        
         if ($last_char !== '*') return false;
-        
         $int = substr($string, 0, $length - 1);
-        
         if ($int == '') return '*';
         if (!is_numeric($int)) return false;
-        
         $int = (int) $int;
-        
         if ($int < 0) return false;
         if ($int == 0) return '0';
         if ($int == 1) return '*';
         return ((string) $int) . '*';
-        
     }
 }
 class HTMLPurifier_AttrDef_HTML_Nmtokens extends HTMLPurifier_AttrDef
 {
     public function validate($string, $config, $context) {
-        
         $string = trim($string);
-        
         if (!$string) return false;
-        
-        
         $matches = array();
         $pattern = '/(?:(?<=\s)|\A)'.  
                    '((?:--|-?[A-Za-z_])[A-Za-z_\-0-9]*)'.
                    '(?:(?=\s)|\z)/';  
         preg_match_all($pattern, $string, $matches);
-        
         if (empty($matches[1])) return false;
-        
         $new_string = '';
         foreach ($matches[1] as $token) {
             $new_string .= $token . ' ';
         }
         $new_string = rtrim($new_string);
-        
         return $new_string;
-        
     }
 }
 abstract class HTMLPurifier_AttrDef_URI_Email extends HTMLPurifier_AttrDef
@@ -4720,7 +4131,6 @@ abstract class HTMLPurifier_AttrDef_URI_Email extends HTMLPurifier_AttrDef
     function unpack($string) {
     }
 }
- 
 class HTMLPurifier_AttrDef_URI_Host extends HTMLPurifier_AttrDef
 {
     protected $ipv4;
@@ -4738,12 +4148,8 @@ class HTMLPurifier_AttrDef_URI_Host extends HTMLPurifier_AttrDef
             if ($valid === false) return false;
             return '['. $valid . ']';
         }
-        
         $ipv4 = $this->ipv4->validate($string, $config, $context);
         if ($ipv4 !== false) return $ipv4;
-        
-        
-        
         $a   = '[a-z]';      
         $an  = '[a-z0-9]';   
         $and = '[a-z0-9-]';  
@@ -4751,7 +4157,6 @@ class HTMLPurifier_AttrDef_URI_Host extends HTMLPurifier_AttrDef
         $toplabel      = "$a($and*$an)?";
         $match = preg_match("/^($domainlabel\.)*$toplabel\.?$/i", $string);
         if (!$match) return false;
-        
         return $string;
     }
 }
@@ -4759,16 +4164,12 @@ class HTMLPurifier_AttrDef_URI_IPv4 extends HTMLPurifier_AttrDef
 {
     protected $ip4;
     public function validate($aIP, $config, $context) {
-        
         if (!$this->ip4) $this->_loadRegex();
-        
         if (preg_match('#^' . $this->ip4 . '$#s', $aIP))
         {
                 return $aIP;
         }
-        
         return false;
-        
     }
     protected function _loadRegex() {
         $oct = '(?:25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])';  
@@ -4778,15 +4179,11 @@ class HTMLPurifier_AttrDef_URI_IPv4 extends HTMLPurifier_AttrDef
 class HTMLPurifier_AttrDef_URI_IPv6 extends HTMLPurifier_AttrDef_URI_IPv4
 {
     public function validate($aIP, $config, $context) {
-        
         if (!$this->ip4) $this->_loadRegex();
-        
         $original = $aIP;
-        
         $hex = '[0-9a-fA-F]';
         $blk = '(?:' . $hex . '{1,4})';
         $pre = '(?:/(?:12[0-8]|1[0-1][0-9]|[1-9][0-9]|[0-9]))';    
-        
         if (strpos($aIP, '/') !== false)
         {
                 if (preg_match('#' . $pre . '$#s', $aIP, $find))
@@ -4799,7 +4196,6 @@ class HTMLPurifier_AttrDef_URI_IPv6 extends HTMLPurifier_AttrDef_URI_IPv4
                         return false;
                 }
         }
-        
         if (preg_match('#(?<=:'.')' . $this->ip4 . '$#s', $aIP, $find))
         {
                 $aIP = substr($aIP, 0, 0-strlen($find[0]));
@@ -4808,7 +4204,6 @@ class HTMLPurifier_AttrDef_URI_IPv6 extends HTMLPurifier_AttrDef_URI_IPv4
                 $aIP .= $ip[0] . $ip[1] . ':' . $ip[2] . $ip[3];
                 unset($find, $ip);
         }
-        
         $aIP = explode('::', $aIP);
         $c = count($aIP);
         if ($c > 2)
@@ -4820,12 +4215,10 @@ class HTMLPurifier_AttrDef_URI_IPv6 extends HTMLPurifier_AttrDef_URI_IPv4
                 list($first, $second) = $aIP;
                 $first = explode(':', $first);
                 $second = explode(':', $second);
-               
                 if (count($first) + count($second) > 8)
                 {
                         return false;
                 }
-               
                 while(count($first) < 8)
                 {
                         array_push($first, '0');
@@ -4839,12 +4232,10 @@ class HTMLPurifier_AttrDef_URI_IPv6 extends HTMLPurifier_AttrDef_URI_IPv4
                 $aIP = explode(':', $aIP[0]);
         }
         $c = count($aIP);
-        
         if ($c != 8)
         {
                 return false;
         }
-       
         foreach ($aIP as $piece)
         {
                 if (!preg_match('#^[0-9a-fA-F]{4}$#s', sprintf('%04s', $piece)))
@@ -4852,9 +4243,7 @@ class HTMLPurifier_AttrDef_URI_IPv6 extends HTMLPurifier_AttrDef_URI_IPv4
                         return false;
                 }
         }
-        
         return $original;
-        
     }
 }
 class HTMLPurifier_AttrDef_URI_Email_SimpleCheck extends HTMLPurifier_AttrDef_URI_Email
@@ -4866,7 +4255,6 @@ class HTMLPurifier_AttrDef_URI_Email_SimpleCheck extends HTMLPurifier_AttrDef_UR
         return $result ? $string : false;
     }
 }
- 
 class HTMLPurifier_AttrTransform_BdoDir extends HTMLPurifier_AttrTransform
 {
     public function transform($attr, $config, $context) {
@@ -4877,15 +4265,10 @@ class HTMLPurifier_AttrTransform_BdoDir extends HTMLPurifier_AttrTransform
 }
 class HTMLPurifier_AttrTransform_BgColor extends HTMLPurifier_AttrTransform {
     public function transform($attr, $config, $context) {
-        
         if (!isset($attr['bgcolor'])) return $attr;
-        
         $bgcolor = $this->confiscateAttr($attr, 'bgcolor');
-        
         $this->prependCSS($attr, "background-color:$bgcolor;");
-        
         return $attr;
-        
     }
 }
 class HTMLPurifier_AttrTransform_BoolToCSS extends HTMLPurifier_AttrTransform {
@@ -4920,36 +4303,26 @@ class HTMLPurifier_AttrTransform_EnumToCSS extends HTMLPurifier_AttrTransform {
         $this->caseSensitive = (bool) $case_sensitive;
     }
     public function transform($attr, $config, $context) {
-        
         if (!isset($attr[$this->attr])) return $attr;
-        
         $value = trim($attr[$this->attr]);
         unset($attr[$this->attr]);
-        
         if (!$this->caseSensitive) $value = strtolower($value);
-        
         if (!isset($this->enumToCSS[$value])) {
             return $attr;
         }
-        
         $this->prependCSS($attr, $this->enumToCSS[$value]);
-        
         return $attr;
-        
     }
 }
- 
 class HTMLPurifier_AttrTransform_ImgRequired extends HTMLPurifier_AttrTransform
 {
     public function transform($attr, $config, $context) {
-        
         $src = true;
         if (!isset($attr['src'])) {
             if ($config->get('Core', 'RemoveInvalidImg')) return $attr;
             $attr['src'] = $config->get('Attr', 'DefaultInvalidImage');
             $src = false;
         }
-        
         if (!isset($attr['alt'])) {
             if ($src) {
                 $attr['alt'] = basename($attr['src']);
@@ -4957,9 +4330,7 @@ class HTMLPurifier_AttrTransform_ImgRequired extends HTMLPurifier_AttrTransform
                 $attr['alt'] = $config->get('Attr', 'DefaultInvalidImageAlt');
             }
         }
-        
         return $attr;
-        
     }
 }
 class HTMLPurifier_AttrTransform_ImgSpace extends HTMLPurifier_AttrTransform {
@@ -4975,40 +4346,29 @@ class HTMLPurifier_AttrTransform_ImgSpace extends HTMLPurifier_AttrTransform {
         }
     }
     public function transform($attr, $config, $context) {
-        
         if (!isset($attr[$this->attr])) return $attr;
-        
         $width = $this->confiscateAttr($attr, $this->attr);
-        
         if (!isset($this->css[$this->attr])) return $attr;
-        
         $style = '';
         foreach ($this->css[$this->attr] as $suffix) {
             $property = "margin-$suffix";
             $style .= "$property:{$width}px;";
         }
-        
         $this->prependCSS($attr, $style);
-        
         return $attr;
-        
     }
 }
 class HTMLPurifier_AttrTransform_Lang extends HTMLPurifier_AttrTransform
 {
     public function transform($attr, $config, $context) {
-        
         $lang     = isset($attr['lang']) ? $attr['lang'] : false;
         $xml_lang = isset($attr['xml:lang']) ? $attr['xml:lang'] : false;
-        
         if ($lang !== false && $xml_lang === false) {
             $attr['xml:lang'] = $lang;
         } elseif ($xml_lang !== false) {
             $attr['lang'] = $xml_lang;
         }
-        
         return $attr;
-        
     }
 }
 class HTMLPurifier_AttrTransform_Length extends HTMLPurifier_AttrTransform
@@ -5083,19 +4443,13 @@ class HTMLPurifier_ChildDef_Custom extends HTMLPurifier_ChildDef
         }
         $el = '[#a-zA-Z0-9_.-]+';
         $reg = $raw;
-        
-        
         preg_match_all("/$el/", $reg, $matches);
         foreach ($matches[0] as $match) {
             $this->elements[$match] = true;
         }
-        
         $reg = preg_replace("/$el/", '(,\\0)', $reg);
-        
         $reg = preg_replace("/([^,(|]\(+),/", '\\1', $reg);
-        
         $reg = preg_replace("/,\(/", '(', $reg);
-        
         $this->_pcre_regex = $reg;
     }
     public function validateChildren($tokens_of_children, $config, $context) {
@@ -5103,15 +4457,12 @@ class HTMLPurifier_ChildDef_Custom extends HTMLPurifier_ChildDef
         $nesting = 0;  
         foreach ($tokens_of_children as $token) {
             if (!empty($token->is_whitespace)) continue;
-            
             $is_child = ($nesting == 0);  
-            
             if ($token instanceof HTMLPurifier_Token_Start) {
                 $nesting++;
             } elseif ($token instanceof HTMLPurifier_Token_End) {
                 $nesting--;
             }
-            
             if ($is_child) {
                 $list_of_children .= $token->name . ',';
             }
@@ -5122,7 +4473,6 @@ class HTMLPurifier_ChildDef_Custom extends HTMLPurifier_ChildDef
                 '/^,?'.$this->_pcre_regex.'$/',
                 $list_of_children
             );
-        
         return (bool) $okay;
     }
 }
@@ -5157,39 +4507,28 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
     public $type = 'required';
     public function validateChildren($tokens_of_children, $config, $context) {
         if (empty($tokens_of_children)) return false;
-        
         $result = array();
-        
         $nesting = 0;
-        
         $is_deleting = false;
-        
         $pcdata_allowed = isset($this->elements['#PCDATA']);
-        
         $all_whitespace = true;
-        
         $escape_invalid_children = $config->get('Core', 'EscapeInvalidChildren');
-        
         static $gen = null;
         if ($gen === null) {
             $gen = new HTMLPurifier_Generator();
         }
-        
         foreach ($tokens_of_children as $token) {
             if (!empty($token->is_whitespace)) {
                 $result[] = $token;
                 continue;
             }
             $all_whitespace = false;  
-            
             $is_child = ($nesting == 0);
-            
             if ($token instanceof HTMLPurifier_Token_Start) {
                 $nesting++;
             } elseif ($token instanceof HTMLPurifier_Token_End) {
                 $nesting--;
             }
-            
             if ($is_child) {
                 $is_deleting = false;
                 if (!isset($this->elements[$token->name])) {
@@ -5212,7 +4551,6 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
                         $gen->generateFromToken( $token, $config )
                     );
             } else {
-                 
             }
         }
         if (empty($result)) return false;
@@ -5242,7 +4580,6 @@ class HTMLPurifier_ChildDef_StrictBlockquote extends HTMLPurifier_ChildDef_Requi
     public $type = 'strictblockquote';
     protected $init = false;
     public function validateChildren($tokens_of_children, $config, $context) {
-        
         $def = $config->getHTMLDefinition();
         if (!$this->init) {
             $this->real_elements = $this->elements;
@@ -5250,20 +4587,16 @@ class HTMLPurifier_ChildDef_StrictBlockquote extends HTMLPurifier_ChildDef_Requi
             $this->fake_elements['#PCDATA'] = true;
             $this->init = true;
         }
-        
         $this->elements = $this->fake_elements;
         $result = parent::validateChildren($tokens_of_children, $config, $context);
         $this->elements = $this->real_elements;
-        
         if ($result === false) return array();
         if ($result === true) $result = $tokens_of_children;
-        
         $block_wrap_start = new HTMLPurifier_Token_Start($def->info_block_wrapper);
         $block_wrap_end   = new HTMLPurifier_Token_End(  $def->info_block_wrapper);
         $is_inline = false;
         $depth = 0;
         $ret = array();
-        
         foreach ($result as $i => $token) {
             $token = $result[$i];
             if (!$is_inline) {
@@ -5278,10 +4611,8 @@ class HTMLPurifier_ChildDef_StrictBlockquote extends HTMLPurifier_ChildDef_Requi
                 }
             } else {
                 if (!$depth) {
-                     
                     if ($token instanceof HTMLPurifier_Token_Start || $token instanceof HTMLPurifier_Token_Empty) {
                         if (isset($this->elements[$token->name])) {
-                             
                             $ret[] = $block_wrap_end;
                             $is_inline = false;
                         }
@@ -5305,38 +4636,26 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
     public function __construct() {}
     public function validateChildren($tokens_of_children, $config, $context) {
         if (empty($tokens_of_children)) return false;
-        
         $tokens_of_children[] = false;
-        
         $caption = false;
         $thead   = false;
         $tfoot   = false;
-        
         $cols    = array();
         $content = array();
-        
         $nesting = 0;  
         $is_collecting = false;  
-                                 
         $collection = array();  
         $tag_index = 0;  
-                             
-        
         foreach ($tokens_of_children as $token) {
             $is_child = ($nesting == 0);
-            
             if ($token === false) {
-                 
             } elseif ($token instanceof HTMLPurifier_Token_Start) {
                 $nesting++;
             } elseif ($token instanceof HTMLPurifier_Token_End) {
                 $nesting--;
             }
-            
             if ($is_collecting) {
                 if ($is_child) {
-                     
-                     
                     switch ($collection[$tag_index]->name) {
                         case 'tr':
                         case 'tbody':
@@ -5348,13 +4667,10 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
                             break;
                         case 'thead':
                         case 'tfoot':
-                             
                             $var = $collection[$tag_index]->name;
                             if ($$var === false) {
                                 $$var = $collection;
                             } else {
-                                 
-                                 
                                 $collection[$tag_index]->name = 'tbody';
                                 $collection[count($collection)-1]->name = 'tbody';
                                 $content[] = $collection;
@@ -5368,18 +4684,12 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
                     $is_collecting = false;
                     $tag_index = 0;
                 } else {
-                     
                     $collection[] = $token;
                 }
             }
-            
             if ($token === false) break;
-            
             if ($is_child) {
-                 
                 if ($token->name == 'col') {
-                     
-                     
                     $cols[] = array_merge($collection, array($token));
                     $collection = array();
                     $tag_index = 0;
@@ -5404,9 +4714,7 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
                 }
             }
         }
-        
         if (empty($content)) return false;
-        
         $ret = array();
         if ($caption !== false) $ret = array_merge($ret, $caption);
         if ($cols !== false)    foreach ($cols as $token_array) $ret = array_merge($ret, $token_array);
@@ -5416,11 +4724,8 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
         if (!empty($collection) && $is_collecting == false){
             $ret = array_merge($ret, $collection);
         }
-        
         array_pop($tokens_of_children);  
-        
         return ($ret === $tokens_of_children) ? true : $ret;
-        
     }
 }
 class HTMLPurifier_ConfigDef_Directive extends HTMLPurifier_ConfigDef
@@ -5592,14 +4897,11 @@ class HTMLPurifier_DefinitionCache_Serializer extends
         }
         if (function_exists('posix_getuid')) {
             if (fileowner($dir) === posix_getuid()) {
-                 
                 chmod($dir, 0755);
                 return true;
             } elseif (filegroup($dir) === posix_getgid()) {
                 $chmod = '775';
             } else {
-                 
-                 
                 $chmod = '777';
             }
             trigger_error('Directory '.$dir.' not writable, '.
@@ -5682,12 +4984,9 @@ class HTMLPurifier_HTMLModule_Bdo extends HTMLPurifier_HTMLModule
             'bdo', 'Inline', 'Inline', array('Core', 'Lang'),
             array(
                 'dir' => 'Enum#ltr,rtl',  
-                 
-                 
             )
         );
         $bdo->attr_transform_post['required-dir'] = new HTMLPurifier_AttrTransform_BdoDir();
-        
         $this->attr_collections['I18N']['dir'] = 'Enum#ltr,rtl';
     }
 }
@@ -5721,11 +5020,6 @@ class HTMLPurifier_HTMLModule_Edit extends HTMLPurifier_HTMLModule
         $this->addElement('del', 'Inline', $contents, 'Common', $attr);
         $this->addElement('ins', 'Inline', $contents, 'Common', $attr);
     }
-     
-     
-     
-     
-     
     public $defines_child_def = true;
     public function getChildDef($def) {
         if ($def->content_model_type != 'chameleon') return false;
@@ -5740,14 +5034,9 @@ class HTMLPurifier_HTMLModule_Hypertext extends HTMLPurifier_HTMLModule
         $a = $this->addElement(
             'a', 'Inline', 'Inline', 'Common',
             array(
-                 
-                 
                 'href' => 'URI',
-                 
                 'rel' => new HTMLPurifier_AttrDef_HTML_LinkTypes('rel'),
                 'rev' => new HTMLPurifier_AttrDef_HTML_LinkTypes('rev'),
-                 
-                 
             )
         );
         $a->excludes = array('a' => true);
@@ -5776,7 +5065,6 @@ class HTMLPurifier_HTMLModule_Legacy extends HTMLPurifier_HTMLModule
 {
     public $name = 'Legacy';
     public function __construct() {
-        
         $this->addElement('basefont', 'Inline', 'Empty', false, array(
             'color' => 'Color',
             'face' => 'Text',  
@@ -5798,110 +5086,77 @@ class HTMLPurifier_HTMLModule_Legacy extends HTMLPurifier_HTMLModule
         $this->addElement('s', 'Inline', 'Inline', 'Common');
         $this->addElement('strike', 'Inline', 'Inline', 'Common');
         $this->addElement('u', 'Inline', 'Inline', 'Common');
-        
-        
         $align = 'Enum#left,right,center,justify';
-        
         $address = $this->addBlankElement('address');
         $address->content_model = 'Inline | #PCDATA | p';
         $address->content_model_type = 'optional';
         $address->child = false;
-        
         $blockquote = $this->addBlankElement('blockquote');
         $blockquote->content_model = 'Flow | #PCDATA';
         $blockquote->content_model_type = 'optional';
         $blockquote->child = false;
-        
         $br = $this->addBlankElement('br');
         $br->attr['clear'] = 'Enum#left,all,right,none';
-        
         $caption = $this->addBlankElement('caption');
         $caption->attr['align'] = 'Enum#top,bottom,left,right';
-        
         $div = $this->addBlankElement('div');
         $div->attr['align'] = $align;
-        
         $dl = $this->addBlankElement('dl');
         $dl->attr['compact'] = 'Bool#compact';
-        
         for ($i = 1; $i <= 6; $i++) {
             $h = $this->addBlankElement("h$i");
             $h->attr['align'] = $align;
         }
-        
         $hr = $this->addBlankElement('hr');
         $hr->attr['align'] = $align;
         $hr->attr['noshade'] = 'Bool#noshade';
         $hr->attr['size'] = 'Pixels';
         $hr->attr['width'] = 'Length';
-        
         $img = $this->addBlankElement('img');
         $img->attr['align'] = 'Enum#top,middle,bottom,left,right';
         $img->attr['border'] = 'Pixels';
         $img->attr['hspace'] = 'Pixels';
         $img->attr['vspace'] = 'Pixels';
-        
-        
         $li = $this->addBlankElement('li');
         $li->attr['value'] = new HTMLPurifier_AttrDef_Integer();
         $li->attr['type']  = 'Enum#s:1,i,I,a,A,disc,square,circle';
-        
         $ol = $this->addBlankElement('ol');
         $ol->attr['compact'] = 'Bool#compact';
         $ol->attr['start'] = new HTMLPurifier_AttrDef_Integer();
         $ol->attr['type'] = 'Enum#s:1,i,I,a,A';
-        
         $p = $this->addBlankElement('p');
         $p->attr['align'] = $align;
-        
         $pre = $this->addBlankElement('pre');
         $pre->attr['width'] = 'Number';
-        
-        
         $table = $this->addBlankElement('table');
         $table->attr['align'] = 'Enum#left,center,right';
         $table->attr['bgcolor'] = 'Color';
-        
         $tr = $this->addBlankElement('tr');
         $tr->attr['bgcolor'] = 'Color';
-        
         $th = $this->addBlankElement('th');
         $th->attr['bgcolor'] = 'Color';
         $th->attr['height'] = 'Length';
         $th->attr['nowrap'] = 'Bool#nowrap';
         $th->attr['width'] = 'Length';
-        
         $td = $this->addBlankElement('td');
         $td->attr['bgcolor'] = 'Color';
         $td->attr['height'] = 'Length';
         $td->attr['nowrap'] = 'Bool#nowrap';
         $td->attr['width'] = 'Length';
-        
         $ul = $this->addBlankElement('ul');
         $ul->attr['compact'] = 'Bool#compact';
         $ul->attr['type'] = 'Enum#square,disc,circle';
-        
     }
 }
 class HTMLPurifier_HTMLModule_List extends HTMLPurifier_HTMLModule
 {
     public $name = 'List';
-     
-     
-     
-     
-     
-     
-     
-     
     public $content_sets = array('Flow' => 'List');
     public function __construct() {
         $this->addElement('ol', 'List', 'Required: li', 'Common');
         $this->addElement('ul', 'List', 'Required: li', 'Common');
         $this->addElement('dl', 'List', 'Required: dt | dd', 'Common');
-        
         $this->addElement('li', false, 'Flow', 'Common');
-        
         $this->addElement('dd', false, 'Flow', 'Common');
         $this->addElement('dt', false, 'Inline', 'Common');
     }
@@ -5976,7 +5231,6 @@ class HTMLPurifier_HTMLModule_Proprietary extends HTMLPurifier_HTMLModule
 {
     public $name = 'Proprietary';
     public function __construct() {
-        
         $this->addElement('marquee', 'Inline', 'Flow', 'Common', 
             array(
                 'direction' => 'Enum#left,right,up,down',
@@ -6016,13 +5270,10 @@ class HTMLPurifier_HTMLModule_Scripting extends HTMLPurifier_HTMLModule
     public $content_sets = array('Block' => 'script | noscript', 'Inline' => 'script | noscript');
     public $safe = false;
     public function __construct() {
-        
-        
         $this->info['noscript'] = new HTMLPurifier_ElementDef();
         $this->info['noscript']->attr = array( 0 => array('Common') );
         $this->info['noscript']->content_model = 'Heading | List | Block';
         $this->info['noscript']->content_model_type = 'required';
-        
         $this->info['script'] = new HTMLPurifier_ElementDef();
         $this->info['script']->attr = array(
             'defer' => new HTMLPurifier_AttrDef_Enum(array('defer')),
@@ -6051,9 +5302,7 @@ class HTMLPurifier_HTMLModule_Tables extends HTMLPurifier_HTMLModule
 {
     public $name = 'Tables';
     public function __construct() {
-        
         $this->addElement('caption', false, 'Inline', 'Common');
-        
         $this->addElement('table', 'Block', 
             new HTMLPurifier_ChildDef_Table(),  'Common', 
             array(
@@ -6066,13 +5315,11 @@ class HTMLPurifier_HTMLModule_Tables extends HTMLPurifier_HTMLModule
                 'width' => 'Length'
             )
         );
-        
         $cell_align = array(
             'align' => 'Enum#left,center,right,justify,char',
             'charoff' => 'Length',
             'valign' => 'Enum#top,middle,bottom,baseline',
         );
-        
         $cell_t = array_merge(
             array(
                 'abbr'    => 'Text',
@@ -6083,9 +5330,7 @@ class HTMLPurifier_HTMLModule_Tables extends HTMLPurifier_HTMLModule
         );
         $this->addElement('td', false, 'Flow', 'Common', $cell_t);
         $this->addElement('th', false, 'Flow', 'Common', $cell_t);
-        
         $this->addElement('tr', false, 'Required: td | th', 'Common', $cell_align);
-        
         $cell_col = array_merge(
             array(
                 'span'  => 'Number',
@@ -6095,11 +5340,9 @@ class HTMLPurifier_HTMLModule_Tables extends HTMLPurifier_HTMLModule
         );
         $this->addElement('col',      false, 'Empty',         'Common', $cell_col);
         $this->addElement('colgroup', false, 'Optional: col', 'Common', $cell_col);
-        
         $this->addElement('tbody', false, 'Required: tr', 'Common', $cell_align);
         $this->addElement('thead', false, 'Required: tr', 'Common', $cell_align);
         $this->addElement('tfoot', false, 'Required: tr', 'Common', $cell_align);
-        
     }
 }
 class HTMLPurifier_HTMLModule_Target extends HTMLPurifier_HTMLModule
@@ -6122,7 +5365,6 @@ class HTMLPurifier_HTMLModule_Text extends HTMLPurifier_HTMLModule
         'Flow' => 'Heading | Block | Inline'
     );
     public function __construct() {
-        
         $this->addElement('abbr',    'Inline', 'Inline', 'Common');
         $this->addElement('acronym', 'Inline', 'Inline', 'Common');
         $this->addElement('cite',    'Inline', 'Inline', 'Common');
@@ -6134,10 +5376,8 @@ class HTMLPurifier_HTMLModule_Text extends HTMLPurifier_HTMLModule
         $this->addElement('samp',    'Inline', 'Inline', 'Common');
         $this->addElement('strong',  'Inline', 'Inline', 'Common');
         $this->addElement('var',     'Inline', 'Inline', 'Common');
-        
         $this->addElement('span', 'Inline', 'Inline', 'Common');
         $this->addElement('br',   'Inline', 'Empty',  'Core');
-        
         $this->addElement('address',     'Block', 'Inline', 'Common');
         $this->addElement('blockquote',  'Block', 'Optional: Heading | Block | List', 'Common', array('cite' => 'URI') );
         $pre = $this->addElement('pre', 'Block', 'Inline', 'Common');
@@ -6149,10 +5389,8 @@ class HTMLPurifier_HTMLModule_Text extends HTMLPurifier_HTMLModule
         $this->addElement('h4', 'Heading', 'Inline', 'Common');
         $this->addElement('h5', 'Heading', 'Inline', 'Common');
         $this->addElement('h6', 'Heading', 'Inline', 'Common');
-        
         $this->addElement('p', 'Block', 'Inline', 'Common');
         $this->addElement('div', 'Block', 'Flow', 'Common');
-        
     }
 }
 class HTMLPurifier_HTMLModule_Tidy extends HTMLPurifier_HTMLModule
@@ -6165,16 +5403,12 @@ class HTMLPurifier_HTMLModule_Tidy extends HTMLPurifier_HTMLModule
         'heavy'  => array()
     );
     public function construct($config) {
-        
         $fixes = $this->makeFixes();
         $this->makeFixesForLevel($fixes);
-        
         $level = $config->get('HTML', 'TidyLevel');
         $fixes_lookup = $this->getFixesForLevel($level);
-        
         $add_fixes    = $config->get('HTML', 'TidyAdd');
         $remove_fixes = $config->get('HTML', 'TidyRemove');
-        
         foreach ($fixes as $name => $fix) {
             if (
                 isset($remove_fixes[$name]) ||
@@ -6183,9 +5417,7 @@ class HTMLPurifier_HTMLModule_Tidy extends HTMLPurifier_HTMLModule
                 unset($fixes[$name]);
             }
         }
-        
         $this->populate($fixes);
-        
     }
     public function getFixesForLevel($level) {
         if ($level == $this->levels[0]) {
@@ -6240,8 +5472,6 @@ class HTMLPurifier_HTMLModule_Tidy extends HTMLPurifier_HTMLModule
                         $type = "info_$type";
                         $e = $this;
                     }
-                     
-                     
                     $f =& $e->$type;
                     $f[$attr] = $fix;
                     break;
@@ -6268,23 +5498,18 @@ class HTMLPurifier_HTMLModule_Tidy extends HTMLPurifier_HTMLModule
         $property = $attr = null;
         if (strpos($name, '#') !== false) list($name, $property) = explode('#', $name);
         if (strpos($name, '@') !== false) list($name, $attr)     = explode('@', $name);
-        
         $params = array();
         if ($name !== '')    $params['element'] = $name;
         if (!is_null($attr)) $params['attr'] = $attr;
-        
         if (!is_null($attr)) {
             if (is_null($property)) $property = 'pre';
             $type = 'attr_transform_' . $property;
             return array($type, $params);
         }
-        
         if (is_null($property)) {
             return array('tag_transform', $params);
         }
-        
         return array($property, $params);
-        
     }
     public function makeFixes() {}
 }
@@ -6308,10 +5533,7 @@ class HTMLPurifier_HTMLModule_Tidy_Proprietary extends HTMLPurifier_HTMLModule_T
 class HTMLPurifier_HTMLModule_Tidy_XHTMLAndHTML4 extends HTMLPurifier_HTMLModule_Tidy
 {
     public function makeFixes() {
-        
         $r = array();
-        
-        
         $r['font']   = new HTMLPurifier_TagTransform_Font();
         $r['menu']   = new HTMLPurifier_TagTransform_Simple('ul');
         $r['dir']    = new HTMLPurifier_TagTransform_Simple('ul');
@@ -6319,20 +5541,13 @@ class HTMLPurifier_HTMLModule_Tidy_XHTMLAndHTML4 extends HTMLPurifier_HTMLModule
         $r['u']      = new HTMLPurifier_TagTransform_Simple('span', 'text-decoration:underline;');
         $r['s']      = new HTMLPurifier_TagTransform_Simple('span', 'text-decoration:line-through;');
         $r['strike'] = new HTMLPurifier_TagTransform_Simple('span', 'text-decoration:line-through;');
-        
-        
         $r['caption@align'] = 
             new HTMLPurifier_AttrTransform_EnumToCSS('align', array(
-                 
-                 
-                 
-                 
                 'left'   => 'text-align:left;',
                 'right'  => 'text-align:right;',
                 'top'    => 'caption-side:top;',
                 'bottom' => 'caption-side:bottom;'  
             ));
-        
         $r['img@align'] =
             new HTMLPurifier_AttrTransform_EnumToCSS('align', array(
                 'left'   => 'float:left;',
@@ -6341,25 +5556,18 @@ class HTMLPurifier_HTMLModule_Tidy_XHTMLAndHTML4 extends HTMLPurifier_HTMLModule
                 'middle' => 'vertical-align:middle;',
                 'bottom' => 'vertical-align:baseline;',
             ));
-        
         $r['table@align'] =
             new HTMLPurifier_AttrTransform_EnumToCSS('align', array(
                 'left'   => 'float:left;',
                 'center' => 'margin-left:auto;margin-right:auto;',
                 'right'  => 'float:right;'
             ));
-        
         $r['hr@align'] =
             new HTMLPurifier_AttrTransform_EnumToCSS('align', array(
-                 
-                 
-                 
-                 
                 'left'   => 'margin-left:0;margin-right:auto;text-align:left;',
                 'center' => 'margin-left:auto;margin-right:auto;text-align:center;',
                 'right'  => 'margin-left:auto;margin-right:0;text-align:right;'
             ));
-        
             $align_lookup = array();
             $align_values = array('left', 'right', 'center', 'justify');
             foreach ($align_values as $v) $align_lookup[$v] = "text-align:$v;";
@@ -6372,14 +5580,11 @@ class HTMLPurifier_HTMLModule_Tidy_XHTMLAndHTML4 extends HTMLPurifier_HTMLModule
         $r['p@align']  =
         $r['div@align'] = 
             new HTMLPurifier_AttrTransform_EnumToCSS('align', $align_lookup);
-        
         $r['table@bgcolor'] =
         $r['td@bgcolor'] =
         $r['th@bgcolor'] =
             new HTMLPurifier_AttrTransform_BgColor();
-        
         $r['img@border'] = new HTMLPurifier_AttrTransform_Border();
-        
         $r['br@clear'] =
             new HTMLPurifier_AttrTransform_EnumToCSS('clear', array(
                 'left'  => 'clear:left;',
@@ -6387,31 +5592,24 @@ class HTMLPurifier_HTMLModule_Tidy_XHTMLAndHTML4 extends HTMLPurifier_HTMLModule
                 'all'   => 'clear:both;',
                 'none'  => 'clear:none;',
             ));
-        
         $r['td@height'] = 
         $r['th@height'] =
             new HTMLPurifier_AttrTransform_Length('height');
-        
         $r['img@hspace'] = new HTMLPurifier_AttrTransform_ImgSpace('hspace');
-        
         $r['img@name'] = 
         $r['a@name'] = new HTMLPurifier_AttrTransform_Name();
-        
         $r['hr@noshade'] =
             new HTMLPurifier_AttrTransform_BoolToCSS(
                 'noshade',
                 'color:#808080;background-color:#808080;border:0;'
             );
-        
         $r['td@nowrap'] = 
         $r['th@nowrap'] =
             new HTMLPurifier_AttrTransform_BoolToCSS(
                 'nowrap',
                 'white-space:nowrap;'
             );
-        
         $r['hr@size'] = new HTMLPurifier_AttrTransform_Length('size', 'height');
-        
             $ul_types = array(
                 'disc'   => 'list-style-type:disc;',
                 'square' => 'list-style-type:square;',
@@ -6425,19 +5623,14 @@ class HTMLPurifier_HTMLModule_Tidy_XHTMLAndHTML4 extends HTMLPurifier_HTMLModule
                 'A'   => 'list-style-type:upper-alpha;'
             );
             $li_types = $ul_types + $ol_types;
-        
         $r['ul@type'] = new HTMLPurifier_AttrTransform_EnumToCSS('type', $ul_types);
         $r['ol@type'] = new HTMLPurifier_AttrTransform_EnumToCSS('type', $ol_types, true);
         $r['li@type'] = new HTMLPurifier_AttrTransform_EnumToCSS('type', $li_types, true);
-        
         $r['img@vspace'] = new HTMLPurifier_AttrTransform_ImgSpace('vspace');
-        
         $r['td@width'] =
         $r['th@width'] = 
         $r['hr@width'] = new HTMLPurifier_AttrTransform_Length('width');
-        
         return $r;
-        
     }
 }
 class HTMLPurifier_HTMLModule_Tidy_Strict extends HTMLPurifier_HTMLModule_Tidy_XHTMLAndHTML4
@@ -6490,19 +5683,14 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
             $this->_splitText($text, $token);
         } elseif ($this->allowsElement('p')) {
             if (strpos($text, "\n\n") !== false) {
-                 
                 $token = array($this->_pStart());
                 $this->_splitText($text, $token);
             } else {
                 $ok = false;
-                 
-                 
                 $nesting = 0;
                 for ($i = $this->inputIndex + 1; isset($this->inputTokens[$i]); $i++) {
                     if ($this->inputTokens[$i] instanceof HTMLPurifier_Token_Start){
                         if (!$this->_isInline($this->inputTokens[$i])) {
-                             
-                             
                             $ok = false;
                             break;
                         }
@@ -6513,7 +5701,6 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
                         $nesting--;
                     }
                     if ($this->inputTokens[$i] instanceof HTMLPurifier_Token_Text) {
-                         
                         if (strpos($this->inputTokens[$i]->data, "\n\n") !== false) {
                             $ok = true;
                             break;
@@ -6521,31 +5708,18 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
                     }
                 }
                 if ($ok) {
-                     
-                     
                     $token = array($this->_pStart(), $token);
                 }
             }
         }
-        
     }
     public function handleElement(&$token) {
         if (!empty($this->currentNesting)) {
             if ($this->allowsElement('p')) {
-                 
-                
-                 
                 if ($token->name == 'p') return;
-                
-                 
                 if (!$this->_isInline($token)) return;
-                
-                 
                 $prev = $this->inputTokens[$this->inputIndex - 1];
                 if (!$prev instanceof HTMLPurifier_Token_Start) {
-                     
-                     
-                     
                     if (
                         $prev->name == 'p' && $prev instanceof HTMLPurifier_Token_End &&
                         $this->_isInline($token)
@@ -6554,14 +5728,7 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
                     }
                     return;
                 }
-                
-                 
-                 
-                 
-                 
                 $ok = false;
-                 
-                 
                 $j = 1;  
                 for ($i = $this->inputIndex; isset($this->inputTokens[$i]); $i++) {
                     if ($this->inputTokens[$i] instanceof HTMLPurifier_Token_Start) $j++;
@@ -6580,24 +5747,19 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
             }
             return;
         }
-        
         if (!$this->_isInline($token)) return;
-        
         $token = array($this->_pStart(), $token);
     }
     private function _splitText($data, &$result) {
         $raw_paragraphs = explode("\n\n", $data);
-        
         $paragraphs = array();
         $needs_start = false;
         $needs_end   = false;
-        
         $c = count($raw_paragraphs);
         if ($c == 1) {
             $result[] = new HTMLPurifier_Token_Text($data);
             return;
         }
-        
         for ($i = 0; $i < $c; $i++) {
             $par = $raw_paragraphs[$i];
             if (trim($par) !== '') {
@@ -6605,64 +5767,37 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
                 continue;
             }
             if ($i == 0 && empty($result)) {
-                 
-                 
-                 
-                 
-                 
-                 
-                 
                 $result[] = new HTMLPurifier_Token_End('p');
-                 
-                 
-                 
-                 
-                 
                 $needs_start = true;
             } elseif ($i + 1 == $c) {
-                 
-                 
-                 
-                 
                 $needs_end = true;
             }
         }
-        
         if (empty($paragraphs)) {
             return;
         }
-        
         if ($needs_start) $result[] = $this->_pStart();
-        
         foreach ($paragraphs as $par) {
             $result[] = new HTMLPurifier_Token_Text($par);
             $result[] = new HTMLPurifier_Token_End('p');
             $result[] = $this->_pStart();
         }
-        
         array_pop($result);
-        
         $remove_paragraph_end = true;
-        
         if (!$needs_end) {
             for ($i = $this->inputIndex + 1; isset($this->inputTokens[$i]); $i++) {
                 if ($this->inputTokens[$i] instanceof HTMLPurifier_Token_Start || $this->inputTokens[$i] instanceof HTMLPurifier_Token_Empty) {
                     $remove_paragraph_end = $this->_isInline($this->inputTokens[$i]);
                 }
-                 
                 if ($this->inputTokens[$i] instanceof HTMLPurifier_Token_Text && !$this->inputTokens[$i]->is_whitespace) break;
-                 
-                 
                 if ($this->inputTokens[$i] instanceof HTMLPurifier_Token_End) break;
             }
         } else {
             $remove_paragraph_end = false;
         }
-        
         if ($remove_paragraph_end) {
             array_pop($result);
         }
-        
     }
     private function _isInline($token) {
         return isset($this->htmlDefinition->info['p']->child->elements[$token->name]);
@@ -6674,15 +5809,11 @@ class HTMLPurifier_Injector_Linkify extends HTMLPurifier_Injector
     public $needed = array('a' => array('href'));
     public function handleText(&$token) {
         if (!$this->allowsElement('a')) return;
-        
         if (strpos($token->data, '://') === false) {
             return;
         }
-        
         $bits = preg_split('#((?:https?|ftp)://[^\s\'"<>()]+)#S', $token->data, -1, PREG_SPLIT_DELIM_CAPTURE);
-        
         $token = array();
-        
         for ($i = 0, $c = count($bits), $l = false; $i < $c; $i++, $l = !$l) {
             if (!$l) {
                 if ($bits[$i] === '') continue;
@@ -6693,7 +5824,6 @@ class HTMLPurifier_Injector_Linkify extends HTMLPurifier_Injector
                 $token[] = new HTMLPurifier_Token_End('a');
             }
         }
-        
     }
 }
 class HTMLPurifier_Injector_PurifierLinkify extends HTMLPurifier_Injector
@@ -6708,10 +5838,8 @@ class HTMLPurifier_Injector_PurifierLinkify extends HTMLPurifier_Injector
     public function handleText(&$token) {
         if (!$this->allowsElement('a')) return;
         if (strpos($token->data, '%') === false) return;
-        
         $bits = preg_split('#%([a-z0-9]+\.[a-z0-9]+)#Si', $token->data, -1, PREG_SPLIT_DELIM_CAPTURE);
         $token = array();
-        
         for ($i = 0, $c = count($bits), $l = false; $i < $c; $i++, $l = !$l) {
             if (!$l) {
                 if ($bits[$i] === '') continue;
@@ -6723,7 +5851,6 @@ class HTMLPurifier_Injector_PurifierLinkify extends HTMLPurifier_Injector
                 $token[] = new HTMLPurifier_Token_End('a');
             }
         }
-        
     }
 }
 class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
@@ -6734,9 +5861,7 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         $this->factory = new HTMLPurifier_TokenFactory();
     }
     public function tokenizeHTML($html, $config, $context) {
-        
         $html = $this->normalize($html, $config, $context);
-        
         if ($config->get('Core', 'AggressivelyFixLt')) {
             $char = '[^a-z!\/]';
             $comment = "/<!--(.*?)(-->|\z)/is";
@@ -6744,16 +5869,12 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
             $html = preg_replace("/<($char)/i", '&lt;\\1', $html);
             $html = preg_replace_callback($comment, array($this, 'callbackUndoCommentSubst'), $html);  
         }
-        
         $html = $this->wrapHTML($html, $config, $context);
-        
         $doc = new DOMDocument();
         $doc->encoding = 'UTF-8';  
-        
         set_error_handler(array($this, 'muteErrorHandler'));
         $doc->loadHTML($html);
         restore_error_handler();
-        
         $tokens = array();
         $this->tokenizeDOM(
             $doc->getElementsByTagName('html')->item(0)->  
@@ -6763,7 +5884,6 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         return $tokens;
     }
     protected function tokenizeDOM($node, &$tokens, $collect = false) {
-        
         if ($node->nodeType === XML_TEXT_NODE) {
             $tokens[] = $this->factory->createText($node->data);
             return;
@@ -6777,7 +5897,6 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
                     if (substr($data, -3) === '-->') {
                         $data = substr($data, 0, -3);
                     } else {
-                         
                     }
                 }
             }
@@ -6791,11 +5910,9 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         ) {
             return;
         }
-        
         $attr = $node->hasAttributes() ?
             $this->transformAttrToAssoc($node->attributes) :
             array();
-        
         if (!$node->childNodes->length) {
             if ($collect) {
                 $tokens[] = $this->factory->createEmpty($node->tagName, $attr);
@@ -6808,15 +5925,12 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
                 );
             }
             foreach ($node->childNodes as $node) {
-                 
-                 
                 $this->tokenizeDOM($node, $tokens, true);
             }
             if ($collect) {
                 $tokens[] = $this->factory->createEnd($tag_name);
             }
         }
-        
     }
     protected function transformAttrToAssoc($node_map) {
         if ($node_map->length === 0) return array();
@@ -6836,14 +5950,12 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
     protected function wrapHTML($html, $config, $context) {
         $def = $config->getDefinition('HTML');
         $ret = '';
-        
         if (!empty($def->doctype->dtdPublic) || !empty($def->doctype->dtdSystem)) {
             $ret .= '<!DOCTYPE html ';
             if (!empty($def->doctype->dtdPublic)) $ret .= 'PUBLIC "' . $def->doctype->dtdPublic . '" ';
             if (!empty($def->doctype->dtdSystem)) $ret .= '"' . $def->doctype->dtdSystem . '" ';
             $ret .= '>';
         }
-        
         $ret .= '<html><head>';
         $ret .= '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
         $ret .= '</head><body><div>'.$html.'</div></body></html>';
@@ -6857,39 +5969,29 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
         return $matches[1] . htmlspecialchars($matches[2], ENT_COMPAT, 'UTF-8') . $matches[3];
     }
     public function tokenizeHTML($html, $config, $context) {
-        
         if ($config->get('HTML', 'Trusted')) {
             $html = preg_replace_callback('#(<script[^>]*>)(\s*[^<].+?)(</script>)#si',
                 array($this, 'scriptCallback'), $html);
         }
-        
         $html = $this->normalize($html, $config, $context);
-        
         $cursor = 0;  
         $inside_tag = false;  
         $array = array();  
-        
         $maintain_line_numbers = $config->get('Core', 'MaintainLineNumbers');
-        
         if ($maintain_line_numbers === null) {
             $maintain_line_numbers = $config->get('Core', 'CollectErrors');
         }
-        
         if ($maintain_line_numbers) $current_line = 1;
         else $current_line = false;
         $context->register('CurrentLine', $current_line);
         $nl = "\n";
         $synchronize_interval = $config->get('Core', 'DirectLexLineNumberSyncInterval'); 
-        
         $e = false;
         if ($config->get('Core', 'CollectErrors')) {
             $e =& $context->get('ErrorCollector');
         }
-        
         $loops = 0;
-        
         while(++$loops) {
-            
             if (
                 $maintain_line_numbers &&  
                 $synchronize_interval &&   
@@ -6898,17 +6000,13 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
             ) {
                 $current_line = 1 + $this->substrCount($html, $nl, 0, $cursor);
             }
-            
             $position_next_lt = strpos($html, '<', $cursor);
             $position_next_gt = strpos($html, '>', $cursor);
-            
             if ($position_next_lt === $cursor) {
                 $inside_tag = true;
                 $cursor++;
             }
-            
             if (!$inside_tag && $position_next_lt !== false) {
-                 
                 $token = new
                     HTMLPurifier_Token_Text(
                         $this->parseData(
@@ -6926,10 +6024,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                 $inside_tag = true;
                 continue;
             } elseif (!$inside_tag) {
-                 
-                 
                 if ($cursor === strlen($html)) break;
-                 
                 $token = new
                     HTMLPurifier_Token_Text(
                         $this->parseData(
@@ -6942,35 +6037,21 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                 $array[] = $token;
                 break;
             } elseif ($inside_tag && $position_next_gt !== false) {
-                 
-                 
                 $strlen_segment = $position_next_gt - $cursor;
-                
                 if ($strlen_segment < 1) {
-                     
                     $token = new HTMLPurifier_Token_Text('<');
                     $cursor++;
                     continue;
                 }
-                
                 $segment = substr($html, $cursor, $strlen_segment);
-                
                 if ($segment === false) {
-                     
-                     
                     break;
                 }
-                
-                 
                 if (
                     substr($segment, 0, 3) === '!--'
                 ) {
-                     
                     $position_comment_end = strpos($html, '-->', $cursor);
                     if ($position_comment_end === false) {
-                         
-                         
-                         
                         if ($e) $e->send(E_WARNING, 'Lexer: Unclosed comment');
                         $position_comment_end = strlen($html);
                         $end = true;
@@ -6994,8 +6075,6 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                     $inside_tag = false;
                     continue;
                 }
-                
-                 
                 $is_end_tag = (strpos($segment,'/') === 0);
                 if ($is_end_tag) {
                     $type = substr($segment, 1);
@@ -7009,12 +6088,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                     $cursor = $position_next_gt + 1;
                     continue;
                 }
-                
-                 
-                 
-                 
                 if (!ctype_alpha($segment[0])) {
-                     
                     if ($e) $e->send(E_NOTICE, 'Lexer: Unescaped lt');
                     $token = new
                         HTMLPurifier_Token_Text(
@@ -7033,20 +6107,12 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                     $inside_tag = false;
                     continue;
                 }
-                
-                 
-                 
-                 
-                 
                 $is_self_closing = (strrpos($segment,'/') === $strlen_segment-1);
                 if ($is_self_closing) {
                     $strlen_segment--;
                     $segment = substr($segment, 0, $strlen_segment);
                 }
-                
-                 
                 $position_first_space = strcspn($segment, $this->_whitespace);
-                
                 if ($position_first_space >= $strlen_segment) {
                     if ($is_self_closing) {
                         $token = new HTMLPurifier_Token_Empty($segment);
@@ -7062,8 +6128,6 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                     $cursor = $position_next_gt + 1;
                     continue;
                 }
-                
-                 
                 $type = substr($segment, 0, $position_first_space);
                 $attribute_string =
                     trim(
@@ -7079,7 +6143,6 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                 } else {
                     $attr = array();
                 }
-                
                 if ($is_self_closing) {
                     $token = new HTMLPurifier_Token_Empty($type, $attr);
                 } else {
@@ -7094,7 +6157,6 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                 $inside_tag = false;
                 continue;
             } else {
-                 
                 if ($e) $e->send(E_WARNING, 'Lexer: Missing gt');
                 $token = new
                     HTMLPurifier_Token_Text(
@@ -7104,13 +6166,11 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                         )
                     );
                 if ($maintain_line_numbers) $token->line = $current_line;
-                 
                 $array[] = $token;
                 break;
             }
             break;
         }
-        
         $context->destroy('CurrentLine');
         return $array;
     }
@@ -7128,14 +6188,11 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
     }
     public function parseAttributeString($string, $config, $context) {
         $string = (string) $string;  
-        
         if ($string == '') return array();  
-        
         $e = false;
         if ($config->get('Core', 'CollectErrors')) {
             $e =& $context->get('ErrorCollector');
         }
-        
         $num_equal = substr_count($string, '=');
         $has_space = strpos($string, ' ');
         if ($num_equal === 0 && !$has_space) {
@@ -7150,15 +6207,11 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
             if (!$quoted_value) return array($key => '');
             $first_char = @$quoted_value[0];
             $last_char  = @$quoted_value[strlen($quoted_value)-1];
-            
             $same_quote = ($first_char == $last_char);
             $open_quote = ($first_char == '"' || $first_char == "'");
-            
             if ( $same_quote && $open_quote) {
-                 
                 $value = substr($quoted_value, 1, strlen($quoted_value) - 2);
             } else {
-                 
                 if ($open_quote) {
                     if ($e) $e->send(E_ERROR, 'Lexer: Missing end quote');
                     $value = substr($quoted_value, 1);
@@ -7169,92 +6222,62 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
             if ($value === false) $value = '';
             return array($key => $value);
         }
-        
         $array  = array();  
         $cursor = 0;  
         $size   = strlen($string);  
-        
         $string .= ' ';
-        
         while(true) {
-            
             if ($cursor >= $size) {
                 break;
             }
-            
             $cursor += ($value = strspn($string, $this->_whitespace, $cursor));
-            
             $key_begin = $cursor; 
-            
             $cursor += strcspn($string, $this->_whitespace . '=', $cursor);
-            
             $key_end = $cursor;  
-            
             $key = substr($string, $key_begin, $key_end - $key_begin);
-            
             if (!$key) {
                 if ($e) $e->send(E_ERROR, 'Lexer: Missing attribute key');
                 $cursor += strcspn($string, $this->_whitespace, $cursor + 1);  
                 continue;  
             }
-            
             $cursor += strspn($string, $this->_whitespace, $cursor);
-            
             if ($cursor >= $size) {
                 $array[$key] = $key;
                 break;
             }
-            
             $first_char = @$string[$cursor];
-            
             if ($first_char == '=') {
-                 
-                
                 $cursor++;
                 $cursor += strspn($string, $this->_whitespace, $cursor);
-                
                 if ($cursor === false) {
                     $array[$key] = '';
                     break;
                 }
-                
-                 
-                
                 $char = @$string[$cursor];
-                
                 if ($char == '"' || $char == "'") {
-                     
                     $cursor++;
                     $value_begin = $cursor;
                     $cursor = strpos($string, $char, $cursor);
                     $value_end = $cursor;
                 } else {
-                     
                     $value_begin = $cursor;
                     $cursor += strcspn($string, $this->_whitespace, $cursor);
                     $value_end = $cursor;
                 }
-                
-                 
                 if ($cursor === false) {
                     $cursor = $size;
                     $value_end = $cursor;
                 }
-                
                 $value = substr($string, $value_begin, $value_end - $value_begin);
                 if ($value === false) $value = '';
                 $array[$key] = $this->parseData($value);
                 $cursor++;
-                
             } else {
-                 
                 if ($key !== '') {
                     $array[$key] = $key;
                 } else {
-                     
                     if ($e) $e->send(E_ERROR, 'Lexer: Missing attribute key');
                 }
-                
             }
         }
         return $array;
@@ -7284,53 +6307,32 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
 {
     public function execute($tokens, $config, $context) {
         //####################################################################//
-        
         $definition = $config->getHTMLDefinition();
-        
         $parent_name = $definition->info_parent;
         array_unshift($tokens, new HTMLPurifier_Token_Start($parent_name));
         $tokens[] = new HTMLPurifier_Token_End($parent_name);
-        
         $is_inline = $definition->info_parent_def->descendants_are_inline;
         $context->register('IsInline', $is_inline);
-        
         $e =& $context->get('ErrorCollector', true);
-        
         //####################################################################//
-        
         $stack = array();
-        
         $exclude_stack = array();
-        
         $start_token = false;
         $context->register('CurrentToken', $start_token);
-        
         //####################################################################//
-        
         for ($i = 0, $size = count($tokens) ; $i < $size; ) {
-            
-            
             $child_tokens = array();
-            
             for ($j = $i, $depth = 0; ; $j++) {
                 if ($tokens[$j] instanceof HTMLPurifier_Token_Start) {
                     $depth++;
-                     
-                     
                     if ($depth == 1) continue;
                 } elseif ($tokens[$j] instanceof HTMLPurifier_Token_End) {
                     $depth--;
-                     
-                     
                     if ($depth == 0) break;
                 }
                 $child_tokens[] = $tokens[$j];
             }
-            
-            
             $start_token = $tokens[$i];  
-            
-            
             if ($count = count($stack)) {
                 $parent_index = $stack[$count-1];
                 $parent_name  = $tokens[$parent_index]->name;
@@ -7340,82 +6342,48 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                     $parent_def   = $definition->info[$parent_name];
                 }
             } else {
-                 
-                 
-                 
-                 
                 $parent_index = $parent_name = $parent_def = null;
             }
-            
             if ($is_inline === false) {
-                 
                 if (!empty($parent_def) && $parent_def->descendants_are_inline) {
                     $is_inline = $count - 1;
                 }
             } else {
-                 
                 if ($count === $is_inline) {
                     $is_inline = false;
                 }
             }
-            
-            
             $excluded = false;
             if (!empty($exclude_stack)) {
                 foreach ($exclude_stack as $lookup) {
                     if (isset($lookup[$tokens[$i]->name])) {
                         $excluded = true;
-                         
                         break;
                     }
                 }
             }
-            
-            
             if ($excluded) {
-                 
                 $result = false;
                 $excludes = array();  
             } else {
-                 
                 if ($i === 0) {
-                     
                     $def = $definition->info_parent_def;
                 } else {
                     $def = $definition->info[$tokens[$i]->name];
-                    
                 }
-                
                 if (!empty($def->child)) {
-                     
                     $result = $def->child->validateChildren(
                         $child_tokens, $config, $context);
                 } else {
-                     
                     $result = false;
                 }
-                
-                 
                 $excludes = $def->excludes;
             }
-            
-            
-            
             if ($result === true || $child_tokens === $result) {
-                 
-                
-                 
                 $stack[] = $i;
-                
-                 
                 if (!empty($excludes)) $exclude_stack[] = $excludes;
-                
-                 
                 $i++;
-                
             } elseif($result === false) {
-                 
-                
                 if ($e) {
                     if ($excluded) {
                         $e->send(E_ERROR, 'Strategy_FixNesting: Node excluded');
@@ -7423,41 +6391,15 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                         $e->send(E_ERROR, 'Strategy_FixNesting: Node removed');
                     }
                 }
-                
-                 
                 $length = $j - $i + 1;
-                
-                 
                 array_splice($tokens, $i, $length);
-                
-                 
                 $size -= $length;
-                
-                 
-                 
-                 
-                
-                 
-                 
-                 
-                 
-                 
-                 
                 if (!$parent_def->child->allow_empty) {
-                     
                     $i = $parent_index;
                     array_pop($stack);
                 }
-                
-                 
-                 
-                
             } else {
-                 
-                
-                 
                 $length = $j - $i - 1;
-                
                 if ($e) {
                     if (empty($result) && $length) {
                         $e->send(E_ERROR, 'Strategy_FixNesting: Node contents removed');
@@ -7465,36 +6407,18 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                         $e->send(E_WARNING, 'Strategy_FixNesting: Node reorganized');
                     }
                 }
-                
-                 
                 array_splice($tokens, $i + 1, $length, $result);
-                
-                 
                 $size -= $length;
                 $size += count($result);
-                
-                 
                 $stack[] = $i;
-                
-                 
                 if (!empty($excludes)) $exclude_stack[] = $excludes;
-                
-                 
                 $i++;
-                
             }
-            
-            
-            
             $size = count($tokens);
             while ($i < $size and !$tokens[$i] instanceof HTMLPurifier_Token_Start) {
                 if ($tokens[$i] instanceof HTMLPurifier_Token_End) {
-                     
                     array_pop($stack);
-                     
-                     
                     if ($i == 0 || $i == $size - 1) {
-                         
                         $s_excludes = $definition->info_parent_def->excludes;
                     } else {
                         $s_excludes = $definition->info[$tokens[$i]->name]->excludes;
@@ -7505,21 +6429,14 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                 }
                 $i++;
             }
-            
         }
-        
         //####################################################################//
-        
         array_shift($tokens);
         array_pop($tokens);
-        
         $context->destroy('IsInline');
         $context->destroy('CurrentToken');
-        
         //####################################################################//
-        
         return $tokens;
-        
     }
 }
 class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
@@ -7527,26 +6444,19 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
     protected $inputTokens, $inputIndex, $outputTokens, $currentNesting,
         $currentInjector, $injectors;
     public function execute($tokens, $config, $context) {
-        
         $definition = $config->getHTMLDefinition();
-        
         $result = array();
         $generator = new HTMLPurifier_Generator();
         $escape_invalid_tags = $config->get('Core', 'EscapeInvalidTags');
         $e = $context->get('ErrorCollector', true);
-        
         $this->currentNesting = array();
         $this->inputIndex     = false;
         $this->inputTokens    =& $tokens;
         $this->outputTokens   =& $result;
-        
         $context->register('CurrentNesting', $this->currentNesting);
         $context->register('InputIndex',     $this->inputIndex);
         $context->register('InputTokens',    $tokens);
-        
-        
         $this->injectors = array();
-        
         $injectors = $config->getBatch('AutoFormat');
         $custom_injectors = $injectors['Custom'];
         unset($injectors['Custom']);  
@@ -7562,33 +6472,22 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             }
             $this->injectors[] = $injector;
         }
-        
         $this->currentInjector = false;
-        
         foreach ($this->injectors as $i => $injector) {
             $error = $injector->prepare($config, $context);
             if (!$error) continue;
             array_splice($this->injectors, $i, 1);  
             trigger_error("Cannot enable {$injector->name} injector because $error is not allowed", E_USER_WARNING);
         }
-        
-        
-        
         $token = false;
         $context->register('CurrentToken', $token);
-        
         for ($this->inputIndex = 0; isset($tokens[$this->inputIndex]); $this->inputIndex++) {
-            
             $token = $tokens[$this->inputIndex];
-            
-            
             foreach ($this->injectors as $injector) {
                 if ($injector->skip > 0) $injector->skip--;
             }
-            
             if (empty( $token->is_tag )) {
                 if ($token instanceof HTMLPurifier_Token_Text) {
-                      
                      foreach ($this->injectors as $i => $injector) {
                          if (!$injector->skip) $injector->handleText($token);
                          if (is_array($token)) {
@@ -7600,49 +6499,33 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 $this->processToken($token, $config, $context);
                 continue;
             }
-            
             $info = $definition->info[$token->name]->child;
-            
             $ok = false;
             if ($info->type === 'empty' && $token instanceof HTMLPurifier_Token_Start) {
-                 
                 $token = new HTMLPurifier_Token_Empty($token->name, $token->attr);
                 $ok = true;
             } elseif ($info->type !== 'empty' && $token instanceof HTMLPurifier_Token_Empty) {
-                 
                 $token = array(
                     new HTMLPurifier_Token_Start($token->name, $token->attr),
                     new HTMLPurifier_Token_End($token->name)
                 );
                 $ok = true;
             } elseif ($token instanceof HTMLPurifier_Token_Empty) {
-                 
                 $ok = true;
             } elseif ($token instanceof HTMLPurifier_Token_Start) {
-                 
-                
-                 
                 if (!empty($this->currentNesting)) {
-                    
                     $parent = array_pop($this->currentNesting);
                     $parent_info = $definition->info[$parent->name];
-                    
-                     
-                     
-                     
                     if (!isset($parent_info->child->elements[$token->name])) {
                         if ($e) $e->send(E_NOTICE, 'Strategy_MakeWellFormed: Tag auto closed', $parent);
-                         
                         $result[] = new HTMLPurifier_Token_End($parent->name);
                         $this->inputIndex--;
                         continue;
                     }
-                    
                     $this->currentNesting[] = $parent;  
                 }
                 $ok = true;
             }
-            
             if ($ok) {
                 foreach ($this->injectors as $i => $injector) {
                     if (!$injector->skip) $injector->handleElement($token);
@@ -7654,9 +6537,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 $this->processToken($token, $config, $context);
                 continue;
             }
-            
             if (!$token instanceof HTMLPurifier_Token_End) continue;
-            
             if (empty($this->currentNesting)) {
                 if ($escape_invalid_tags) {
                     if ($e) $e->send(E_WARNING, 'Strategy_MakeWellFormed: Unnecessary end tag to text');
@@ -7668,7 +6549,6 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 }
                 continue;
             }
-            
             $current_parent = array_pop($this->currentNesting);
             if ($current_parent->name == $token->name) {
                 $result[] = $token;
@@ -7677,20 +6557,15 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 }
                 continue;
             }
-            
-            
             $this->currentNesting[] = $current_parent;
-            
             $size = count($this->currentNesting);
             $skipped_tags = false;
             for ($i = $size - 2; $i >= 0; $i--) {
                 if ($this->currentNesting[$i]->name == $token->name) {
-                     
                     $skipped_tags = array_splice($this->currentNesting, $i);
                     break;
                 }
             }
-            
             if ($skipped_tags === false) {
                 if ($escape_invalid_tags) {
                     $result[] = new HTMLPurifier_Token_Text(
@@ -7702,9 +6577,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 }
                 continue;
             }
-            
             for ($i = count($skipped_tags) - 1; $i >= 0; $i--) {
-                 
                 if ($i && $e && !isset($skipped_tags[$i]->armor['MakeWellFormed_TagClosedError'])) {
                     $e->send(E_NOTICE, 'Strategy_MakeWellFormed: Tag closed by element end', $skipped_tags[$i]);
                 }
@@ -7713,17 +6586,13 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                     $injector->notifyEnd($new_token);
                 }
             }
-            
         }
-        
         $context->destroy('CurrentNesting');
         $context->destroy('InputTokens');
         $context->destroy('InputIndex');
         $context->destroy('CurrentToken');
-        
         if (!empty($this->currentNesting)) {
             for ($i = count($this->currentNesting) - 1; $i >= 0; $i--) {
-                 
                 if ($e && !isset($this->currentNesting[$i]->armor['MakeWellFormed_TagClosedError'])) {
                     $e->send(E_NOTICE, 'Strategy_MakeWellFormed: Tag closed by document end', $this->currentNesting[$i]);
                 }
@@ -7733,25 +6602,16 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
                 }
             }
         }
-        
         unset($this->outputTokens, $this->injectors, $this->currentInjector,
           $this->currentNesting, $this->inputTokens, $this->inputIndex);
-        
         return $result;
     }
     function processToken($token, $config, $context) {
         if (is_array($token)) {
-            
             array_splice($this->inputTokens, $this->inputIndex--, 1, $token);
-            
             if ($this->injectors) {
                 $offset = count($token);
                 for ($i = 0; $i <= $this->currentInjector; $i++) {
-                     
-                     
-                     
-                     
-                     
                     if (!$this->injectors[$i]->skip) $this->injectors[$i]->skip++;
                     $this->injectors[$i]->skip += $offset;
                 }
@@ -7772,33 +6632,24 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
         $definition = $config->getHTMLDefinition();
         $generator = new HTMLPurifier_Generator();
         $result = array();
-        
         $escape_invalid_tags = $config->get('Core', 'EscapeInvalidTags');
         $remove_invalid_img  = $config->get('Core', 'RemoveInvalidImg');
-        
         $remove_script_contents = $config->get('Core', 'RemoveScriptContents');
         $hidden_elements     = $config->get('Core', 'HiddenElements');
-        
         if ($remove_script_contents === true) {
             $hidden_elements['script'] = true;
         } elseif ($remove_script_contents === false && isset($hidden_elements['script'])) {
             unset($hidden_elements['script']);
         }
-        
         $attr_validator = new HTMLPurifier_AttrValidator();
-        
         $remove_until = false;
-        
         $textify_comments = false;
-        
         $token = false;
         $context->register('CurrentToken', $token);
-        
         $e = false;
         if ($config->get('Core', 'CollectErrors')) {
             $e =& $context->get('ErrorCollector');
         }
-        
         foreach($tokens as $token) {
             if ($remove_until) {
                 if (empty($token->is_tag) || $token->name !== $remove_until) {
@@ -7806,25 +6657,16 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                 }
             }
             if (!empty( $token->is_tag )) {
-                 
-                
-                 
                 if (
                     isset($definition->info_tag_transform[$token->name])
                 ) {
                     $original_name = $token->name;
-                     
-                     
                     $token = $definition->
                                 info_tag_transform[$token->name]->
                                     transform($token, $config, $context);
                     if ($e) $e->send(E_NOTICE, 'Strategy_RemoveForeignElements: Tag transform', $original_name);
                 }
-                
                 if (isset($definition->info[$token->name])) {
-                    
-                     
-                     
                     if (
                         ($token instanceof HTMLPurifier_Token_Start || $token instanceof HTMLPurifier_Token_Empty) &&
                         $definition->info[$token->name]->required_attr &&
@@ -7844,27 +6686,21 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                         }
                         $token->armor['ValidateAttributes'] = true;
                     }
-                    
                     if (isset($hidden_elements[$token->name]) && $token instanceof HTMLPurifier_Token_Start) {
                         $textify_comments = $token->name;
                     } elseif ($token->name === $textify_comments && $token instanceof HTMLPurifier_Token_End) {
                         $textify_comments = false;
                     }
-                    
                 } elseif ($escape_invalid_tags) {
-                     
                     if ($e) $e->send(E_WARNING, 'Strategy_RemoveForeignElements: Foreign element to text');
                     $token = new HTMLPurifier_Token_Text(
                         $generator->generateFromToken($token, $config, $context)
                     );
                 } else {
-                     
-                     
                     if (isset($hidden_elements[$token->name])) {
                         if ($token instanceof HTMLPurifier_Token_Start) {
                             $remove_until = $token->name;
                         } elseif ($token instanceof HTMLPurifier_Token_Empty) {
-                             
                         } else {
                             $remove_until = false;
                         }
@@ -7875,12 +6711,10 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                     continue;
                 }
             } elseif ($token instanceof HTMLPurifier_Token_Comment) {
-                 
                 if ($textify_comments !== false) {
                     $data = $token->data;
                     $token = new HTMLPurifier_Token_Text($data);
                 } else {
-                     
                     if ($e) $e->send(E_NOTICE, 'Strategy_RemoveForeignElements: Comment removed');
                     continue;
                 }
@@ -7893,33 +6727,23 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
         if ($remove_until && $e) {
             $e->send(E_ERROR, 'Strategy_RemoveForeignElements: Token removed to end', $remove_until);
         }
-        
         $context->destroy('CurrentToken');
-        
         return $result;
     }
 }
 class HTMLPurifier_Strategy_ValidateAttributes extends HTMLPurifier_Strategy
 {
     public function execute($tokens, $config, $context) {
-        
         $validator = new HTMLPurifier_AttrValidator();
-        
         $token = false;
         $context->register('CurrentToken', $token);
-        
         foreach ($tokens as $key => $token) {
-            
             if (!$token instanceof HTMLPurifier_Token_Start && !$token instanceof HTMLPurifier_Token_Empty) continue;
-            
             if (!empty($token->armor['ValidateAttributes'])) continue;
-            
             $validator->validateToken($token, $config, $context);
-            
             $tokens[$key] = $token;  
         }
         $context->destroy('CurrentToken');
-        
         return $tokens;
     }
 }
@@ -7943,26 +6767,21 @@ class HTMLPurifier_TagTransform_Font extends HTMLPurifier_TagTransform
         '+4' => '300%'
     );
     public function transform($tag, $config, $context) {
-        
         if ($tag instanceof HTMLPurifier_Token_End) {
             $new_tag = clone $tag;
             $new_tag->name = $this->transform_to;
             return $new_tag;
         }
-        
         $attr = $tag->attr;
         $prepend_style = '';
-        
         if (isset($attr['color'])) {
             $prepend_style .= 'color:' . $attr['color'] . ';';
             unset($attr['color']);
         }
-        
         if (isset($attr['face'])) {
             $prepend_style .= 'font-family:' . $attr['face'] . ';';
             unset($attr['face']);
         }
-        
         if (isset($attr['size'])) {
             if ($attr['size']{0} == '+' || $attr['size']{0} == '-') {
                 $size = (int) $attr['size'];
@@ -7978,19 +6797,15 @@ class HTMLPurifier_TagTransform_Font extends HTMLPurifier_TagTransform
             }
             unset($attr['size']);
         }
-        
         if ($prepend_style) {
             $attr['style'] = isset($attr['style']) ?
                 $prepend_style . $attr['style'] :
                 $prepend_style;
         }
-        
         $new_tag = clone $tag;
         $new_tag->name = $this->transform_to;
         $new_tag->attr = $attr;
-        
         return $new_tag;
-        
     }
 }
 class HTMLPurifier_TagTransform_Simple extends HTMLPurifier_TagTransform
@@ -8104,7 +6919,6 @@ class HTMLPurifier_URIFilter_HostBlacklist extends HTMLPurifier_URIFilter
         return true;
     }
 }
- 
 class HTMLPurifier_URIFilter_MakeAbsolute extends HTMLPurifier_URIFilter
 {
     public $name = 'MakeAbsolute';
@@ -8136,11 +6950,9 @@ class HTMLPurifier_URIFilter_MakeAbsolute extends HTMLPurifier_URIFilter
             if (!is_null($uri->host)) return true;
             $scheme_obj = $uri->getSchemeObj($config, $context);
             if (!$scheme_obj) {
-                 
                 return false;
             }
             if (!$scheme_obj->hierarchical) {
-                 
                 return true;
             }
         }
@@ -8170,21 +6982,17 @@ class HTMLPurifier_URIFilter_MakeAbsolute extends HTMLPurifier_URIFilter
                 if (!empty($result)) {
                     $segment = array_pop($result);
                     if ($segment === '' && empty($result)) {
-                         
-                         
                         $result[] = '';
                     } elseif ($segment === '..') {
                         $result[] = '..';  
                     }
                 } else {
-                     
                     $result[] = '..';
                 }
                 $is_folder = true;
                 continue;
             }
             if ($stack[$i] == '.') {
-                 
                 $is_folder = true;
                 continue;
             }
@@ -8201,17 +7009,14 @@ class HTMLPurifier_URIScheme_ftp extends HTMLPurifier_URIScheme {
     public function validate(&$uri, $config, $context) {
         parent::validate($uri, $config, $context);
         $uri->query    = null;
-        
         $semicolon_pos = strrpos($uri->path, ';');  
         if ($semicolon_pos !== false) {
             $type = substr($uri->path, $semicolon_pos + 1);  
             $uri->path = substr($uri->path, 0, $semicolon_pos);
             $type_ret = '';
             if (strpos($type, '=') !== false) {
-                 
                 list($key, $typecode) = explode('=', $type, 2);
                 if ($key !== 'type') {
-                     
                     $uri->path .= '%3B' . $type;
                 } elseif ($typecode === 'a' || $typecode === 'i' || $typecode === 'd') {
                     $type_ret = ";type=$typecode";
@@ -8222,7 +7027,6 @@ class HTMLPurifier_URIScheme_ftp extends HTMLPurifier_URIScheme {
             $uri->path = str_replace(';', '%3B', $uri->path);
             $uri->path .= $type_ret;
         }
-        
         return true;
     }
 }
@@ -8239,8 +7043,6 @@ class HTMLPurifier_URIScheme_http extends HTMLPurifier_URIScheme {
 class HTMLPurifier_URIScheme_https extends HTMLPurifier_URIScheme_http {
     public $default_port = 443;
 }
- 
- 
 class HTMLPurifier_URIScheme_mailto extends HTMLPurifier_URIScheme {
     public $browsable = false;
     public function validate(&$uri, $config, $context) {
@@ -8306,21 +7108,14 @@ class HTMLPurifier_VarParser_Flexible extends HTMLPurifier_VarParser
             case 'hash':
             case 'lookup':
                 if (is_string($var)) {
-                     
-                     
-                     
                     if ($var == '') return array();
                     if (strpos($var, "\n") === false && strpos($var, "\r") === false) {
-                         
-                         
                         $var = explode(',',$var);
                     } else {
                         $var = preg_split('/(,|[\n\r]+)/', $var);
                     }
-                     
                     foreach ($var as $i => $j) $var[$i] = trim($j);
                     if ($type === 'hash') {
-                         
                         $nvar = array();
                         foreach ($var as $keypair) {
                             $c = explode(':', $keypair, 2);

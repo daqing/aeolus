@@ -3,16 +3,12 @@
   # 'index' controller in 'index' group
   function index()
   {
-    A::ld('ACache');
-	if(! $data = ACache::fetch('index') ){
-	  # Cache miss
-	  $model = A::m('IndexModel');
-	  $data = $model->get_data();
+    # Get data
+    $model = A::m('IndexModel');
+	$data = $model->get_data();
+	$model = null;
 
-	  ACache::store($data, 'index', 60);
-	  $model = null;
-	}
-
+    # Get view
     $view = A::v('IndexView', $data);
 
 	$view->title = 'Index';

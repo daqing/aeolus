@@ -21,7 +21,7 @@
 	{
 	  if( null == self::$engine ){
 	    # Get HTMLPurifier engine
-	    A::ld('guard/HTMLPurifier');
+	    A::ld('guard/Guard');
 	    self::$engine = new HTMLPurifier();
 	  }
 
