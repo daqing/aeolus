@@ -10,10 +10,8 @@
     <html><head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<!-- Cache control -->
-    <title><?php echo($this->title);?></title>
+    <title><?php echo $this->title;?></title>
     <link href="<?php $this->show_style();?>" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="<?php $this->show_jquery();?>"></script>
-    <script type="text/javascript" src="<?php $this->show_jcorner();?>"></script> 
     </head>
     
     <body>
@@ -52,14 +50,12 @@
     </table>
 
 	<!-- JavaScript -->
+    <script type="text/javascript" src="<?php $this->show_jquery();?>"></script>
+    <script type="text/javascript" src="<?php $this->show_jcorner();?>"></script> 
+    <?php $this->show_script();?> 
     <script type="text/javascript"> 
 	  $(function(){
-		// Base URL
-	    var base = '<?php echo URL_BASE;?>';
-
 		$("#nav").corner();
-
-        <?php $this->show_script();?> 
 	  });
     </script>    
 </body></html>
