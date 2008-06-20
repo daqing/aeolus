@@ -5,9 +5,9 @@
    * @author Kinch Zhang <kinch.zhang@gmail.com>
    */
 
-  (APP_DEBUG) ? error_reporting( E_ALL ) : error_reporting(0);
+  (APP_DEBUG) ? error_reporting(E_ALL) : error_reporting(0);
   
-  if(! isset($GLOBALS['session_started']) ){
+  if (! isset($GLOBALS['session_started'])) {
     session_start();
 	$GLOBALS['session_started'] = true;
   }
@@ -20,7 +20,7 @@
 
   # APP base URL
   $rewrite = isset($_GET['rewrite']) && 1 == $_GET['rewrite'];
-  $prefix = $rewrite ? SUB_DIR : SUB_DIR.'index.php/';
+  $prefix = $rewrite ? SUB_DIR : SUB_DIR . 'index.php/';
 
-  define('URL_BASE',$prefix);
+  define('URL_BASE', $prefix);
 ?>

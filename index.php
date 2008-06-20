@@ -10,7 +10,7 @@
  # Load configuration 
  require 'etc/app.php';
  
- if(! APP_ENABLED ){
+ if (! APP_ENABLED) {
    require 'pub/error/aeolus_na.html';
    die();
  }

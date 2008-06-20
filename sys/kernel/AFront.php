@@ -60,23 +60,16 @@
 	private function process()
 	{
 	  # Remove base url from the request
-	  $this->request = substr($this->request,strlen(URL_BASE));
-	  $this->request = trim($this->request,'/\\');
+	  $this->request = substr($this->request, strlen(URL_BASE));
+	  $this->request = trim($this->request, '/\\');
 
-	  if( strpos($this->request,'(') || strpos($this->request,'%')){
-	    # Invalid request
+	  if (strpos($this->request, '(') || strpos($this->request, '%'))
 		return;
-	  }
 
       # Get segments
-	  if( strlen($this->request) > 0 ){
-	    $seg = explode('/',$this->request);
-	  }else{
-	    $seg = '/';
-	  }
+	  $seg = (strlen($this->request)) ? explode('/', $this->request) : '/';
 
-
-	  if( '/' !== $seg && is_array($seg) ){
+	  if ('/' !== $seg && is_array($seg)) {
 	    # Load valid groups
 	    require A_PREFIX.'etc/group.php';
 	    
@@ -85,13 +78,13 @@
 		$this->result['inter']['grp'] = $group;
 
 		$size = count($seg);
-		switch( $size ){
+		switch ($size) {
 		  case 1:
-			if( in_array($seg[0], $group)){
+			if (in_array($seg[0], $group)) {
 			  # Group defined
 			  $this->result['group'] = $seg[0];
-
-			}else{
+			}
+			else{
 			  # Controller in 'index' group
 			  $this->result['controller'] = $seg[0];
 			}
@@ -99,12 +92,12 @@
 		    break;
 
 		  case 2:
-		    if( in_array($seg[0], $group) ){
+		    if (in_array($seg[0], $group)) {
 			  # Group defined
 			  $this->result['group'] = $seg[0];
 			  $this->result['controller'] = $seg[1];
-
-			}else{
+			}
+			else{
 			  # Controller in 'index' group
 			  $this->result['controller'] = $seg[0];
 			  $this->result['argv'][] = $seg[1];
@@ -113,13 +106,13 @@
 		    break;
 		  
 		  default:
-		    if( in_array($seg[0], $group) ){
+		    if (in_array($seg[0], $group)) {
 			  # Group defined
 			  $this->result['group'] = $seg[0];
 			  $this->result['controller'] = $seg[1];
 			  $this->result['argv'] = array_slice($seg, 2);
-
-			}else{
+			}
+			else{
 			  # Controller in 'index' group
 			  $this->result['controller'] = $seg[0];
 			  $this->result['argv'] = array_slice($seg, 1);
@@ -144,28 +137,27 @@
 	  $launched = false;
 
 	  extract($this->result);
-	  $path = A_PREFIX."app/$group/controller/$controller.php";    
+	  $path = A_PREFIX . "app/$group/controller/$controller.php";    
 
-      if( file_exists($path) ){
+      if (file_exists($path)) {
 	    # Load Assistant class
-	    require( 'A.php' );
+	    require 'A.php';
 	    
 	    # Setup environment variable
 	    global $thisgrp;
 	    $thisgrp = $group;
 
 		# Load controller
-	    require( $path );
-	    if( function_exists( $controller ) ){
+	    require($path);
+	    if (function_exists($controller)) {
 	      # Launch this controller
 		  $launched = true;
           $controller($this->result['argv']);
 		}
 	  }
 
-	  if(! $launched ){
+	  if (! $launched)
 	    (APP_DEBUG) ? $this->debug() : $this->to_home();
-	  }
 	}
 
 	/**
@@ -176,42 +168,44 @@
 	private function debug()
 	{
 	  echo '<div style="background-color:#EEE;border:1px solid #CCC;">';
-	    echo '<h3 style="margin:10px;">AEOLUS DEBUG</h3>';
-	    echo '<div style="margin:10px;border-top:1px solid #CCC;">';
-		  # Subdir
-	      echo '<h4>Application subdirectory:';
-	      echo '<span style="font-style:italic;color:#666;padding:0px 10px;">\'';
-	      echo SUB_DIR.'\'</span></h4>';
+	  echo '<h3 style="margin:10px;">AEOLUS DEBUG</h3>';
+	  echo '<div style="margin:10px;border-top:1px solid #CCC;">';
 
-		  # Base URL
-	      echo '<h4>Base URL:';
-	      echo '<span style="font-style:italic;color:#666;padding:0px 10px;">\'';
-	      echo URL_BASE.'\'</span></h4>';
+	  # Subdir
+	  echo '<h4>Application subdirectory:';
+	  echo '<span style="font-style:italic;color:#666;padding:0px 10px;">\'';
+	  echo SUB_DIR.'\'</span></h4>';
 
-		  # Request segments
-	      echo '<h4>Request segments:</h4>';
-	      echo '<div style="background-color:#F7F7F7;padding:0px 10px;border:1px solid #CCC;">';
-	      echo '<p>&nbsp;Group:&nbsp;<i>'.$this->result['group'].'</i></p>';
-	      echo '<p>&nbsp;Controller:&nbsp;<i>'.$this->result['controller'].'</i></p>';
-	      echo '<p>&nbsp;Arguments:&nbsp;';
-	      if( count($this->result['argv']) > 0 ){
-	        foreach($this->result['argv'] as $v){
-		    echo '<span style="font-style:italic;padding:0px 5px;border:1px dashed #999;">';
-		    echo $v.'</span>&nbsp;&nbsp;';
-		    }
+	  # Base URL
+	  echo '<h4>Base URL:';
+	  echo '<span style="font-style:italic;color:#666;padding:0px 10px;">\'';
+	  echo URL_BASE.'\'</span></h4>';
 
-	      }else{
-	        echo '<span style="font-style:italic;">null</span>';
-	      }
-	      echo '</p></div>';
+	  # Request segments
+	  echo '<h4>Request segments:</h4>';
+	  echo '<div style="background-color:#F7F7F7;padding:0px 10px;border:1px solid #CCC;">';
+	  echo '<p>&nbsp;Group:&nbsp;<i>'.$this->result['group'].'</i></p>';
+	  echo '<p>&nbsp;Controller:&nbsp;<i>'.$this->result['controller'].'</i></p>';
+	  echo '<p>&nbsp;Arguments:&nbsp;';
+	  if (count($this->result['argv']) > 0) {
+	   foreach ($this->result['argv'] as $v) {
+	    echo '<span style="font-style:italic;padding:0px 5px;border:1px dashed #999;">';
+	    echo $v.'</span>&nbsp;&nbsp;';
+	   }
+	  }
+	  else
+	    echo '<span style="font-style:italic;">null</span>';
+
+	  echo '</p></div>';
 	    
-		  # Valid groups
-		  echo '<h4>Valid groups:</h4>';
-		  echo '<p style="padding:10px;background-color:#F7F7F7;border:1px solid #CCC;">';
-		  foreach($this->result['inter']['grp'] as $v){
-		    echo '<span style="font-style:italic;padding:0px 5px;border:1px dashed #999;">';
-		    echo $v.'</span>&nbsp;&nbsp;';
-		  }
+	  # Valid groups
+      echo '<h4>Valid groups:</h4>';
+	  echo '<p style="padding:10px;background-color:#F7F7F7;border:1px solid #CCC;">';
+	  foreach ($this->result['inter']['grp'] as $v) {
+	    echo '<span style="font-style:italic;padding:0px 5px;border:1px dashed #999;">';
+	    echo $v.'</span>&nbsp;&nbsp;';
+	  }
+
 	  echo '</p></div></div>';
 	} 
 
@@ -223,7 +217,7 @@
 	private function to_home()
 	{
 	  header('Location: ' . URL_BASE );
-	  die();
+	  exit(0);
 	}
   }
 ?>

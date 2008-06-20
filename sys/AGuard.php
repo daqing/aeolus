@@ -19,14 +19,13 @@
 	 */
 	public function pf($input)
 	{
-	  if( null == self::$engine ){
+	  if (null == self::$engine) {
 	    # Get HTMLPurifier engine
 	    A::ld('guard/Guard');
 	    self::$engine = new HTMLPurifier();
 	  }
 
 	  return self::$engine->purify($input);
-
 	}
   }
 ?>

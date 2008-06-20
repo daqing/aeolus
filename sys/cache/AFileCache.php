@@ -30,9 +30,10 @@
 	  # Load configurations
 	  require A_PREFIX.'etc/cache/file.php';
 
-	  if(! is_writable( CACHE_DIR ) ){
-		$error = 'Fatal: directory <i>\''.CACHE_DIR.'\'</i> not writable, please chmod to 777';
-	    die($error);
+	  if (! is_writable(CACHE_DIR)) {
+		$err = 'Fatal: directory <i>\'' . CACHE_DIR;
+		$err .= '\'</i> not writable, please chmod to 777';
+	    exit($err);
 	  }
 	}
 
@@ -44,14 +45,15 @@
 	 */
 	public function fetch($id)
 	{
-	  if(!$metadata = $this->is_fresh($id)){ return false;}	  
+	  if (! $metadata = $this->is_fresh($id)) 
+	    return false;
 	  
-	  $file = $this->get_path($id) . $this->get_file($id);
+	  $file = $this->get_path($id).$this->get_file($id);
 	  $data = $this->read_from($file);
 	  
 	  # check sum
 	  $hash = crc32($data);
-	  if( $hash != $metadata['hash']){
+	  if ($hash != $metadata['hash']) {
 	  	# Problem detected by the read control
 	  	$this->remove($id);
 	  	return false;
@@ -72,20 +74,18 @@
 	  $file = $this->get_path($id) . $this->get_file($id);
 
 	  # Remove cache data
-      if(! is_file($metafile) || ! is_file($file)){
+      if (! is_file($metafile) || ! is_file($file))
 	    return false;
-	  }
 
-	  if(!@unlink($file)){ return false;}
+	  if (! @ unlink($file))
+	    return false;
 	  
 	  # Remove metadata
-	  if( isset($this->metadata[$id])){
+	  if (isset($this->metadata[$id]))
 	    unset($this->metadata[$id]);
-	  }
 
-	  if(!@unlink($metafile)){
+	  if (! @ unlink($metafile))
 	    return false;
-	  }
 
 	  return true;
 	}
@@ -100,9 +100,11 @@
 	private function is_fresh($id)
 	{
 	  $meta = $this->get_metadata($id);
-	  if(! $meta){ return false;}
+	  if (! $meta)
+	    return false;
 	  
-	  if( time() <= $meta['expire']){ return $meta;}
+	  if (time() <= $meta['expire'])
+	    return $meta;
 	  
 	  return false;
 	}
@@ -124,13 +126,14 @@
 	  $file = $path . $this->get_file($id);
 
 	  # Build cache directory structure
-	  if( HASHED_DIR_LEVEL > 0 ){
-	    if(! file_exists($path)){
+	  if (HASHED_DIR_LEVEL > 0) {
+	    if (! file_exists($path)) {
 		  @mkdir($path, HASHED_DIR_UMASK, true);
 		  @chmod($path, HASHED_DIR_UMASK);
 		}
 
-		if(! is_writable($path)){ return false;}
+		if (! is_writable($path))
+		  return false;
 	  }
 
 	  # Add read control hash
@@ -144,7 +147,8 @@
 
 	  # Save metadata
 	  $res = $this->save_metadata($id, $metadata);	  
-	  if(! $res){ return false;}
+	  if (! $res)
+	    return false;
 
       # Save data into file
 	  $res = $this->write_to($file, $data);	  
@@ -160,14 +164,12 @@
 	 */
 	private function get_path($id)
 	{
-	  if( null == $this->path){
+	  if (null == $this->path) {
 	  	$this->path = CACHE_DIR;
-	  		  
-	    if( HASHED_DIR_LEVEL > 0){
+	    if (HASHED_DIR_LEVEL > 0) {
 	  	  $hash = hash('adler32', $id);
-	  	  for($i=0; $i < HASHED_DIR_LEVEL; $i++){
-	  	    $this->path .= DIRECTORY_SEPARATOR . CACHE_FILE_PREFIX . '-' . substr($hash, 0, $i+1);
-	  	  }
+	  	  for ($i=0; $i < HASHED_DIR_LEVEL; $i++)
+		    $this->path .= DIRECTORY_SEPARATOR . CACHE_FILE_PREFIX . '-' . substr($hash, 0, $i+1);
 	    }
 	  }
 	  
@@ -210,9 +212,11 @@
 	  $metafile =  $this->get_path($id) . $this->get_meta_file($id);
 	  
 	  $res = $this->write_to($metafile, serialize($meta));
-	  if(! $res){ return false;}
+	  if (! $res)
+	    return false;
 	  
 	  $this->metadata[$id] = $meta;
+
 	  return true;
 	}
 	
@@ -224,11 +228,13 @@
 	 */
 	private function get_metadata($id)
 	{
-	  if(isset($this->metadata[$id])){
+	  if (isset($this->metadata[$id])) {
 	  	return $this->metadata[$id];
-	  }else{
+	  }
+	  else{
 	  	$meta = $this->load_metadata($id);
-	  	if(! $meta){ return false;}
+	  	if (! $meta)
+		  return false;
 	    
 	  	return $meta;
 	  }
@@ -244,12 +250,10 @@
 	private function load_metadata($id)
 	{
 	  $metafile =  $this->get_path($id) . $this->get_meta_file($id);
-	  
 	  $data = $this->read_from($metafile);
-	  if(! $data){
+	  if (! $data)
 	  	return false;
-	  }
-	  	  
+
 	  return unserialize($data);
 	}
 	/**
@@ -265,7 +269,7 @@
 	  $result = false;
 	  $f = @fopen($file, 'wb');
 
-	  if($f){
+	  if ($f) {
 	  	# Lock file
 	  	@flock($f, LOCK_EX);
 	  	$result = @fwrite($f, $string);
@@ -288,13 +292,15 @@
 	 */
 	private function read_from($file)
 	{
-	  if(! is_file($file)){ return false;}
+	  if (! is_file($file))
+	    return false;
+
 	  $mqr = get_magic_quotes_runtime();
 	  set_magic_quotes_runtime(0);
 	  $result = false;
-	  	  
+
 	  $f = @fopen($file, 'rb');
-	  if($f){
+	  if ($f) {
 	    # Lock file
 	    @flock($f, LOCK_SH);
 	    $size = @filesize($file);
@@ -305,6 +311,7 @@
 	    @flock($f, LOCK_UN);
 	    @fclose($f);
 	  }
+
 	  set_magic_quotes_runtime($mqr);
 	  
 	  return $result;

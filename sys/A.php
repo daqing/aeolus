@@ -24,7 +24,7 @@
     public function ld($path)
     {
 	  $path .= '.php';
-	  if(! in_array($path, self::$loaded) ){
+	  if (! in_array($path, self::$loaded)) {
         require($path);
 		self::$loaded[] = $path;
 	  }
@@ -42,28 +42,28 @@
     public function v($view, $data = null, $group = 'this')
     {
 	  # Set group
-	  if( 'this' == $group ){
+	  if ('this' == $group) {
 	    global $thisgrp;
 		$group = $thisgrp;
 	  }
 
-      if( APP_DEBUG ){ clearstatcache();}
+      if (APP_DEBUG) 
+	    clearstatcache();
+
       $obj = null;
-	  
-	  # Absolute path to the view file
-      $path = A_PREFIX."app/$group/view/$view";
-      if( file_exists($path.'.php')){
+      $path = A_PREFIX . "app/$group/view/$view";
+
+      if (file_exists($path . '.php')) {
 	    # Load related classes
         self::ld('kernel/AView');
         self::ld($path);
 
-        if( class_exists($view)){
+        if (class_exists($view)) {
 		  # Get an instance of this view class
           $obj = new $view();
 
-          if($data){
+          if ($data)
             $obj->set_data($data);  
-          }
         }
       }
       
@@ -80,22 +80,23 @@
      */
     public function m($model, $group = 'this')
     {
-	  if( 'this' == $group){
+	  if ('this' == $group) {
 	    global $thisgrp;
 		$group = $thisgrp;
 	  }
 
-      if( APP_DEBUG ){clearstatcache();}
-      $obj = null;
+      if (APP_DEBUG)
+	    clearstatcache();
 
-	  # Absolute path to the model file
-      $path = A_PREFIX."app/$group/model/$model";
-      if( file_exists($path.'.php')){
+      $obj = null;
+      $path = A_PREFIX . "app/$group/model/$model";
+
+      if (file_exists($path . '.php')) {
 	    # Load related classes
         self::ld('kernel/AModel');
         self::ld($path);
 
-        if( class_exists($model)){
+        if (class_exists($model)) {
 		  # Get an instance of this model class
           $obj = new $model();
         }
@@ -113,16 +114,16 @@
 	 */
 	public function h($helper, $group = 'this')
 	{
-      if( 'this' == $group ){
+      if ('this' == $group) {
 	    global $thisgrp;
 		$group = $thisgrp;
 	  }
 
 	  # Absolute path to the helper file
-      $path = A_PREFIX."app/$group/helper/$helper";
-      if( file_exists($path.'.php')){
-        A::ld($path);        
-      }
+      $path = A_PREFIX . "app/$group/helper/$helper";
+
+      if (file_exists($path . '.php'))
+        A::ld($path);
 	}
   }
 ?>

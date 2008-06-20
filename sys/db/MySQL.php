@@ -20,20 +20,16 @@
      */
     function __construct()
     {
-      if(! $this->link )
-      {
+      if (! $this->link) {
         # Try to connect to the MySQL server
-        require( A_PREFIX.'etc/db/mysql.php');
-        $this->link = @ mysql_connect("$host:$port", $user, $passwd);
+        require A_PREFIX . 'etc/db/mysql.php';
 
-        if(! $this->link ){
-          # Fatal error: can't connect to database 
+        $this->link = @mysql_connect("$host:$port", $user, $passwd);
+        if (! $this->link) 
           $this->server_error();
-        }
     
-        if(! @ mysql_select_db($schema, $this->link) ){
+        if (! @mysql_select_db($schema, $this->link))
           $this->server_error();
-        }
       }
     }
   
@@ -45,9 +41,9 @@
     private function server_error()
     {
       ob_start();
-      require(A_PREFIX.'pub/error/mysql_error.html');
+      require A_PREFIX . 'pub/error/mysql_error.html';
       ob_end_flush();
-      die();
+	  exit(0);
     }
     
     /**
@@ -64,10 +60,9 @@
       mysql_query("SET CHARACTER SET 'utf8'");
       mysql_query("SET COLLATION_CONNECTION='utf8_general_ci'");
       
-      if(! $result = mysql_query($sql,$this->link) ){
+      if (! $result = mysql_query($sql, $this->link))
         $this->server_error();
-      }
-        	 	
+
       return $result;
     }  
 
