@@ -1,45 +1,40 @@
 #! /usr/bin/php
 <?php
-  /**
+  /*
    * Add application views
-   *
-   * @author Kinch Zhang <kinch.zhang@gmail.com>
    */
 
   if( 3 > $argc ){
     echo "Usage: view [GROUP] [VIEW]...\n";
 	echo "Add VIEW(s) to a GROUP.\n\n";
 	echo "Report bugs to <kinch.zhang@gmail.com>.\n";
-  }else{
-    define('AEOLUS_HOME', dirname(dirname(__FILE__)));
-    $group = $argv[1];
-	$views = array_slice($argv, 2);
-	$group_path = AEOLUS_HOME.'/app/'.$group;
+	exit(0);
+  }
 
-	if( file_exists( $group_path ) && is_writable($group_path) ){
-	  foreach( $views as $view){
-	    $view_path = $group_path.'/view/'.$view.'.php';
-	    if(! file_exists($view_path)){
-	      if( $res = fopen($view_path,'w')){
-		    $content = "<?php\n\n  # '$view' view in '$group' group\n  ";
-			$content .= "class $view extends AView\n  {";
+  define('AEOLUS_HOME', dirname(dirname(__FILE__)));
+  $group = $argv[1];
+  $views = array_slice($argv, 2);
+  $gpath = AEOLUS_HOME.'/app/'.$group;
+
+  if (file_exists( $gpath ) && is_writable($gpath)) {
+	  foreach ($views as $v) {
+	    $vpath = $gpath.'/view/'.$v.'.php';
+	    if (!file_exists($vpath)) {
+	      if ($res = fopen($vpath, 'w')) {
+		    $content = "<?php\n\n  /* $v view in $group group */\n  ";
+			$content .= "class $v extends AView\n  {";
 		    $content .= "\n    public function show_sidebar()\n    {\n    }\n";
 		    $content .= "\n    public function show_content()\n    {\n    }\n";
 		    $content .= "\n    public function show_script()\n    {";
 		    $content .= "\n      ?>\n      <?php\n    }\n";
 		    $content .= "  }\n?>";
 
-		    if( FALSE === fwrite($res,$content) ){
-		      echo "[ERROR] Can't write content to '$view_path'.\n";
-		    }
-
-		  }else{
-		    echo "[ERROR] Can't open file $view_path to write.\n";
-		  }
+		    if (FALSE === fwrite($res,$content))
+			  echo "[ERROR] Can't write content to '$vpath'.\n";
+		  } else
+		    echo "[ERROR] Can't open file $vpath to write.\n";
 	    }
       }
-	}else{
-      echo "[ERROR] The directory '$group_path' doesn't exist or doesn't allow creating files.\n";
-	}
-  }
+	} else
+      echo "[ERROR] The directory '$gpath' doesn't exist or doesn't allow creating files.\n";
 ?>

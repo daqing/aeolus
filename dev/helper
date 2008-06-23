@@ -1,41 +1,36 @@
 #! /usr/bin/php
 <?php
-  /**
+  /*
    * Add application helpers
-   *
-   * @author Kinch Zhang <kinch.zhang@gmail.com>
    */
 
-  if( 3 > $argc ){
+  if (3 > $argc) {
     echo "Usage: helper [GROUP] [HELPER]... \n";
 	echo "Add HELPER(s) to a GROUP.\n\n";
 	echo "Report bugs to <kinch.zhang@gmail.com>.\n";
-  }else{
-    define('AEOLUS_HOME', dirname(dirname(__FILE__)));
-    $group = $argv[1];
-	$helpers = array_slice($argv, 2);
-	$group_path = AEOLUS_HOME.'/app/'.$group;
-
-	foreach($helpers as $helper){
-	  $helper_path = $group_path.'/helper/'.$helper.'.php';
-	  if( file_exists( $group_path ) && is_writable($group_path) ){
-	    if(! file_exists($helper_path)){
-	      if( $res = fopen($helper_path,'w')){
-		    $content = "<?php\n\n  # '$helper' helper in '$group' group\n  ";
-			$content .= "function $helper()\n  {\n    ?>\n    <div>Change Me!</div>";
-  		    $content .= "\n    <?php\n  }\n?>";
-  
-  		    if( FALSE === fwrite($res,$content) ){
-  		      echo "[ERROR] Can't write content $content to file: $helper_path.\n";
-  	        }
-  		  }else{
-  		    echo "[ERROR] Can't open file $helper_path to write.\n";
-  		  }
-		}
-	  }else{
-        echo "[ERROR] Directory '$group_path' doesn't exist or doesn't allow creating files.\n";
-	  }
-	}
-    
+    exit(0);
   }
+
+  define('AEOLUS_HOME', dirname(dirname(__FILE__)));
+  $group = $argv[1];
+  $helpers = array_slice($argv, 2);
+  $gpath = AEOLUS_HOME.'/app/'.$group;
+
+  foreach($helpers as $h){
+    $hpath = $gpath.'/helper/'.$h.'.php';
+	if (file_exists( $gpath ) && is_writable($gpath)) {
+	  if (!file_exists($hpath)) {
+	    if ($res = fopen($hpath, 'w')) {
+	      $content = "<?php\n\n  /* $h helper in $group group */\n  ";
+		  $content .= "function $h()\n  {\n    ?>\n    <div>Change Me!</div>";
+  		  $content .= "\n    <?php\n  }\n?>";
+  
+  		  if (FALSE === fwrite($res, $content))
+  		      echo "[ERROR] Can't write content $content to file: $hpath.\n";
+  		  } else
+  		    echo "[ERROR] Can't open file $hpath to write.\n";
+		}
+	  } else
+        echo "[ERROR] Directory '$gpath' doesn't exist or doesn't allow creating files.\n";
+	}
 ?>

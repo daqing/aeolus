@@ -1,17 +1,14 @@
 <?php
 
-  # 'index' controller in 'index' group
+  /* index controller in index group */
   function index()
   {
-    # Get data
-    $model = A::m('IndexModel');
-	$data = $model->get_data();
-	$model = null;
+    $m = A::m('WelcomeModel');
+	$data = $m->get_msg();
 
-    # Get view
-    $view = A::v('IndexView', $data);
+	$v = A::v('IndexView', $data);
 
-	$view->title = 'Index';
-	$view->show();
+	$v->title = 'Home';
+	$v->show();
   }
 ?>

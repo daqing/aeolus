@@ -1,26 +1,19 @@
 <?php
- /**
-  * Aeolus front controller 
-  *
-  * @author Kinch Zhang <kinch.zhang@gmail.com>
-  */
- 
- define('A_PREFIX', dirname(__FILE__).'/');
+  /*
+   * Aeolus front controller 
+   */
 
- # Load configuration 
- require 'etc/app.php';
- 
- if (! APP_ENABLED) {
-   require 'pub/error/aeolus_na.html';
-   die();
- }
+  define('A_PREFIX', dirname(__FILE__).'/');
 
- # Bootstrap
- require 'sys/bootstrap.php';
+  require 'etc/app.php';
+  if (!APP_ENABLED) {
+    require 'pub/error/aeolus_na.html';
+    die();
+  }
 
- # Run 
- require 'kernel/AFront.php';
+  require 'sys/bootstrap.php';
+  require 'kernel/AFront.php';
 
- $front = new AFront();
- $front->run();
+  $front = new AFront();
+  $front->run();
 ?>

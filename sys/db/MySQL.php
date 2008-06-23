@@ -1,29 +1,16 @@
 <?php
-  /**
+  /*
    * MySQL class
-   *
-   * @author Kinch Zhang <kinch.zhang@gmail.com>
    */
   
   class MySQL
   {
-    /**
-     * Link identifier
-     *
-	 * @access private
-     */
     private $link = null;  
    
-    /**
-     * Constructor
-     *
-     */
     function __construct()
     {
-      if (! $this->link) {
-        # Try to connect to the MySQL server
+      if (!$this->link) {
         require A_PREFIX . 'etc/db/mysql.php';
-
         $this->link = @mysql_connect("$host:$port", $user, $passwd);
         if (! $this->link) 
           $this->server_error();
@@ -33,11 +20,6 @@
       }
     }
   
-    /**
-     * Display server error and exit
-     *
-	 * @access private
-     */
     private function server_error()
     {
       ob_start();
@@ -46,31 +28,19 @@
 	  exit(0);
     }
     
-    /**
-     * Send a MySQL query
-     *
-	 * @access public
-	 * @param string $sql The SQL query
-	 * @return resource $result The query result
-     */
     public final function query($sql)
     {
-      # Set encoding
+      /* Set encoding */
       mysql_query("SET NAMES 'utf8'");
       mysql_query("SET CHARACTER SET 'utf8'");
       mysql_query("SET COLLATION_CONNECTION='utf8_general_ci'");
       
-      if (! $result = mysql_query($sql, $this->link))
+      if (!$result = mysql_query($sql, $this->link))
         $this->server_error();
 
       return $result;
     }  
 
-	/**
-	 * Get the link identifier
-	 *
-	 * @access public
-	 */
 	public function get_link()
 	{
 	  return $this->link;
