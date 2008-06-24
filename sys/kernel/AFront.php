@@ -16,7 +16,8 @@
 	  $this->result['group'] = 'index';
 	  $this->result['controller'] = 'index';
 	  $this->result['argv'] = array();
-	  $this->result['inter'] = array();
+	  if (APP_DEBUG)
+	    $this->result['inter'] = array();
 	}
 
 	public function run()
@@ -41,9 +42,10 @@
 	  if ('/' !== $seg && is_array($seg)) {
 	    require A_PREFIX.'etc/group.php';
 	    
-	    /* Set intermedia data for debugging */
-	    $this->result['inter']['seg'] = $seg;
-		$this->result['inter']['grp'] = $group;
+		if (APP_DEBUG) {
+		  $this->result['inter']['seg'] = $seg;
+		  $this->result['inter']['grp'] = $group;
+		}
 
 		$size = count($seg);
 		switch ($size) {
