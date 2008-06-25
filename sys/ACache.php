@@ -19,7 +19,7 @@
 
 	public function fetch($id)
 	{
-	  if (null == self::$backend)
+	  if (null === self::$backend)
 	    self::set_backend();
 
 	  return self::$backend->fetch($id);
