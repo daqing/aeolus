@@ -7,7 +7,7 @@
   {
     public $title = 'Index';
   	
-  	public $data = array();
+  	public $data = null;
 
     function __construct()
 	{
