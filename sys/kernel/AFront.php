@@ -41,7 +41,7 @@
 
 	  if ('/' !== $seg && is_array($seg)) {
 	    require A_PREFIX.'etc/group.php';
-	    
+
 		if (APP_DEBUG) {
 		  $this->result['inter']['seg'] = $seg;
 		  $this->result['inter']['grp'] = $group;
@@ -87,6 +87,7 @@
 
 	  extract($this->result);
 	  $path = A_PREFIX . "app/$group/controller/$controller.php";    
+
       if (file_exists($path)) {
 	    require 'A.php';
 
@@ -94,14 +95,14 @@
 	    global $thisgrp;
 	    $thisgrp = $group;
 
-		# Load controller
+		/* Load controller */
 	    require($path);
 	    if (function_exists($controller)) {
 		  $launched = true;
           $controller($this->result['argv']);
+		  exit(0);
 		}
 	  }
-
 	  if (!$launched)
 	    (APP_DEBUG) ? $this->debug() : $this->to_home();
 	}
@@ -122,8 +123,8 @@
 	  echo '<h4>Request segments:</h4>';
 	  echo '<div style="background-color:#F7F7F7;padding:10px;">';
 	  echo '<p>&nbsp;Group:&nbsp;<i>'.$this->result['group'].'</i></p>';
-	  echo '<p>&nbsp;Controller:&nbsp;<i>'.$this->result['controller'].'</i></p>';
-	  echo '<p>&nbsp;Arguments:&nbsp;';
+	  echo '<p>&nbsp;Controller:&nbsp;<i>'.$this->result['controller'];
+	  echo '</i></p><p>&nbsp;Arguments:&nbsp;';
 	  if (count($this->result['argv']) > 0) {
 	   foreach ($this->result['argv'] as $v) {
 	    echo '&nbsp;<span style="font-style:italic;">\'';
