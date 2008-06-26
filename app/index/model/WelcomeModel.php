@@ -5,7 +5,7 @@
   {
     public function get_msg()
     {
-	  return 'hello, world';
+	  return 'hello, world @ '. date('d-m-Y G:i:s');
     }
   } 
 ?>

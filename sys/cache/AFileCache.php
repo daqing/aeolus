@@ -11,11 +11,10 @@
 
 	function __construct()
 	{
-	  require A_PREFIX.'etc/cache/file.php';
+	  require A_PREFIX .'etc/cache/file.php';
 
 	  if (!is_writable(CACHE_DIR)) {
-		$err = 'Fatal: directory <i>\'' . CACHE_DIR;
-		$err .= '\'</i> not writable, please chmod to 777';
+		$err = 'Error: '. CACHE_DIR .' not writable, please chmod to 777';
 	    exit($err);
 	  }
 	}

@@ -4879,7 +4879,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends
         return $this->generateDirectoryPath($config) . '/' . $key . '.ser';
     }
     public function generateDirectoryPath($config) {
-        return A_PREFIX .'/tmp/guard';
+        return A_PREFIX .'tmp/guard';
     }
     private function _write($file, $data) {
         return file_put_contents($file, $data);
