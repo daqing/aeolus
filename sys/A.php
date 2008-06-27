@@ -18,7 +18,7 @@
 	} 
 
 	/* Get an instance of a view class */
-    public function v($view, $data = null, $group = 'this')
+    public function v($view, $group = 'this')
     {
 	  if ('this' == $group) {
 	    global $thisgrp;
@@ -33,11 +33,8 @@
         self::ld('kernel/AView');
         self::ld($path);
 
-        if (class_exists($view)) {
+        if (class_exists($view))
           $obj = new $view();
-          if ($data)
-            $obj->set_data($data);  
-        }
       }
       return $obj;
     }

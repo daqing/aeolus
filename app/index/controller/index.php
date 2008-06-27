@@ -11,9 +11,10 @@
 	  ACache::store($data, 'date');
 	}
 
-	$v = A::v('IndexView', $data);
-
+	$v = A::v('IndexView');
 	$v->title = 'Home';
+	$v->data = $data;
+
 	$v->show();
   }
 ?>

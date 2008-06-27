@@ -22,10 +22,14 @@
   
     private function server_error()
     {
-      ob_start();
-      require A_PREFIX . 'pub/error/mysql_error.html';
-      ob_end_flush();
-	  exit(0);
+	  if (APP_DEBUG) {
+        ob_start();
+        require A_PREFIX . 'pub/error/mysql_error.html';
+        ob_end_flush();
+	    exit(0);
+	  } else {
+	    exit('<h3>Internal Database Error</h3>');
+	  }
     }
     
     public final function query($sql)

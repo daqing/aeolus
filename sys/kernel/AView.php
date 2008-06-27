@@ -13,11 +13,6 @@
 	{
 	}
       
-  	public function set_data($v)
-  	{
-  	  $this->data = $v;
-  	}
-
     /* Render a given template */
     public function show()
     {	
