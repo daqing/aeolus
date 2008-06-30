@@ -14,9 +14,4 @@
   $path .= A_PREFIX.'sys/'.PATH_SEPARATOR;
   $path .= ini_get('include_path');
   ini_set('include_path',$path);
-
-  $rewrite = isset($_GET['rewrite']) && 1 == $_GET['rewrite'];
-  $prefix = $rewrite ? SUB_DIR : SUB_DIR . 'index.php/';
-
-  define('URL_BASE', $prefix);
 ?>

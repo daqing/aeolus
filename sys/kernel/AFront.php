@@ -113,9 +113,6 @@
 	  echo '<h3 style="margin:10px;">AEOLUS DEBUG</h3>';
 	  echo '<div style="margin:10px;border-top:1px solid #CCC;">';
 
-	  echo '<h4>Application subdirectory:';
-	  echo '<span style="font-style:italic;color:#666;padding:0px 10px;">';
-	  echo SUB_DIR.'</span></h4>';
 	  echo '<h4>Base URL:';
 	  echo '<span style="font-style:italic;color:#666;padding:0px 10px;">';
 	  echo URL_BASE.'</span></h4>';
