@@ -1,9 +1,9 @@
 <?php
   /*
-   * AView class
+   * View class
    */
 
-  class AView
+  class AeoView
   {
     public $title = 'Index';
   	
@@ -38,13 +38,13 @@
 
   	public function show_top()
   	{
-  	  A::h('top', 'index');
+  	  Aeo::h('top', 'index');
   	  top();
   	}
   
   	public function show_nav()
   	{
-  	  A::h('nav', 'index');
+  	  Aeo::h('nav', 'index');
   	  nav();
   	}
 

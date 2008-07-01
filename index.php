@@ -12,8 +12,8 @@
   }
 
   require 'sys/bootstrap.php';
-  require 'kernel/AFront.php';
+  require 'kernel/AeoFront.php';
 
-  $front = new AFront();
+  $front = new AeoFront();
   $front->run();
 ?>

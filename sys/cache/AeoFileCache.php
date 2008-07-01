@@ -1,9 +1,9 @@
 <?php
   /*
-   * AFileCache class
+   * File-based caching
    */
   
-  class AFileCache
+  class AeoFileCache
   {
 	private $metadata = array();
 	

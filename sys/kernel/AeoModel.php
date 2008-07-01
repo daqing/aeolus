@@ -1,9 +1,9 @@
 <?php
   /*
-   * AModel class
+   * Model class
    */
 
-  class AModel
+  class AeoModel
   {
     private static $driver = null;
 
@@ -14,7 +14,7 @@
 	  if (null == self::$driver) {
 		require A_PREFIX.'etc/db/driver.php';
 
-        A::ld("db/$driver");
+        Aeo::ld("db/$driver");
 	    self::$driver = new $driver();
 	    
 		$this->data = array(

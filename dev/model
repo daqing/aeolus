@@ -22,7 +22,7 @@
 	    if (!file_exists($mpath)) {
 	      if ($res = fopen($mpath, 'w')) {
 		    $content = "<?php\n\n  /* $m model in $group group */\n  ";
-			$content .= "class $m extends AModel\n  {\n    ";
+			$content .= "class $m extends AeoModel\n  {\n    ";
 		    $content .= "public function foobar()\n    {\n    }\n  } \n?>";
 
 		    if (FALSE === fwrite($res, $content))

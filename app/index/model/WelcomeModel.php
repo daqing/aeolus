@@ -1,7 +1,7 @@
 <?php
 
   /* WelcomeModel model in index group */
-  class WelcomeModel extends AModel
+  class WelcomeModel extends AeoModel
   {
     public function get_msg()
     {

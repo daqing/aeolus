@@ -1,7 +1,7 @@
 <?php
 
   /* IndexView view in index group */
-  class IndexView extends AView
+  class IndexView extends AeoView
   {
     public function show_sidebar()
     {
@@ -10,9 +10,9 @@
 
     public function show_content()
     {
-	  A::ld('AGuard');
+	  Aeo::ld('AeoGuard');
 	  echo '<div class="section">';
-	  echo AGuard::pf($this->data);
+	  echo AeoGuard::pf($this->data);
 	  echo '</div>';
     }
 

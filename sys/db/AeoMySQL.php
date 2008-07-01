@@ -1,9 +1,9 @@
 <?php
   /*
-   * MySQL class
+   * Database driver for MySQL 5.0+
    */
   
-  class MySQL
+  class AeoMySQL
   {
     private $link = null;  
    

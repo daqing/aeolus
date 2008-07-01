@@ -1,9 +1,9 @@
 <?php
   /*
-   * A class
+   * Factory class
    */
   
-  class A
+  class Aeo
   {
 	private static $loaded = array();
 
@@ -30,7 +30,7 @@
       $obj = null;
       $path = A_PREFIX . "app/$group/view/$view";
       if (file_exists($path . '.php')) {
-        self::ld('kernel/AView');
+        self::ld('kernel/AeoView');
         self::ld($path);
 
         if (class_exists($view))
@@ -52,7 +52,7 @@
       $obj = null;
       $path = A_PREFIX . "app/$group/model/$model";
       if (file_exists($path . '.php')) {
-        self::ld('kernel/AModel');
+        self::ld('kernel/AeoModel');
         self::ld($path);
 
         if (class_exists($model)) {
@@ -72,7 +72,7 @@
 
       $path = A_PREFIX . "app/$group/helper/$helper";
       if (file_exists($path . '.php'))
-        A::ld($path);
+        self::ld($path);
 	}
   }
 ?>

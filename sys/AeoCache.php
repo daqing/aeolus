@@ -1,9 +1,9 @@
 <?php
   /*
-   * ACache class for caching
+   * Frontend for caching system
    */
 
-  class ACache
+  class AeoCache
   {
 	private static $backend = null;
 
@@ -11,8 +11,8 @@
 	{
 	  require A_PREFIX . 'etc/cache/backend.php';
 
-	  $backend = 'A' . $backend . 'Cache';
-	  A::ld("cache/$backend");
+	  $backend = 'Aeo' . $backend . 'Cache';
+	  Aeo::ld("cache/$backend");
 
       self::$backend = new $backend();
 	}

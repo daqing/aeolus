@@ -1,9 +1,9 @@
 <?php
   /*
-   * AFront class
+   * Front controller
    */
 
-  class AFront
+  class AeoFront
   {
 	private $request;
 
@@ -89,7 +89,7 @@
 	  $path = A_PREFIX . "app/$group/controller/$controller.php";    
 
       if (file_exists($path)) {
-	    require 'A.php';
+	    require 'Aeo.php';
 
 	    /* Setup environment variable */
 	    global $thisgrp;

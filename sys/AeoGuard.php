@@ -1,9 +1,9 @@
 <?php
   /*
-   * AGuard class
+   * Security
    */
 
-  class AGuard
+  class AeoGuard
   {
     private static $engine = null;
 
@@ -11,7 +11,7 @@
 	public function pf($input)
 	{
 	  if (null === self::$engine) {
-	    A::ld('guard/HTMLPurifier');
+	    Aeo::ld('guard/HTMLPurifier');
 	    self::$engine = new HTMLPurifier();
 	  }
 
