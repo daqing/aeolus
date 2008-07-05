@@ -100,7 +100,6 @@
 	    if (function_exists($controller)) {
 		  $launched = true;
           $controller($this->result['argv']);
-		  exit(0);
 		}
 	  }
 	  if (!$launched)
