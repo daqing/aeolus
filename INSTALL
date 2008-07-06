@@ -1,4 +1,17 @@
+///////////////////////////////////////////////////////////////
 
-    Aeolus installation
+    Aeolus installation guide
 
+///////////////////////////////////////////////////////////////
 
+1) Requirement
+
+  * Apache 2.0 +
+  * PHP 5.2.0 +
+  * MySQL 5.0 +
+
+2) Installation
+
+  * Download and uncompress "aeolus.tar.gz"
+  * Put "aeolus" directory into your DOCUMENT_ROOT
+  * Done
