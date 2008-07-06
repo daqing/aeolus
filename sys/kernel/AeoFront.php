@@ -29,8 +29,8 @@
 	/* Process the HTTP request */
 	private function process()
 	{
-	  /* Remove base url from the request */
-	  $this->request = substr($this->request, strlen(URL_BASE));
+	  /* Remove output base url from the request */
+	  $this->request = substr($this->request, strlen(OP_BASE));
 	  $this->request = trim($this->request, '/\\');
 
 	  if (strpos($this->request, '(') || strpos($this->request, '%'))
@@ -112,9 +112,13 @@
 	  echo '<h3 style="margin:10px;">AEOLUS DEBUG</h3>';
 	  echo '<div style="margin:10px;border-top:1px solid #CCC;">';
 
-	  echo '<h4>Base URL:';
+	  echo '<h4>Sub URL:';
 	  echo '<span style="font-style:italic;color:#666;padding:0px 10px;">';
-	  echo URL_BASE.'</span></h4>';
+	  echo SUB_URL.'</span></h4>';
+
+	  echo '<h4>Output base:';
+	  echo '<span style="font-style:italic;color:#666;padding:0px 10px;">';
+	  echo OP_BASE.'</span></h4>';
 
 	  echo '<h4>Request segments:</h4>';
 	  echo '<div style="background-color:#F7F7F7;padding:10px;">';
@@ -141,7 +145,7 @@
 
 	private function to_home()
 	{
-	  header('Location: ' . URL_BASE );
+	  header('Location: ' . SUB_URL );
 	  exit(0);
 	}
   }

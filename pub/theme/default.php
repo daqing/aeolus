@@ -41,7 +41,7 @@
       <!-- Bottom -->
 	  <tr><td>
 	    <div id="bottom">Powered by
-		  <a href="http://code.google.com/p/aeolus/">Aeolus</a>
+		  <a href="http://github.com/kinch/aeolus/tree/master/">Aeolus</a>
 		  &middot;&nbsp;&copy;&nbsp;Copyright 2008-2009,
 		  <a href="http://citygeneration.com/">CityGeneration, Inc.</a>
 		  &middot;&nbsp;All Rights Reserved   
