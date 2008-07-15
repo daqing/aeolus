@@ -16,8 +16,6 @@
 	  $this->result['group'] = 'index';
 	  $this->result['controller'] = 'index';
 	  $this->result['argv'] = array();
-	  if (APP_DEBUG)
-	    $this->result['inter'] = array();
 	}
 
 	public function run()
@@ -42,40 +40,33 @@
 	  if ('/' !== $seg && is_array($seg)) {
 	    require A_PREFIX.'etc/group.php';
 
-		if (APP_DEBUG) {
-		  $this->result['inter']['seg'] = $seg;
-		  $this->result['inter']['grp'] = $group;
-		}
-
 		$size = count($seg);
 		switch ($size) {
-		  case 1:
-			if (in_array($seg[0], $group))
-			  $this->result['group'] = $seg[0];
-			else
-			  $this->result['controller'] = $seg[0];
-		    break;
-
-		  case 2:
-		    if (in_array($seg[0], $group)) {
-			  $this->result['group'] = $seg[0];
-			  $this->result['controller'] = $seg[1];
-			} else {
-			  $this->result['controller'] = $seg[0];
-			  $this->result['argv'][] = $seg[1];
-			}
-		    break;
-
-		  default:
-		    if (in_array($seg[0], $group)) {
-			  $this->result['group'] = $seg[0];
-			  $this->result['controller'] = $seg[1];
-			  $this->result['argv'] = array_slice($seg, 2);
-			} else {
-			  $this->result['controller'] = $seg[0];
-			  $this->result['argv'] = array_slice($seg, 1);
-			}
-		    break;
+		case 1:
+		  if (in_array($seg[0], $group))
+		    $this->result['group'] = $seg[0];
+		  else
+		    $this->result['controller'] = $seg[0];
+		break;
+		case 2:
+		  if (in_array($seg[0], $group)) {
+		    $this->result['group'] = $seg[0];
+		    $this->result['controller'] = $seg[1];
+		  } else {
+		    $this->result['controller'] = $seg[0];
+		    $this->result['argv'][] = $seg[1];
+		  }
+		break;
+		default:
+		  if (in_array($seg[0], $group)) {
+		    $this->result['group'] = $seg[0];
+			$this->result['controller'] = $seg[1];
+			$this->result['argv'] = array_slice($seg, 2);
+		  } else {
+		    $this->result['controller'] = $seg[0];
+		    $this->result['argv'] = array_slice($seg, 1);
+		  }
+		break;
 		}
       }
     }
@@ -97,50 +88,26 @@
 
 		/* Load controller */
 	    require($path);
+
 	    if (function_exists($controller)) {
 		  $launched = true;
           $controller($this->result['argv']);
 		}
 	  }
+
 	  if (!$launched)
 	    (APP_DEBUG) ? $this->debug() : $this->to_home();
 	}
 
 	private function debug()
 	{
-	  echo '<div style="background-color:#EEE;border:1px solid #CCC;">';
-	  echo '<h3 style="margin:10px;">AEOLUS DEBUG</h3>';
-	  echo '<div style="margin:10px;border-top:1px solid #CCC;">';
-
-	  echo '<h4>Sub URL:';
-	  echo '<span style="font-style:italic;color:#666;padding:0px 10px;">';
-	  echo SUB_URL.'</span></h4>';
-
-	  echo '<h4>Output base:';
-	  echo '<span style="font-style:italic;color:#666;padding:0px 10px;">';
-	  echo OP_BASE.'</span></h4>';
-
-	  echo '<h4>Request segments:</h4>';
-	  echo '<div style="background-color:#F7F7F7;padding:10px;">';
-	  echo '<p>&nbsp;Group:&nbsp;<i>'.$this->result['group'].'</i></p>';
-	  echo '<p>&nbsp;Controller:&nbsp;<i>'.$this->result['controller'];
-	  echo '</i></p><p>&nbsp;Arguments:&nbsp;';
-	  if (count($this->result['argv']) > 0) {
-	   foreach ($this->result['argv'] as $v) {
-	    echo '&nbsp;<span style="font-style:italic;">\'';
-	    echo $v.'\'</span>&nbsp;';
-	   }
-	  } else
-	      echo '<span style="font-style:italic;">null</span>';
-	  echo '</p></div>';
-	    
-      echo '<h4>Valid groups:</h4>';
-	  echo '<p style="padding:10px;background-color:#F7F7F7;">';
-	  foreach ($this->result['inter']['grp'] as $v) {
-	    echo '&nbsp;<span style="font-style:italic;">\'';
-	    echo $v.'\'</span>&nbsp;';
+	  extract($this->result);
+	  if ('index' == $group) {
+	    echo "Fatal: '$controller' is neither a valid group nor a ";
+		echo "controller in 'index' group.";
+	  } else {
+	    echo "Fatal: controller '$controller' not found in '$group' group.";
 	  }
-	  echo '</p></div></div>';
 	} 
 
 	private function to_home()
