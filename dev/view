@@ -26,7 +26,11 @@
 		    $content .= "\n    public function show_sidebar()\n    {\n    }\n";
 		    $content .= "\n    public function show_content()\n    {\n    }\n";
 		    $content .= "\n    public function show_script()\n    {";
-		    $content .= "\n      ?>\n      <?php\n    }\n";
+			$content .= "\n      # echo '<script type=\"text/javascript\" ";
+			$content .= "src=\"\"></script>';";
+		    $content .= "\n      ?>\n      <script type=\"text/javascript\">";
+			$content .= "\n      alert('hello, world');";
+			$content .= "\n      </script>\n      <?php\n    }\n";
 		    $content .= "  }\n?>";
 
 		    if (FALSE === fwrite($res,$content))
