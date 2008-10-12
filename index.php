@@ -1,6 +1,7 @@
 <?php
+
   /*
-   * Aeolus front controller 
+   * Aeolus entrance script
    */
 
   define('A_PREFIX', dirname(__FILE__).'/');
@@ -11,7 +12,10 @@
     die();
   }
 
+  // Bootstrap
   require 'sys/bootstrap.php';
+
+  // Load front controller
   require 'kernel/AeoFront.php';
 
   $front = new AeoFront();
