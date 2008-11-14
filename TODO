@@ -1,4 +1,6 @@
-# Aeolus TODO(s)
-Add FastCGI support
-Add Memcache support
-Add bundle support
+Aeolus 1.1 TODO List
+====================
+
+1. Enable plugin support (respect Eclipse)
+2. Refine the whole code base
+3. Redesign the M-V-C architecture
