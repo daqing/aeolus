@@ -87,6 +87,7 @@
 	    $thisgrp = $group;
 
 		/* Load controller */
+        // TODO: use output buffer?
 	    require($path);
 
 	    if (function_exists($controller)) {
