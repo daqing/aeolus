@@ -1,1 +1,3 @@
 # Ignored directories
+.project
+.settings
