@@ -1,7 +1,8 @@
 <?php
 
   /*
-   * Aeolus entrance script
+   * This is the frontend for Aeolus system.
+   *
    */
 
   define('A_PREFIX', dirname(__FILE__).'/');
@@ -19,5 +20,6 @@
   require 'kernel/AeoFront.php';
 
   $front = new AeoFront();
+
   $front->run();
 ?>
