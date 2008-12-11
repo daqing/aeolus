@@ -1,10 +1,12 @@
 <?php
-  /**
-   * Cache backend
-   *
-   * @author Kinch Zhang <kinch.zhang@gmail.com>
-   */
-
-  # You can choose from {File, APC or Memcached}
-  $backend = 'File';
+  
+    /*
+     * Cache backend
+     *
+     */
+  
+    # You can choose from "File", "APC", or "Memcached".
+    # NOTE: currently only "File" backend implemented
+  
+    $backend = 'File';
 ?>

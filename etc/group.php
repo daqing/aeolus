@@ -1,6 +1,6 @@
 <?php
 
-  # Valid groups
-  $group[] = 'index';
+    # Valid groups
 
+    $group[] = 'index';
 ?>
