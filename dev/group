@@ -1,33 +1,35 @@
 #! /usr/bin/php
 <?php
-  /*
-   * Add groups
-   */
+  
+    /*
+     * Add groups
+     */
+  
+    if (2 > $argc) {
+        echo "Usage: group [GROUP]...\n";
+      	echo "Add GROUP(s).\n\n";
+      	echo "Report bugs to <kinch.zhang@gmail.com>.\n";
+      	exit(0);
+    }
+  
+    define('AEOLUS_HOME', dirname(dirname(__FILE__)));
+  
+    clearstatcache();
 
-  if (2 > $argc) {
-    echo "Usage: group [GROUP]...\n";
-	echo "Add GROUP(s).\n\n";
-	echo "Report bugs to <kinch.zhang@gmail.com>.\n";
-	exit(0);
-  }
-
-  define('AEOLUS_HOME', dirname(dirname(__FILE__)));
-
-  clearstatcache();
-  for( $i=1; $i<$argc; $i++){
-    $path = AEOLUS_HOME."/app/$argv[$i]";
-    if (!file_exists($path)) {
-	    @mkdir( $path );
-		@mkdir( $path.'/controller' );
-		@mkdir( $path.'/model' );
-		@mkdir( $path.'/view' );
-		@mkdir( $path.'/helper' );
-	} else {
-	    foreach (array('controller','view','model','helper') as $v) {
-		  if (!file_exists( $path."/$v")) {
-		    @mkdir( $path."/$v" );
-		  }
-	    }
-      }
-	}
+    for ( $i=1; $i<$argc; $i++) {
+        $path = AEOLUS_HOME."/app/$argv[$i]";
+  
+        if (!file_exists($path)) {
+    	    @mkdir( $path );
+    		@mkdir( $path.'/controller' );
+    		@mkdir( $path.'/model' );
+    		@mkdir( $path.'/view' );
+    		@mkdir( $path.'/helper' );
+    	  } else {
+    	      foreach (array('controller','view','model','helper') as $v) {
+    		    if (!file_exists( $path."/$v"))
+    		        @mkdir( $path."/$v" );
+    	      }
+        }
+    }
 ?>
