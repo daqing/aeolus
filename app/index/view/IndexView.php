@@ -5,12 +5,16 @@
   {
     public function show_sidebar()
     {
-	  echo 'Aeolus home';
+	  echo 'Aeolus home page';
     }
 
     public function show_content()
     {
 	  Aeo::ld('AeoGuard');
+	  echo '<div class="section">';
+      echo '<p>Aeolus is an open-source PHP framework ';
+      echo 'designed for productive Web development.</p>';
+      echo '</div>';
 	  echo '<div class="section">';
 	  echo AeoGuard::pf($this->data);
 	  echo '</div>';

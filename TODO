@@ -1,6 +1,7 @@
 Aeolus 1.1 TODO List
 ====================
 
-1. Enable plugin support (respect Eclipse)
+1. Plugin system
 2. Refine the whole code base
-3. Redesign the M-V-C architecture
+3. Redesign the MVC architecture
+4. Design a simple template engine

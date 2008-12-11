@@ -11,6 +11,7 @@
 
 	function __construct()
 	{
+      // Load configuration
 	  require A_PREFIX .'etc/cache/file.php';
 
 	  if (!is_writable(CACHE_DIR)) {

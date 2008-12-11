@@ -43,7 +43,7 @@
 	    <div id="bottom">Powered by
 		  <a href="http://github.com/kinch/aeolus/tree/master/">Aeolus</a>
 		  &middot;&nbsp;&copy;&nbsp;Copyright 2008-2009,
-		  <a href="http://citygeneration.com/">CityGeneration, Inc.</a>
+		  <a href="mailto:kinch.zhang@gmail.com">Kinch Zhang (a.k.a daqing)</a>
 		  &middot;&nbsp;All Rights Reserved   
         </div>
 	  </td></tr>
@@ -55,7 +55,8 @@
     <?php $this->show_script();?> 
     <script type="text/javascript"> 
 	  $(function(){
-		$("#nav").corner();
+		$("#sidebar").corner();
+        $(".section").corner();
 	  });
     </script>    
 </body></html>

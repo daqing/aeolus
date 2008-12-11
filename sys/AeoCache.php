@@ -1,6 +1,6 @@
 <?php
   /*
-   * Frontend for caching system
+   * Frontend for Aeolus caching system
    */
 
   class AeoCache

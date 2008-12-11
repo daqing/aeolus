@@ -5,7 +5,7 @@
   {
     public function get_msg()
     {
-	  return 'hello, world @ '. date('d-m-Y G:i:s');
+	  return '<p>Message cached  at '. date('d-m-Y G:i:s') . ' for 5 minutes.';
     }
   } 
 ?>
