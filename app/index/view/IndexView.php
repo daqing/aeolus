@@ -10,7 +10,7 @@
 
     public function show_content()
     {
-	  Aeolus::ld('AeoGuard');
+	  Aeolus::loadClass('AeoGuard');
 	  echo '<div class="section">';
       echo '<p>Aeolus is an open-source PHP framework ';
       echo 'designed for productive Web development.</p>';

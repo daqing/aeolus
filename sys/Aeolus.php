@@ -1,78 +1,95 @@
 <?php
-  /*
-   * Factory class
-   */
+
+/*
+ * Factory class
+ */
+    
+class Aeolus
+{
+    private static $loaded = array();
   
-  class Aeolus
-  {
-	private static $loaded = array();
-
-	/* Load files */
-    public function ld($path)
+  	/**
+     * Load a class
+     *
+     * This method loads a class and makes sure to load it only once
+     *
+     * @param string $path path to file to be included
+     * @return void
+     */
+    public function loadClass($className)
     {
-	  $path .= '.php';
-	  if (!in_array($path, self::$loaded)) {
-        require($path);
-		self::$loaded[] = $path;
-	  }
-	} 
+  	    $path = $className . '.php';
+  	    if (!in_array($path, self::$loaded)) {
+            require $path;
 
-	/* Get an instance of a view class */
-    public function v($view, $group = 'this')
+  		    self::$loaded[] = $path;
+  	    }
+  	} 
+  
+  	/**
+     * Get an instance of a view class
+     *
+     */
+    public function v($view, $group='this')
     {
-	  if ('this' == $group) {
-	    global $thisgrp;
-		$group = $thisgrp;
-	  }
+  	  if ('this' == $group) {
+  	      global $thisgrp;
+
+  		  $group = $thisgrp;
+  	  }
+      
       if (APP_DEBUG) 
-	    clearstatcache();
-
+  	      clearstatcache();
+  
       $obj = null;
       $path = A_PREFIX . "app/$group/view/$view";
       if (file_exists($path . '.php')) {
-        self::ld('kernel/AeoView');
-        self::ld($path);
-
-        if (class_exists($view))
-          $obj = new $view();
+          self::loadClass('kernel/AeoView');
+          self::loadClass($path);
+  
+          if (class_exists($view))
+            $obj = new $view();
       }
+
       return $obj;
     }
-    
-	/* Get an instance of a model class */
+      
+  	/* Get an instance of a model class */
     public function m($model, $group = 'this')
     {
-	  if ('this' == $group) {
-	    global $thisgrp;
-		$group = $thisgrp;
-	  }
-      if (APP_DEBUG)
-	    clearstatcache();
-
-      $obj = null;
-      $path = A_PREFIX . "app/$group/model/$model";
-      if (file_exists($path . '.php')) {
-        self::ld('kernel/AeoModel');
-        self::ld($path);
-
-        if (class_exists($model)) {
-          $obj = new $model();
+  	  if ('this' == $group) {
+  	    global $thisgrp;
+  		$group = $thisgrp;
+  	  }
+        if (APP_DEBUG)
+  	    clearstatcache();
+  
+        $obj = null;
+        $path = A_PREFIX . "app/$group/model/$model";
+        if (file_exists($path . '.php')) {
+          self::loadClass('kernel/AeoModel');
+          self::loadClass($path);
+  
+          if (class_exists($model)) {
+            $obj = new $model();
+          }
         }
-      }
-      return $obj;
+        return $obj;
     }
+  
+  	/* Load app helper */
+  	public function h($helper, $group = 'this')
+  	{
+        if ('this' == $group) {
+  	        global $thisgrp;
 
-	/* Load app helper */
-	public function h($helper, $group = 'this')
-	{
-      if ('this' == $group) {
-	    global $thisgrp;
-		$group = $thisgrp;
-	  }
+  		    $group = $thisgrp;
+  	    }
+  
+        $path = A_PREFIX . "app/$group/helper/$helper";
+        if (file_exists($path . '.php'))
+          self::loadClass($path);
+  	}
+}
 
-      $path = A_PREFIX . "app/$group/helper/$helper";
-      if (file_exists($path . '.php'))
-        self::ld($path);
-	}
-  }
 ?>

@@ -73,7 +73,7 @@
 	  if (null == self::$driver) {
 		require A_PREFIX.'etc/db/driver.php';
 
-        Aeolus::ld("db/$driver");
+        Aeolus::loadClass("db/$driver");
 	    self::$driver = new $driver();
 	    
 		$this->data = array(

@@ -12,7 +12,7 @@
 	  require A_PREFIX . 'etc/cache/backend.php';
 
 	  $backend = 'Aeo' . $backend . 'Cache';
-	  Aeolus::ld("cache/$backend");
+	  Aeolus::loadClass("cache/$backend");
 
       self::$backend = new $backend();
 	}

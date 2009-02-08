@@ -3,7 +3,7 @@
   /* index controller in index group */
   function index()
   {
-    Aeolus::ld('AeoCache');
+    Aeolus::loadClass('AeoCache');
 	if (!$data = AeoCache::fetch('date')) {
 	  $m = Aeolus::m('WelcomeModel');
 	  $data = $m->get_msg();
