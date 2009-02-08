@@ -11,6 +11,65 @@
 	
 	function __construct()
 	{
+	}
+
+	public final function insert($sql)
+	{
+      $driver = self::getDriver();
+
+	  if ($driver->query($sql)) {
+	    $this->data['affected'] = mysql_affected_rows();
+	    $this->data['lastInsertId'] = mysql_insert_id();
+	  }
+
+	  return $this->data;
+	}
+	
+	public final function update($sql)
+	{
+      $driver = self::getDriver();
+
+	  if ($driver->query($sql))
+	    $this->data['affected'] = mysql_affected_rows();
+
+	  return $this->data;
+	}
+	
+	public final function delete($sql)
+	{
+      $driver = self::getDriver();
+
+	  if ($driver->query($sql))
+	    $this->data['affected'] = mysql_affected_rows();
+	  
+	  return $this->data;
+	}
+	
+	public final function select($sql)
+	{			
+      $driver = self::getDriver();
+
+	  if ($result = $driver->query($sql)) {	        
+	    $this->data['affected'] = mysql_num_rows($result);
+	    if ($this->data['affected'] > 0) {
+		  /* Fetch data */
+	      while ($dataset = mysql_fetch_assoc($result))
+	        $this->data['set'][] = $dataset;
+
+		  $dataset = null;
+	    }
+	  }
+
+	  return $this->data;
+	}
+	
+	public final function escape($v)
+	{
+	  return mysql_real_escape_string($v,self::$driver->get_link());
+	}
+
+    private static final function getDriver()
+    {
 	  if (null == self::$driver) {
 		require A_PREFIX.'etc/db/driver.php';
 
@@ -23,51 +82,8 @@
 		  'set' => array()
 		);
 	  }
-	}
 
-	public final function insert($sql)
-	{
-	  if (self::$driver->query($sql)) {
-	    $this->data['affected'] = mysql_affected_rows();
-	    $this->data['lastInsertId'] = mysql_insert_id();
-	  }
-	  return $this->data;
-	}
-	
-	public final function update($sql)
-	{
-	  if (self::$driver->query($sql))
-	    $this->data['affected'] = mysql_affected_rows();
-
-	  return $this->data;
-	}
-	
-	public final function delete($sql)
-	{
-	  if (self::$driver->query($sql))
-	    $this->data['affected'] = mysql_affected_rows();
-	  
-	  return $this->data;
-	}
-	
-	public final function select($sql)
-	{			
-	  if ($result = self::$driver->query($sql)) {	        
-	    $this->data['affected'] = mysql_num_rows($result);
-	    if ($this->data['affected'] > 0) {
-		  /* Fetch data */
-	      while ($dataset = mysql_fetch_assoc($result))
-	        $this->data['set'][] = $dataset;
-
-		  $dataset = null;
-	    }
-	  }
-	  return $this->data;
-	}
-	
-	public final function escape($v)
-	{
-	  return mysql_real_escape_string($v,self::$driver->get_link());
-	}	
+      return self::$driver;
+    }
   }
 ?>
