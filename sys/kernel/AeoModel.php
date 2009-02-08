@@ -14,7 +14,7 @@
 	  if (null == self::$driver) {
 		require A_PREFIX.'etc/db/driver.php';
 
-        Aeo::ld("db/$driver");
+        Aeolus::ld("db/$driver");
 	    self::$driver = new $driver();
 	    
 		$this->data = array(

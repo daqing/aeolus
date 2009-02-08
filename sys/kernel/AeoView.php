@@ -38,13 +38,13 @@
 
   	public function show_top()
   	{
-  	  Aeo::h('top', 'index');
+  	  Aeolus::h('top', 'index');
   	  top();
   	}
   
   	public function show_nav()
   	{
-  	  Aeo::h('nav', 'index');
+  	  Aeolus::h('nav', 'index');
   	  nav();
   	}
 

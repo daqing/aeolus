@@ -80,7 +80,7 @@
 	  $path = A_PREFIX . "app/$group/controller/$controller.php";    
 
       if (file_exists($path)) {
-	    require 'Aeo.php';
+	    require 'Aeolus.php';
 
 	    /* Setup environment variable */
 	    global $thisgrp;

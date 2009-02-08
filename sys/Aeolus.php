@@ -3,7 +3,7 @@
    * Factory class
    */
   
-  class Aeo
+  class Aeolus
   {
 	private static $loaded = array();
 

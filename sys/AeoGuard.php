@@ -11,7 +11,7 @@
 	public function pf($input)
 	{
 	  if (null === self::$engine) {
-	    Aeo::ld('guard/HTMLPurifier');
+	    Aeolus::ld('guard/HTMLPurifier');
 	    self::$engine = new HTMLPurifier();
 	  }
 
