@@ -6,7 +6,7 @@
      */
   
     if ( 3 > $argc ) {
-        echo "Usage: view [GROUP] [VIEW]...\n";
+        echo "Usage: $argv[0] [GROUP] [VIEW]...\n";
       	echo "Add VIEW(s) to a GROUP.\n\n";
       	echo "Report bugs to <kinch.zhang@gmail.com>.\n";
       	exit(0);
@@ -45,4 +45,5 @@
   	} else {
         echo "[ERROR] The directory '$gpath' doesn't exist or doesn't allow creating files.\n";
     }
+
 ?>

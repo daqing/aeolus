@@ -6,7 +6,7 @@
      */
   
     if (3 > $argc) {
-        echo "Usage: model [GROUP] [MODEL]...\n";
+        echo "Usage: $argv[0] [GROUP] [MODEL]...\n";
       	echo "Add MODEL(s) to a GROUP.\n\n";
       	echo "Report bugs to <kinch.zhang@gmail.com>.\n";
       	exit(0);
@@ -38,4 +38,5 @@
     } else {
         echo "[ERROR] Directory '$group_path' doesn't exist or doesn't allow creating files.\n";
     }
+
 ?>
