@@ -24,7 +24,7 @@
     {
 	  if (APP_DEBUG) {
         ob_start();
-        require A_PREFIX . 'pub/error/mysql_error.html';
+        require A_PREFIX . 'public/error/mysql_error.html';
         ob_end_flush();
 	    exit(0);
 	  } else {

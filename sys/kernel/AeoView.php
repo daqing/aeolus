@@ -17,23 +17,23 @@
     public function show()
     {	
       ob_start();
-  	  require A_PREFIX . 'pub/theme/' . APP_TPL . '.php';
+  	  require A_PREFIX . 'public/theme/' . APP_TPL . '.php';
       ob_end_flush();
     }
   	
     public function show_style()
     {
-      echo SUB_URL . 'pub/theme/' . APP_STYLE . '.css';
+      echo SUB_URL . 'public/theme/' . APP_STYLE . '.css';
     }
       
     public function show_jquery()
     {
-      echo SUB_URL . 'pub/script/jquery-1.2.6.min.js';
+      echo SUB_URL . 'public/script/jquery-1.2.6.min.js';
     }
       
     public function show_jcorner()
     {
-      echo SUB_URL . 'pub/script/jquery.corner-1.92.js';
+      echo SUB_URL . 'public/script/jquery.corner-1.92.js';
     }  
 
   	public function show_top()

@@ -11,7 +11,7 @@
     require 'config/app.php';
 
     if (!APP_ENABLED) {
-      require 'pub/error/aeolus_na.html';
+      require 'public/error/aeolus_na.html';
       die();
     }
   
