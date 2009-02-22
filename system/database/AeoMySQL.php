@@ -10,7 +10,7 @@
     function __construct()
     {
       if (!$this->link) {
-        require A_PREFIX . 'config/db/mysql.php';
+        require A_PREFIX . 'config/system/database/mysql.php';
         $this->link = @mysql_connect("$host:$port", $user, $passwd);
         if (! $this->link) 
           $this->server_error();

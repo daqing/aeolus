@@ -71,9 +71,9 @@
     private static final function getDriver()
     {
 	  if (null == self::$driver) {
-		require A_PREFIX.'config/db/driver.php';
+		require A_PREFIX.'config/system/database/driver.php';
 
-        Aeolus::loadClass("db/$driver");
+        Aeolus::loadClass("database/$driver");
 	    self::$driver = new $driver();
 	    
 		$this->data = array(

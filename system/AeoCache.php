@@ -9,7 +9,7 @@
 
 	private function set_backend()
 	{
-	  require A_PREFIX . 'config/cache/backend.php';
+	  require A_PREFIX . 'config/system/cache/backend.php';
 
 	  $backend = 'Aeo' . $backend . 'Cache';
 	  Aeolus::loadClass("cache/$backend");

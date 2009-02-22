@@ -38,7 +38,7 @@
 	  $seg = (strlen($this->request)) ? explode('/', $this->request) : '/';
 
 	  if ('/' !== $seg && is_array($seg)) {
-	    require A_PREFIX.'config/group.php';
+	    require A_PREFIX.'config/system/group.php';
 
 		$size = count($seg);
 		switch ($size) {
