@@ -1,7 +1,6 @@
 Aeolus 1.1 TODO List
 ====================
-
-1. Plugin system
-2. Refine the whole code base
-3. Redesign the MVC architecture
-4. Design a simple template engine
+1. redesign the modular system
+2. refine the whole codebase
+3. redesign the MVC architecture
+4. to design a simple template engine or use Dwoo(http://dwoo.org/)
