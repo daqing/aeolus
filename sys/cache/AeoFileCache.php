@@ -12,7 +12,7 @@
 	function __construct()
 	{
       // Load configuration
-	  require A_PREFIX .'etc/cache/file.php';
+	  require A_PREFIX .'config/cache/file.php';
 
 	  if (!is_writable(CACHE_DIR)) {
 		$err = 'Error: '. CACHE_DIR .' not writable, please chmod to 777';

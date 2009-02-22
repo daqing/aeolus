@@ -8,7 +8,7 @@
     define('A_PREFIX', dirname(__FILE__).'/');
   
     // Load application configuration
-    require 'etc/app.php';
+    require 'config/app.php';
 
     if (!APP_ENABLED) {
       require 'pub/error/aeolus_na.html';

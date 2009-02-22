@@ -1,3 +1,6 @@
 # Ignored directories
 .project
 .settings
+tmp/
+*.old
+*.swp
