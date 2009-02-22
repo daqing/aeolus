@@ -16,14 +16,14 @@
     }
   
     // Bootstrap
-    require 'sys/bootstrap.php';
+    require 'system/bootstrap.php';
   
     // Load front controller
     require 'kernel/AeoFront.php';
   
   
     // Load Aeolus exception class
-    require 'sys/AeoException.php';
+    require 'system/AeoException.php';
   
     try {
         $front = new AeoFront();
