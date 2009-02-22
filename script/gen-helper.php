@@ -6,7 +6,7 @@
      */
   
     if (3 > $argc) {
-        echo "Usage: helper [GROUP] [HELPER]... \n";
+        echo "Usage: $argv[0] [GROUP] [HELPER]... \n";
       	echo "Add HELPER(s) to a GROUP.\n\n";
       	echo "Report bugs to <kinch.zhang@gmail.com>.\n";
         exit(0);
@@ -38,4 +38,5 @@
             echo "[ERROR] Directory '$gpath' doesn't exist or doesn't allow creating files.\n";
         }
   	}
+
 ?>
