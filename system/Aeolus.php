@@ -42,7 +42,7 @@ class Aeolus
   	      clearstatcache();
   
       $obj = null;
-      $path = A_PREFIX . "app/$group/view/$view";
+      $path = A_PREFIX . "module/$group/view/$view";
       if (file_exists($path . '.php')) {
           self::loadClass('kernel/AeoView');
           self::loadClass($path);
@@ -65,7 +65,7 @@ class Aeolus
   	    clearstatcache();
   
         $obj = null;
-        $path = A_PREFIX . "app/$group/model/$model";
+        $path = A_PREFIX . "module/$group/model/$model";
         if (file_exists($path . '.php')) {
           self::loadClass('kernel/AeoModel');
           self::loadClass($path);
@@ -86,7 +86,7 @@ class Aeolus
   		    $group = $thisgrp;
   	    }
   
-        $path = A_PREFIX . "app/$group/helper/$helper";
+        $path = A_PREFIX . "module/$group/helper/$helper";
         if (file_exists($path . '.php'))
           self::loadClass($path);
   	}

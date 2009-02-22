@@ -16,7 +16,7 @@
 
     $group = $argv[1];
     $views = array_slice($argv, 2);
-    $gpath = AEOLUS_HOME.'/app/'.$group;
+    $gpath = AEOLUS_HOME.'/module/'.$group;
   
     if (file_exists( $gpath ) && is_writable($gpath)) {
   	    foreach ($views as $v) {
