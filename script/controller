@@ -16,11 +16,11 @@
 
     $group = $argv[1];
     $con = array_slice($argv, 2);
-    $gpath = AEOLUS_HOME.'/app/'.$group;
+    $gpath = AEOLUS_HOME.'/module/'.$group;
   
     if (file_exists($gpath) && is_writable($gpath)) {
         foreach ($con as $v) {
-            $path = AEOLUS_HOME.'/app/'.$group.'/controller/'.$v.'.php';
+            $path = $gpath.'/controller/'.$v.'.php';
   	        if (!file_exists($path)) {
       	        if ($res = fopen($path,'w')) {
             	      $content = "<?php\n\n  /* $v controller in $group group */\n  ";
@@ -37,4 +37,5 @@
   	} else {
   	    echo "[ERROR] The directory '$gpath' doesn't exist or doesn't allow creating files.\n";
     }
+
 ?>

@@ -77,7 +77,7 @@
 	  $launched = false;
 
 	  extract($this->result);
-	  $path = A_PREFIX . "app/$group/controller/$controller.php";    
+	  $path = A_PREFIX . "module/$group/controller/$controller.php";    
 
       if (file_exists($path)) {
 	    require 'Aeolus.php';

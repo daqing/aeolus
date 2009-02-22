@@ -17,7 +17,7 @@
     clearstatcache();
 
     for ( $i=1; $i<$argc; $i++) {
-        $path = AEOLUS_HOME."/app/$argv[$i]";
+        $path = AEOLUS_HOME."/module/$argv[$i]";
   
         if (!file_exists($path)) {
     	    @mkdir( $path );

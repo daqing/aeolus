@@ -16,7 +16,7 @@
 
     $group = $argv[1];
     $helpers = array_slice($argv, 2);
-    $gpath = AEOLUS_HOME.'/app/'.$group;
+    $gpath = AEOLUS_HOME.'/module/'.$group;
   
     foreach ($helpers as $h) {
         $hpath = $gpath.'/helper/'.$h.'.php';
