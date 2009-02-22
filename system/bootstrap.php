@@ -10,7 +10,7 @@
 	$GLOBALS['session_started'] = true;
   }
 
-  $path = A_PREFIX.'opt/'.PATH_SEPARATOR;
+  $path = A_PREFIX.'plugin/'.PATH_SEPARATOR;
   $path .= A_PREFIX.'system/'.PATH_SEPARATOR;
   $path .= ini_get('include_path');
   ini_set('include_path',$path);
