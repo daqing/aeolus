@@ -78,7 +78,7 @@ class Aeolus
     }
   
   	/* Load app helper */
-  	public function h($helper, $group = 'this')
+  	public function loadHelper($helper, $group = 'this')
   	{
         if ('this' == $group) {
   	        global $thisgrp;
