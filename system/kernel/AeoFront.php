@@ -13,8 +13,8 @@
 	{
 	  $this->request = strtolower($_SERVER['REQUEST_URI']);
 
-	  $this->result['group'] = 'index';
-	  $this->result['controller'] = 'index';
+	  $this->result['module'] = 'index';
+	  $this->result['controller'] = 'index_index';
 	  $this->result['argv'] = array();
 	}
 
@@ -38,33 +38,38 @@
 	  $seg = (strlen($this->request)) ? explode('/', $this->request) : '/';
 
 	  if ('/' !== $seg && is_array($seg)) {
-	    require A_PREFIX.'config/system/group.php';
+	    require A_PREFIX.'config/system/module.php';
 
 		$size = count($seg);
 		switch ($size) {
 		case 1:
-		  if (in_array($seg[0], $group))
-		    $this->result['group'] = $seg[0];
-		  else
-		    $this->result['controller'] = $seg[0];
+		  if (in_array($seg[0], $module)) {
+              // default controller in this module
+              $this->result['module'] = $seg[0];
+              $this->result['controller'] = $seg[0] . '_index';
+          } else {
+              // this controller in 'index' module
+              $this->result['controller'] = 'index_' . $seg[0];
+          }
 		break;
 		case 2:
-		  if (in_array($seg[0], $group)) {
-		    $this->result['group'] = $seg[0];
-		    $this->result['controller'] = $seg[1];
+		  if (in_array($seg[0], $module)) {
+              $this->result['module'] = $seg[0];
+              $this->result['controller'] = $seg[0] . '_' .$seg[1];
 		  } else {
-		    $this->result['controller'] = $seg[0];
-		    $this->result['argv'][] = $seg[1];
+              // this controller in 'index' group with argv
+		      $this->result['controller'] = 'index_' . $seg[0];
+		      $this->result['argv'][] = $seg[1];
 		  }
 		break;
 		default:
-		  if (in_array($seg[0], $group)) {
-		    $this->result['group'] = $seg[0];
-			$this->result['controller'] = $seg[1];
-			$this->result['argv'] = array_slice($seg, 2);
+		  if (in_array($seg[0], $module)) {
+		      $this->result['module'] = $seg[0];
+			  $this->result['controller'] = $seg[0] . '_' . $seg[1];
+			  $this->result['argv'] = array_slice($seg, 2);
 		  } else {
-		    $this->result['controller'] = $seg[0];
-		    $this->result['argv'] = array_slice($seg, 1);
+		      $this->result['controller'] = 'index_' . $seg[0];
+		      $this->result['argv'] = array_slice($seg, 1);
 		  }
 		break;
 		}
@@ -77,14 +82,14 @@
 	  $launched = false;
 
 	  extract($this->result);
-	  $path = A_PREFIX . "module/$group/controller/$controller.php";    
+	  $path = A_PREFIX . "module/$module/controller/$controller.php";    
 
       if (file_exists($path)) {
 	    require 'Aeolus.php';
 
 	    /* Setup environment variable */
 	    global $thisGroup;
-	    $thisGroup = $group;
+	    $thisGroup = $module;
 
 		/* Load controller */
         // TODO: use output buffer?
@@ -103,11 +108,11 @@
 	private function debug()
 	{
 	  extract($this->result);
-	  if ('index' == $group) {
-	    echo "Fatal: '$controller' is neither a valid group nor a ";
-		echo "controller in 'index' group.";
+	  if ('index' == $module) {
+	    echo "Fatal: '$controller' is neither a valid module nor a ";
+		echo "controller in 'index' module.";
 	  } else {
-	    echo "Fatal: controller '$controller' not found in '$group' group.";
+	    echo "Fatal: controller '$controller' not found in '$module' module.";
 	  }
 	} 
 

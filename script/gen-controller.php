@@ -14,18 +14,18 @@
   
     define('AEOLUS_HOME', dirname(dirname(__FILE__)));
 
-    $group = $argv[1];
+    $module = $argv[1];
     $con = array_slice($argv, 2);
-    $gpath = AEOLUS_HOME.'/module/'.$group;
+    $gpath = AEOLUS_HOME.'/module/'.$module;
   
     if (file_exists($gpath) && is_writable($gpath)) {
         foreach ($con as $v) {
-            $path = $gpath.'/controller/'.$v.'.php';
+            $path = "$gpath/controller/{$module}_{$v}.php";
   	        if (!file_exists($path)) {
       	        if ($res = fopen($path,'w')) {
-            	      $content = "<?php\n\n  /* $v controller in $group group */\n  ";
-            		  $content .= "function $v()\n  {\n    echo 'Hello,world!&nbsp;(From $v";
-            	      $content .= " controller in $group group)';\n  }\n?>";
+            	      $content = "<?php\n\n  /* $v controller in $module module */\n  ";
+            		  $content .= "function {$module}_{$v}()\n  {\n    echo 'Hello,world!&nbsp;(From $v";
+            	      $content .= " controller in $module module)';\n  }\n?>";
             
             		  if (FALSE === fwrite($res, $content))
             		    echo "[ERROR] Can't write content to '$path'.\n";

@@ -2,12 +2,12 @@
 <?php
   
     /*
-     * Add groups
+     * Add modules
      */
   
     if (2 > $argc) {
-        echo "Usage: $argv[0] [GROUP]...\n";
-      	echo "Add GROUP(s).\n\n";
+        echo "Usage: $argv[0] [MODULE]...\n";
+      	echo "Add MODULE(s).\n\n";
       	echo "Report bugs to <kinch.zhang@gmail.com>.\n";
       	exit(0);
     }

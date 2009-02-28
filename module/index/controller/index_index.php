@@ -1,7 +1,7 @@
 <?php
 
   /* index controller in index group */
-  function index()
+  function index_index()
   {
     Aeolus::loadClass('AeoCache');
 	if (!$data = AeoCache::fetch('date')) {
