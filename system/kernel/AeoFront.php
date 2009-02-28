@@ -83,8 +83,8 @@
 	    require 'Aeolus.php';
 
 	    /* Setup environment variable */
-	    global $thisgrp;
-	    $thisgrp = $group;
+	    global $thisGroup;
+	    $thisGroup = $group;
 
 		/* Load controller */
         // TODO: use output buffer?

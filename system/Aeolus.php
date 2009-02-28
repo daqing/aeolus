@@ -1,8 +1,6 @@
 <?php
 
-/*
- * Factory class
- */
+/* Factory class */
     
 class Aeolus
 {
@@ -32,48 +30,50 @@ class Aeolus
      */
     public function newView($view, $group='this')
     {
-  	  if ('this' == $group) {
-  	      global $thisgrp;
+        if ('this' == $group) {
+    	    global $thisGroup;
 
-  		  $group = $thisgrp;
-  	  }
-      
-      if (APP_DEBUG) 
-  	      clearstatcache();
+    	    $group = $thisGroup;
+    	}
+        
+        if (APP_DEBUG) 
+            clearstatcache();
+    
+        $obj = null;
+        $path = A_PREFIX . "module/$group/view/$view";
+        if (file_exists($path . '.php')) {
+            self::loadClass('kernel/AeoView');
+            self::loadClass($path);
+    
+            if (class_exists($view))
+                $obj = new $view();
+        }
   
-      $obj = null;
-      $path = A_PREFIX . "module/$group/view/$view";
-      if (file_exists($path . '.php')) {
-          self::loadClass('kernel/AeoView');
-          self::loadClass($path);
-  
-          if (class_exists($view))
-            $obj = new $view();
-      }
-
-      return $obj;
+        return $obj;
     }
       
   	/* Get an instance of a model class */
     public function newModel($model, $group = 'this')
     {
-  	  if ('this' == $group) {
-  	    global $thisgrp;
-  		$group = $thisgrp;
-  	  }
+        if ('this' == $group) {
+    	    global $thisGroup;
+
+    	    $group = $thisGroup;
+    	}
+
         if (APP_DEBUG)
   	    clearstatcache();
   
         $obj = null;
         $path = A_PREFIX . "module/$group/model/$model";
         if (file_exists($path . '.php')) {
-          self::loadClass('kernel/AeoModel');
-          self::loadClass($path);
-  
-          if (class_exists($model)) {
-            $obj = new $model();
-          }
+            self::loadClass('kernel/AeoModel');
+            self::loadClass($path);
+    
+            if (class_exists($model))
+                $obj = new $model();
         }
+
         return $obj;
     }
   
@@ -81,14 +81,14 @@ class Aeolus
   	public function loadHelper($helper, $group = 'this')
   	{
         if ('this' == $group) {
-  	        global $thisgrp;
+  	        global $thisGroup;
 
-  		    $group = $thisgrp;
+  		    $group = $thisGroup;
   	    }
   
         $path = A_PREFIX . "module/$group/helper/$helper";
         if (file_exists($path . '.php'))
-          self::loadClass($path);
+            self::loadClass($path);
   	}
 }
 
