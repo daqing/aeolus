@@ -30,7 +30,7 @@ class Aeolus
      * Get an instance of a view class
      *
      */
-    public function v($view, $group='this')
+    public function newView($view, $group='this')
     {
   	  if ('this' == $group) {
   	      global $thisgrp;

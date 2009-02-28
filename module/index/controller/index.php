@@ -11,7 +11,7 @@
 	  AeoCache::store($data, 'date');
 	}
 
-	$v = Aeolus::v('IndexView');
+	$v = Aeolus::newView('IndexView');
 	$v->title = 'Home';
 	$v->data = $data;
 
