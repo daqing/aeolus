@@ -55,7 +55,7 @@ class Aeolus
     }
       
   	/* Get an instance of a model class */
-    public function m($model, $group = 'this')
+    public function newModel($model, $group = 'this')
     {
   	  if ('this' == $group) {
   	    global $thisgrp;

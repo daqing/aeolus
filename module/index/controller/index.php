@@ -5,7 +5,7 @@
   {
     Aeolus::loadClass('AeoCache');
 	if (!$data = AeoCache::fetch('date')) {
-	  $m = Aeolus::m('WelcomeModel');
+	  $m = Aeolus::newModel('WelcomeModel');
 	  $data = $m->get_msg();
 
 	  AeoCache::store($data, 'date');
