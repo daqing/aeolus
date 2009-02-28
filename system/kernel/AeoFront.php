@@ -109,10 +109,14 @@
 	{
 	  extract($this->result);
 	  if ('index' == $module) {
-	    echo "Fatal: '$controller' is neither a valid module nor a ";
-		echo "controller in 'index' module.";
+          $origin = substr($controller, strpos($controller, '_') + 1);
+          echo "Fatal: '$origin' is not a valid module name<br/>";
+          echo "Fatal: controller '$controller' not found in 'index' module<br/>";
+          echo "Tips:<br/>";
+          echo "to resolve this fatal error, you could add a '$controller' controller to 'index' module, or<br/>";
+          echo "add '$origin' as a module.";
 	  } else {
-	    echo "Fatal: controller '$controller' not found in '$module' module.";
+	      echo "Fatal: controller '$controller' not found in '$module' module.";
 	  }
 	} 
 
