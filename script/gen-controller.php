@@ -6,8 +6,8 @@
      */
 
     if (3 > $argc) {
-        echo "Usage: $argv[0] [GROUP] [CONTROLLER]... \n";
-      	echo "Add CONTROLLER(s) to a GROUP.\n\n";
+        echo "Usage: $argv[0] [MODULE] [CONTROLLER]... \n";
+      	echo "Add CONTROLLER(s) to a MODULE.\n\n";
       	echo "Report bugs to <kinch.zhang@gmail.com>.\n";
       	exit(0);
     }
