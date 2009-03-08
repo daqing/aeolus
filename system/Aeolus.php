@@ -56,13 +56,15 @@
                 clearstatcache();
 
             $obj = null;
-            $path = A_PREFIX . "module/$module/model/$model";
+
+            $modelClass = ucfirst($module) . $model . 'Model';
+            $path = A_PREFIX . "module/$module/model/" . $modelClass;
             if (file_exists($path . '.php')) {
                 self::loadClass('kernel/AeoModel');
                 self::loadClass($path);
 
-                if (class_exists($model))
-                    $obj = new $model();
+                if (class_exists($modelClass))
+                    $obj = new $modelClass();
             }
 
             return $obj;
