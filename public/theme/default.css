@@ -58,8 +58,8 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 #content {
-  margin: 0px 5px;
-  width: 76%;
+  margin: 0 0 0 20px;
+  width: 78%;
 }
 
 #bottom {

@@ -86,13 +86,14 @@
                 clearstatcache();
 
             $obj = null;
-            $path = A_PREFIX . "module/$module/view/$view";
+            $viewClass = ucfirst($module) . $view . 'View';
+            $path = A_PREFIX . "module/$module/view/$viewClass";
             if (file_exists($path . '.php')) {
                 self::loadClass('kernel/AeoView');
                 self::loadClass($path);
 
-                if (class_exists($view))
-                    $obj = new $view();
+                if (class_exists($viewClass))
+                    $obj = new $viewClass();
             }
 
             return $obj;
