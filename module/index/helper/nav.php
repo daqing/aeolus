@@ -3,6 +3,6 @@
   /* nav helper in index group */
   function nav()
   {
-    echo '<a href="'. OP_BASE .'">Home</a>';
+    echo '<a href="'. BASE_URL .'">Home</a>';
   }
 ?>

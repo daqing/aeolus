@@ -28,7 +28,7 @@
 	private function process()
 	{
 	  /* Remove output base url from the request */
-	  $this->request = substr($this->request, strlen(OP_BASE));
+	  $this->request = substr($this->request, strlen(BASE_URL));
 	  $this->request = trim($this->request, '/\\');
 
 	  if (strpos($this->request, '(') || strpos($this->request, '%'))
@@ -122,7 +122,7 @@
 
 	private function to_home()
 	{
-	  header('Location: ' . SUB_URL );
+	  header('Location: ' . SUB_DIR);
 	  exit(0);
 	}
   }
