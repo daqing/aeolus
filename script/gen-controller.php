@@ -24,8 +24,8 @@
             if (!file_exists($path)) {
                 if ($res = fopen($path,'w')) {
                     $content = "<?php\n\n    /* $v controller in $module module */\n    ";
-                    $content .= "function {$module}_{$v}()\n    {\n        echo 'Hello,world!&nbsp;(From '$v'";
-                    $content .= " controller in '$module' module)';\n  }\n?>";
+                    $content .= "function {$module}_{$v}()\n    {\n        echo 'Hello,world!&nbsp;(From \'$v\'";
+                    $content .= " controller in \'$module\' module)';\n    }\n?>";
 
                     if (FALSE === fwrite($res, $content))
                         echo "[ERROR] Can't write content to '$path'.\n";
@@ -37,4 +37,4 @@
     } else
         echo "[ERROR] The directory '$gpath' doesn't exist or doesn't allow creating files.\n";
 
-?
+?>
