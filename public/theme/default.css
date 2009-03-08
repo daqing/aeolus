@@ -9,11 +9,9 @@ html,body {
 	color: #000;
 }
 
-table{
-  width:80%;
-  position:relative;
-  left:50%;
-  margin-left:-40%;
+#main {
+    width:960px;
+    margin: 0 auto;
 }
 
 img {

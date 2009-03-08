@@ -1,6 +1,6 @@
 <?php
     /**
-	 * Aeolus template
+	 * Default template for Aeolus system
 	 *
 	 * @author Kinch Zhang <kinch.zhang@gmail.com>
 	 */   
@@ -9,45 +9,31 @@
     "http://www.w3.org/tr/xhtml1/DTD/xhtml1-transitional.dtd">
     <html><head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<!-- Cache control -->
     <title><?php echo $this->title;?></title>
     <link href="<?php $this->show_style();?>" rel="stylesheet" type="text/css" />
     </head>
     
-    <body>
-	<table width="960" border="0" cellspacing="0" cellpadding="0">
-      <!-- Top -->
-      <tr><td>
+    <body id="trackgeek">
+    <div id="main">
+        <!-- Top -->
 	    <div id="top"><?php $this->show_top();?></div>
-	  </td></tr>
-      
-      <!-- Navigator -->
-	  <tr><td>
+
+        <!-- Navigator -->
 	    <div id="nav"><?php $this->show_nav()?></div>
-	  </td></tr>
-
-     <!-- Middle -->
-      <tr><td>
-        <!-- Main -->
-        <div id="main"> 
-          <div id="notice"></div>
-	      <div id="content"><?php $this->show_content();?></div>
-        </div>           
-
+        
         <!-- sidebar -->
         <div id="sidebar"><? $this->show_sidebar();?></div>
-      </td></tr>
+        <div id="notice"></div>
+	    <div id="content"><?php $this->show_content();?></div>
 
-      <!-- Bottom -->
-	  <tr><td>
+        <!-- Bottom -->
 	    <div id="bottom">Powered by
 		  <a href="http://github.com/kinch/aeolus/tree/master/">Aeolus</a>
 		  &middot;&nbsp;&copy;&nbsp;Copyright 2008-2009,
 		  <a href="mailto:kinch.zhang@gmail.com">Kinch Zhang (a.k.a daqing)</a>
 		  &middot;&nbsp;All Rights Reserved   
         </div>
-	  </td></tr>
-    </table>
+    </div>
 
 	<!-- JavaScript -->
     <script type="text/javascript" src="<?php $this->show_jquery();?>"></script>
