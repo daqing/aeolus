@@ -89,11 +89,10 @@
         require 'Aeolus.php';
 
         /* Setup environment variable */
-        global $thisGroup;
-        $thisGroup = $module;
+        global $thisModule;
+        $thisModule = $module;
 
         /* Load controller */
-        // TODO: use output buffer?
         require($path);
 
         if (function_exists($controller)) {
