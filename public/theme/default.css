@@ -1,107 +1,99 @@
 /* Default theme */
 
 html,body {
-	background-color:white;
+	background-color: white;
 	font-family: Verdana, "Lucida Grande", "Lucida Sans", sans, Hei;
-    font-size:11pt;
-	margin:0px;
-	padding:0px;
+    font-size: 11pt;
+	margin: 0px;
+	padding: 0px;
 	color: #000;
 }
 
 #main {
-    width:960px;
+    width: 960px;
     margin: 0 auto;
 }
 
 img {
-  border:0px;
+  border: 0px;
 }
 
-h1,h2,h3,h4,h5,h6,p{
-  margin:5px;
+h1, h2, h3, h4, h5, h6, p {
+  margin: 5px;
 }
 
 #top {
-  margin-top:5px;
+  margin-top: 5px;
 }
 
-#nav{
-  text-align:left;
-  padding:5px 20px;
-  margin-bottom:10px;
+#nav {
+  text-align: left;
+  padding: 5px 20px;
+  margin-bottom: 10px;
   background: #D8E5F1;
 }
 
-#nav a:link, #nav a:visited{
-  display:inline;
-  text-decoration:none;
-  margin-right:13px;
+#nav a:link, #nav a:visited {
+  display: inline;
+  text-decoration: none;
+  margin-right: 13px;
 }
 
-#nav a:hover{
-  display:inline;
-  text-decoration:underline;
+#nav a:hover {
+  display: inline;
+  text-decoration: underline;
 }
 
 #sidebar {
-  position:relative;
-  right:10px;
-  top:10px;
-  text-align:left;
-  margin-left:80%;
-  padding:2px 10px;
+  float: right;
+  margin: 0 20px 0 0;
+  padding: 2px 10px;
   background: #D8E5F1;
 }
 
-#sidebar a{
-  display:block;
-  margin:4px 0px;
-  padding:2px 14px;
+#sidebar a {
+  display: block;
+  margin: 4px 0px;
+  padding: 2px 14px;
 }
 
-#main {      
-    float:left;
-	width:76%;
-	margin:10px 5px 10px 15px;
-}
-
-#content{	
-  margin:0px 5px;
+#content {	
+  margin: 0px 5px;
+  width: 76%;
 }
 
 #bottom {
-	margin-top:20px;
-	padding:10px 0px 5px 20px;
-	text-align:left;
-    font-size:9pt;
-    color:#5762A8;
-    border-top:1px solid #EBEBEB;
+	margin-top: 20px;
+	padding: 10px 0px 5px 20px;
+	text-align: left;
+    font-size: 9pt;
+    color: #5762A8;
+    border-top: 1px solid #EBEBEB;
 }
 
 a:link, a:active, a:visited, a:hover {
-    text-decoration:underline;
-    color:#5762A8;
+    text-decoration: underline;
+    color: #5762A8;
 }
 
 label {
-  font-size:10pt;    
+  font-size: 10pt;    
 }
 
-ul{
-  margin:0px;
-  text-align:left;
-  font-size:10pt;
+ul {
+  margin: 0px;
+  text-align: left;
+  font-size: 10pt;
 }
 
-ul li{
-  list-style-type:none;
-  margin:2px 0px; 
-  background-color:#EFEFEF;
+ul li {
+  list-style-type: none;
+  margin: 2px 0px; 
+  background-color: #EFEFEF;
 }
 
 .section {
-  margin-bottom:8px;
-  padding:4px 10px;
-  background-color:#EFEFEF;
+  margin-bottom: 8px;
+  padding: 4px 10px;
+  background-color: #EFEFEF;
 }
