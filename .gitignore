@@ -5,3 +5,4 @@ tmp/
 *.old
 *.swp
 tags
+cached
