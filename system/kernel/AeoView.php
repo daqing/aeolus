@@ -2,7 +2,7 @@
     /*
      * View class
      */
-  
+
     class AeoView
     {
         public $title = 'Index';
@@ -24,7 +24,7 @@
           
         public function show_jquery()
         {
-            echo SUB_DIR . 'public/script/jquery-1.2.6.min.js';
+            echo SUB_DIR . 'public/script/jquery-1.3.2.js';
         }
           
         public function show_jcorner()
