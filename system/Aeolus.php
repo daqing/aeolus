@@ -24,7 +24,13 @@
             }
         }
 
-        /* Load module controller */
+        /**
+         * Load module controller
+         *
+         * @param string $controller controller name
+         * @param string $module module name
+         * @returns string $action action to be called directly
+         */
         public function loadController($controller, $module='this')
         {
             if ('this' == $module) {
@@ -33,13 +39,19 @@
                 $module = $thisModule;
             }
 
-            $path = A_PREFIX . "module/$module/controller/{$module}_{$controller}.php";
+            $action = $module . '_' . $controller;
+
+            $path = A_PREFIX . "module/$module/controller/$action.php";
 
             if (APP_DEBUG)
                 clearstatcache();
 
             if (file_exists($path)) {
                 require $path;
+
+                return $action;
+            } else {
+                throw new AeoException('controller_not_found');
             }
         }
 

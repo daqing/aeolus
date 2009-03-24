@@ -1,4 +1,3 @@
-#! /usr/bin/php
 <?php
 
     /*
@@ -6,9 +5,12 @@
      */
 
     if (3 > $argc) {
-        echo "Usage: $argv[0] [MODULE] [MODEL]...\n";
-        echo "Add MODEL(s) to a MODULE.\n\n";
-        echo "Report bugs to <kinch.zhang@gmail.com>.\n";
+        echo "Usage: php $argv[0] MODULE MODEL...\n",
+            "Add MODEL(s) to a MODULE.\n",
+            "Options:\n",
+            "\tMODULE - module name\n",
+            "\tMODEL - one or more model names\n\n",
+            "Report bugs to <kinch.zhang@gmail.com>.\n";
         exit(0);
     }
 

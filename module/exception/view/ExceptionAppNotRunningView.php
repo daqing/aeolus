@@ -1,24 +1,18 @@
 <?php
 
-    /* IndexIndexView class in index module */
-    class IndexIndexView extends AeoView
+    /* ExceptionAppNotRunningView class in exception module */
+    class ExceptionAppNotRunningView extends AeoView
     {
         public function show_sidebar()
         {
-            echo '<div>',
-                'Aeolus Home',
-                '</div>';
+            echo 'sidebar';
         }
 
         public function show_content()
         {
             echo '<div class="section">',
-                'Aeolus is an open-source PHP framework designed for productive Web development.',
-                '</div>',
-                '<div class="section">',
-                $this->data,
+                '<p>App is not running</p>',
                 '</div>';
-
         }
 
         public function show_script()

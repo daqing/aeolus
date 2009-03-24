@@ -21,8 +21,9 @@
 
         public function run()
         {
-          $this->process();
-          $this->launch();
+            $this->process();
+
+            $this->launch();
         }
 
         /* Process the HTTP request */
@@ -90,7 +91,6 @@
             $path = A_PREFIX . "module/$module/controller/$controller.php";
 
             if (file_exists($path)) {
-                require 'Aeolus.php';
 
                 /* Setup environment variable */
                 global $thisModule;

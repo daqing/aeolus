@@ -1,4 +1,3 @@
-#! /usr/bin/php
 <?php
 
     /*
@@ -6,9 +5,12 @@
      */
 
     if (3 > $argc) {
-        echo "Usage: $argv[0] [MODULE] [CONTROLLER]... \n";
-        echo "Add CONTROLLER(s) to a MODULE.\n\n";
-        echo "Report bugs to <kinch.zhang@gmail.com>.\n";
+        echo "Usage: php $argv[0] MODULE CONTROLLER...\n",
+            "Add CONTROLLER(s) to a MODULE.\n",
+            "Options:\n",
+            "\tMODULE - module name\n",
+            "\tCONTROLLER - one or more controller names\n\n",
+            "Report bugs to <kinch.zhang@gmail.com>.\n";
         exit(0);
     }
 
@@ -24,7 +26,7 @@
             if (!file_exists($path)) {
                 if ($res = fopen($path,'w')) {
                     $content = "<?php\n\n    /* $v controller in $module module */\n    ";
-                    $content .= "function {$module}_{$v}()\n    {\n        echo 'Hello,world!&nbsp;(From \'$v\'";
+                    $content .= "function {$module}_{$v}(\$argv)\n    {\n        echo 'Hello,world!&nbsp;(From \'$v\'";
                     $content .= " controller in \'$module\' module)';\n    }\n?>";
 
                     if (FALSE === fwrite($res, $content))
@@ -34,7 +36,8 @@
 
             }
         }
-    } else
+    } else {
         echo "[ERROR] The directory '$gpath' doesn't exist or doesn't allow creating files.\n";
+    }
 
 ?>

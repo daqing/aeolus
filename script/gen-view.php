@@ -1,4 +1,3 @@
-#! /usr/bin/php
 <?php
 
     /*
@@ -6,9 +5,12 @@
      */
 
     if ( 3 > $argc ) {
-        echo "Usage: $argv[0] [MODULE] [VIEW]...\n";
-        echo "Add VIEW(s) to a MODULE.\n\n";
-        echo "Report bugs to <kinch.zhang@gmail.com>.\n";
+        echo "Usage: php $argv[0] MODULE VIEW...\n",
+            "Add VIEW(s) to a MODULE.\n",
+            "Options:\n",
+            "\tMODULE - module name\n",
+            "\tVIEW - one or more view names\n\n",
+            "Report bugs to <kinch.zhang@gmail.com>.\n";
         exit(0);
     }
 
@@ -32,7 +34,7 @@
                     $content .= "\n            # echo '<script type=\"text/javascript\" ";
                     $content .= "src=\"\"></script>';";
                     $content .= "\n            ?>\n            <script type=\"text/javascript\">";
-                    $content .= "\n                alert('Hello, Aeolus');";
+                    $content .= "\n                //alert('Hello, Aeolus');";
                     $content .= "\n            </script>\n            <?php\n        }\n";
                     $content .= "    }\n?>";
 

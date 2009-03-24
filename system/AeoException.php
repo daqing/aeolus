@@ -1,21 +1,26 @@
 <?php
-    
+
     /*
      * Aeolus exception class
      *
      */
-    
+
     class AeoException extends Exception
     {
-        public function __construct($message, $code=0)
+        private $level;
+        private $handler;
+
+        public function __construct($handler, $level=0)
         {
-            parent::__construct($message, $code);
+            $this->level = $level;
+            $this->handler = $handler;
         }
-  
-        public function __toString()
+
+        public function handle()
         {
-            return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+            $action = Aeolus::loadController($this->handler, 'exception');
+
+            $action($this->level);
         }
-  
     }
 ?>

@@ -6,3 +6,4 @@ tmp/
 *.swp
 tags
 cached
+cscope.*

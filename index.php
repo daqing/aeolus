@@ -5,33 +5,38 @@
      *
      */
 
-    define('A_PREFIX', dirname(__FILE__).'/');
-
-    // Load application configuration
-    require 'config/system/app.php';
-
-    if (!APP_ENABLED) {
-      require 'public/error/aeolus_na.html';
-      die();
-    }
-
-    // Bootstrap
-    require 'system/bootstrap.php';
-
-    // Load front controller
-    require 'kernel/AeoFront.php';
-
-
-    // Load Aeolus exception class
-    require 'system/AeoException.php';
-
     try {
+        define('A_PREFIX', dirname(__FILE__) . '/');
+
+        // Load application configuration
+        require 'config/system/app.php';
+
+        // Bootstrap
+        require 'system/bootstrap.php';
+
+        // Load Aeolus factory class
+        require 'Aeolus.php';
+
+        // Load Aeolus Exception class
+        require 'AeoException.php';
+
+
+        if (! APP_ENABLED) {
+            throw new AeoException('app_not_running');
+        }
+
+        // Load front controller
+        require 'kernel/AeoFront.php';
+
         $front = new AeoFront();
 
         $front->run();
     } catch (AeoException $e) {
-        // TODO: display user-friendly error page
-        die($e->getMessage());
+        global $thisModule;
+
+        $thisModule = 'exception';
+
+        $e->handle();
     }
 
 ?>
