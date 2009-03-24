@@ -7,12 +7,12 @@
 
     class AeoException extends Exception
     {
-        private $level;
+        private $argv;
         private $handler;
 
-        public function __construct($handler, $level=0)
+        public function __construct($handler, $argv=0)
         {
-            $this->level = $level;
+            $this->argv = $argv;
             $this->handler = $handler;
         }
 
@@ -20,7 +20,7 @@
         {
             $action = Aeolus::loadController($this->handler, 'exception');
 
-            $action($this->level);
+            $action($this->argv);
         }
     }
 ?>

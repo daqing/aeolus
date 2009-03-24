@@ -90,12 +90,11 @@
 
             $path = A_PREFIX . "module/$module/controller/$controller.php";
 
+            /* Setup environment variable */
+            global $thisModule;
+            $thisModule = $module;
+
             if (file_exists($path)) {
-
-                /* Setup environment variable */
-                global $thisModule;
-                $thisModule = $module;
-
                 /* Load controller */
                 require($path);
 
@@ -106,27 +105,12 @@
             }
 
             if (!$launched)
-                (APP_DEBUG) ? $this->debug() : $this->to_home();
-        }
+            {
+                // use wildcard url handler
+                $action = Aeolus::loadController('wildcard', 'index');
 
-        private function debug()
-        {
-            extract($this->result);
-            if ('index' == $module) {
-                $origin = substr($controller, strpos($controller, '_') + 1);
-                echo "<span style=\"color:red;\">Fatal: </span>'$origin' is not a valid module name<br/>";
-                echo "<span style=\"color:red;\">Fatal: </span>controller '$controller' not found in 'index' module<br/>";
-                echo '<div style="color:green;">Tips:</div>';
-                echo "to resolve this fatal error, you could add a '$controller' controller to 'index' module, or<br/>";
-                echo "add '$origin' as a module.";
-            } else
-              echo "<span style=\"color:red;\">Fatal: </span>controller '$controller' not found in '$module' module.";
-        }
-
-        private function to_home()
-        {
-            header('Location: ' . SUB_DIR);
-            exit(0);
+                $action($this->request);
+            }
         }
     }
 ?>

@@ -51,7 +51,9 @@
 
                 return $action;
             } else {
-                throw new AeoException('controller_not_found');
+                throw new AeoException('controller_not_found',
+                    array('module' => $module, 'controller' => $controller)
+                );
             }
         }
 
