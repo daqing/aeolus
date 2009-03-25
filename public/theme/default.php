@@ -10,7 +10,7 @@
     <html><head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title><?php echo $this->title;?></title>
-    <link href="<?php $this->show_style();?>" rel="stylesheet" type="text/css" />
+    <?php $this->show_style(); ?>
     </head>
 
     <body id="trackgeek">
@@ -39,7 +39,6 @@
     <?php $this->show_script();?> 
     <script type="text/javascript"> 
       $(function(){
-            $("#sidebar").corner();
             $(".section").corner();
       });
     </script>

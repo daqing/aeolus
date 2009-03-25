@@ -16,6 +16,7 @@
 
         public function show_script()
         {
+            parent::show_script();
             # echo '<script type="text/javascript" src=""></script>';
             ?>
             <script type="text/javascript">

@@ -20,17 +20,20 @@ class AeoView
 
     public function show_style()
     {
-        echo SUB_DIR . 'public/theme/' . APP_STYLE . '.css';
+        echo '<link type="text/css" href="' , SUB_DIR, 'public/theme/',
+            APP_STYLE, '.css" rel="stylesheet" />',
+            '<link type="text/css" href="', SUB_DIR,
+            'public/script/jquery-ui-1.7.1.css" rel="stylesheet" />';
     }
 
     public function show_jquery()
     {
-        echo SUB_DIR . 'public/script/jquery-1.3.2.js';
+        echo SUB_DIR, 'public/script/jquery-1.3.2.js';
     }
 
     public function show_jcorner()
     {
-        echo SUB_DIR . 'public/script/jquery.corner-1.92.js';
+        echo SUB_DIR, 'public/script/jquery.corner-1.92.js';
     }
 
     public function show_top()
@@ -48,6 +51,8 @@ class AeoView
 
     public function show_script()
     {
+        echo '<script type="text/javascript" src="', SUB_DIR,
+            'public/script/jquery-ui-1.7.1.js"></script>';
     }
 
     public function show_content()

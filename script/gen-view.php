@@ -30,6 +30,7 @@
                     $content .= "class $viewClass extends AeoView\n    {";
                     $content .= "\n        public function show_content()\n        {\n        }\n";
                     $content .= "\n        public function show_script()\n        {";
+                    $content .= "\n            parent::show_script();";
                     $content .= "\n            # echo '<script type=\"text/javascript\" ";
                     $content .= "src=\"\"></script>';";
                     $content .= "\n            ?>\n            <script type=\"text/javascript\">";
