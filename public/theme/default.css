@@ -18,6 +18,13 @@ img {
   border: 0px;
 }
 
+code {
+    background-color: #D8E5F1;
+    color: black;
+    padding: 5px;
+    margin: 10px;
+}
+
 h1, h2, h3, h4, h5, h6, p {
   margin: 5px;
 }
@@ -89,6 +96,7 @@ ul {
 ul li {
   list-style-type: none;
   margin: 2px 0px;
+  padding: 5px;
   background-color: #EFEFEF;
 }
 

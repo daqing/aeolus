@@ -108,6 +108,10 @@
 
                 if (class_exists($viewClass))
                     $obj = new $viewClass();
+                else
+                    throw new AeoException('view_not_defined', array('module' => $module, 'view' => $view));
+            } else {
+                throw new AeoException('view_not_exists', array('module' => $module, 'view' => $view));
             }
 
             return $obj;

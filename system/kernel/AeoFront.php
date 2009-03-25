@@ -12,7 +12,7 @@
 
         function __construct()
         {
-          $this->request = strtolower($_SERVER['REQUEST_URI']);
+          $this->request = $_SERVER['REQUEST_URI'];
 
           $this->result['module'] = 'index';
           $this->result['controller'] = 'index_index';
@@ -30,16 +30,12 @@
         private function process()
         {
             /* Remove base url from request */
-            $this->request = substr($this->request, strlen(BASE_URL));
-            $this->request = trim($this->request, '/\\');
-
-            if (strpos($this->request, '(') || strpos($this->request, '%'))
-                return;
+            $request = trim(substr(strtolower($this->request), strlen(BASE_URL)), '/\\');
 
             /* Get segments */
-            $seg = (strlen($this->request)) ? explode('/', $this->request) : '/';
+            $seg = (strlen($request)) ? explode('/', $request) : '/';
 
-            if ('/' !== $seg && is_array($seg)) {
+            if ('/' !== $seg) {
                 require A_PREFIX . 'config/system/module.php';
 
                 $size = count($seg);
@@ -84,8 +80,6 @@
         /* Launch application controllers */
         private function launch()
         {
-            $launched = false;
-
             extract($this->result);
 
             $path = A_PREFIX . "module/$module/controller/$controller.php";
@@ -96,20 +90,28 @@
 
             if (file_exists($path)) {
                 /* Load controller */
-                require($path);
+                require $path;
 
                 if (function_exists($controller)) {
-                    $launched = true;
                     $controller($this->result['argv']);
+                } else {
+                    throw new AeoException('controller_not_defined', array('module' => $module, 'controller' => $controller));
                 }
-            }
+            } else {
+                // looking for wildcard handler
+                $wildcard = $module . '_wildcard';
+                $wild_path = A_PREFIX . "module/$module/controller/$wildcard.php";
+                if (file_exists($wild_path)) {
+                    require $wild_path;
 
-            if (!$launched)
-            {
-                // use wildcard url handler
-                $action = Aeolus::loadController('wildcard', 'index');
-
-                $action($this->request);
+                    if (function_exists($wildcard)) {
+                        $wildcard($this->request);
+                    } else {
+                        throw new AeoException('wildcard_not_defined', array('module' => $module, 'controller' => $controller, 'url' => $this->request));
+                    }
+                } else {
+                    throw new AeoException('route_failed', array('module' => $module, 'controller' => $controller, 'url' => $this->request));
+                }
             }
         }
     }
