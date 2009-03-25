@@ -28,7 +28,6 @@
                 if ($res = fopen($vpath, 'w')) {
                     $content = "<?php\n\n    /* $viewClass class in $module module */\n    ";
                     $content .= "class $viewClass extends AeoView\n    {";
-                    $content .= "\n        public function show_sidebar()\n        {\n        }\n";
                     $content .= "\n        public function show_content()\n        {\n        }\n";
                     $content .= "\n        public function show_script()\n        {";
                     $content .= "\n            # echo '<script type=\"text/javascript\" ";

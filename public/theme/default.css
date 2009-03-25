@@ -51,22 +51,9 @@ h1, h2, h3, h4, h5, h6, p {
   text-decoration: underline;
 }
 
-#sidebar {
-  float: right;
-  margin: 0 20px 0 0;
-  padding: 2px 10px;
-  background: #D8E5F1;
-}
-
-#sidebar a {
-  display: block;
-  margin: 4px 0px;
-  padding: 2px 14px;
-}
-
 #content {
-  margin: 0 0 0 20px;
-  width: 76%;
+  margin: 0 auto;
+  width: 90%;
 }
 
 #bottom {

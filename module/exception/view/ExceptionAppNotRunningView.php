@@ -3,11 +3,6 @@
     /* ExceptionAppNotRunningView class in exception module */
     class ExceptionAppNotRunningView extends AeoView
     {
-        public function show_sidebar()
-        {
-            echo 'sidebar';
-        }
-
         public function show_content()
         {
             echo '<div class="section">',

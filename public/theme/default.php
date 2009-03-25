@@ -21,8 +21,6 @@
         <!-- Navigator -->
         <div id="nav"><?php $this->show_nav()?></div>
 
-        <!-- sidebar -->
-        <div id="sidebar"><?php $this->show_sidebar();?></div>
         <div id="notice"></div>
         <div id="content"><?php $this->show_content();?></div>
 

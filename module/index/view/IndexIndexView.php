@@ -3,13 +3,6 @@
     /* IndexIndexView class in index module */
     class IndexIndexView extends AeoView
     {
-        public function show_sidebar()
-        {
-            echo '<div>',
-                'Aeolus Home',
-                '</div>';
-        }
-
         public function show_content()
         {
             echo '<div class="section">',

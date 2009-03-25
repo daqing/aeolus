@@ -3,11 +3,6 @@
     /* ExceptionRouteFailedView class in exception module */
     class ExceptionRouteFailedView extends AeoView
     {
-        public function show_sidebar()
-        {
-            echo 'route failed';
-        }
-
         public function show_content()
         {
             echo '<div class="section">',

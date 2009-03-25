@@ -50,10 +50,6 @@ class AeoView
     {
     }
 
-    public function show_sidebar()
-    {
-    }
-
     public function show_content()
     {
     }

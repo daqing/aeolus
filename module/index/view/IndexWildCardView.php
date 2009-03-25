@@ -3,11 +3,6 @@
     /* IndexWildCardView class in index module */
     class IndexWildCardView extends AeoView
     {
-        public function show_sidebar()
-        {
-            echo 'wildcard url handler';
-        }
-
         public function show_content()
         {
             echo '<div class="section">',

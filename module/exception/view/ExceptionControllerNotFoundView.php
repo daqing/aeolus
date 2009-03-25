@@ -3,11 +3,6 @@
     /* ExceptionControllerNotFoundView class in exception module */
     class ExceptionControllerNotFoundView extends AeoView
     {
-        public function show_sidebar()
-        {
-            echo 'error';
-        }
-
         public function show_content()
         {
             echo '<div class="section">',
