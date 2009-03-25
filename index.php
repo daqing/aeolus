@@ -20,9 +20,13 @@
         // Load Aeolus Exception class
         require 'AeoException.php';
 
+        global $thisModule;
 
         if (! APP_ENABLED) {
-            throw new AeoException('app_not_running');
+            $thisModule = 'exception';
+
+            $action = Aeolus::loadController('app_not_running', 'exception');
+            $action();
         }
 
         // Load front controller
@@ -33,7 +37,6 @@
         $front->run();
     } catch (AeoException $e) {
         global $thisModule;
-
         $thisModule = 'exception';
 
         $e->handle();

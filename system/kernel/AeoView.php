@@ -16,6 +16,7 @@ class AeoView
         ob_start();
         require A_PREFIX . 'public/theme/' . APP_TPL . '.php';
         ob_end_flush();
+        exit(0);
     }
 
     public function show_style()

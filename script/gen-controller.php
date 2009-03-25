@@ -26,7 +26,7 @@
             if (!file_exists($path)) {
                 if ($res = fopen($path,'w')) {
                     $content = "<?php\n\n    /* $v controller in $module module */\n    ";
-                    $content .= "function {$module}_{$v}(\$argv)\n    {\n        echo 'Hello,world!&nbsp;(From \'$v\'";
+                    $content .= "function {$module}_{$v}(\$argv=null)\n    {\n        echo 'Hello,world!&nbsp;(From \'$v\'";
                     $content .= " controller in \'$module\' module)';\n    }\n?>";
 
                     if (FALSE === fwrite($res, $content))

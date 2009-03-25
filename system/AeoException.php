@@ -18,9 +18,32 @@
 
         public function handle()
         {
-            $action = Aeolus::loadController($this->handler, 'exception');
+            try {
+                $action = Aeolus::loadController($this->handler, 'exception');
 
-            $action($this->argv);
+                $action($this->argv);
+            } catch (AeoException $e) {
+                echo $e->toString();
+            }
+        }
+
+        public function toString()
+        {
+            return 'An exception occurred:'.
+                '<ul>'.
+                '<li>hander: \''. $this->handler. '\'</li>'.
+                '<li>argv: '. $this->format_argv() . '</li>'.
+                '</ul>';
+        }
+
+        private function format_argv()
+        {
+            $str = 'Array(';
+
+            foreach ($this->argv as $k => $v)
+                $str .= "'$k' => '$v', ";
+
+            return $str . ');';
         }
     }
 ?>
