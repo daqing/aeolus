@@ -36,10 +36,25 @@
 
         $front->run();
     } catch (AeoException $e) {
+        // handle exception
         global $thisModule;
         $thisModule = 'exception';
 
-        $e->handle();
-    }
+        // load exception handler
+        $action = 'exception_' . $e->handler;
+        $path = A_PREFIX . "module/exception/controller/$action.php";
 
+        if (is_file($path)) {
+            require $path;
+
+            if (function_exists($action)) {
+                $action($e->argv);
+            } else {
+                die('Error: exception handler "<em>' . $e->handler . '</em>" not <strong>defined</strong>.');
+            }
+        } else {
+            // controller not exists
+            die('Error: exception handler "<em>' . $e->handler . '</em>" not <strong>exists</strong>.');
+        }
+    }
 ?>

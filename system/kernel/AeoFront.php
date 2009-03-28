@@ -88,7 +88,7 @@
             global $thisModule;
             $thisModule = $module;
 
-            if (file_exists($path)) {
+            if (is_file($path)) {
                 /* Load controller */
                 require $path;
 
@@ -101,7 +101,7 @@
                 // looking for wildcard handler
                 $wildcard = $module . '_wildcard';
                 $wild_path = A_PREFIX . "module/$module/controller/$wildcard.php";
-                if (file_exists($wild_path)) {
+                if (is_file($wild_path)) {
                     require $wild_path;
 
                     if (function_exists($wildcard)) {
