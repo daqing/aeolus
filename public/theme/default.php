@@ -1,45 +1,28 @@
-<?php
-    /**
-     * Default template for Aeolus system
-     *
-     * @author Kinch Zhang <kinch.zhang@gmail.com>
-     */
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 transitional//EN" 
+<!-- default template -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 transitional//EN"
     "http://www.w3.org/tr/xhtml1/DTD/xhtml1-transitional.dtd">
-    <html><head>
+<html>
+    <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title><?php echo $this->title;?></title>
-    <?php $this->show_style(); ?>
+    <title><?php echo $this->title; ?></title>
+    <?php $this->show_head() ?>
     </head>
-
-    <body id="trackgeek">
+    <body>
     <div id="main">
-        <!-- Top -->
-        <div id="top"><?php $this->show_top();?></div>
-
-        <!-- Navigator -->
-        <div id="nav"><?php $this->show_nav()?></div>
-
-        <div id="notice"></div>
-        <div id="content"><?php $this->show_content();?></div>
-
-        <!-- Bottom -->
-        <div id="bottom">Powered by
-           <a href="http://github.com/kinch/aeolus/tree/master/">Aeolus</a>
-           &middot;&nbsp;&copy;&nbsp;Copyright 2008-2009,
-           <a href="mailto:kinch.zhang@gmail.com">Kinch Zhang (a.k.a daqing)</a>
-           &middot;&nbsp;All Rights Reserved   
+        <div id="top_panel">
+        <?php $this->show_top_panel(); ?>
         </div>
-    </div>
 
-    <!-- JavaScript -->
-    <script type="text/javascript" src="<?php $this->show_jquery();?>"></script>
-    <script type="text/javascript" src="<?php $this->show_jcorner();?>"></script>
-    <?php $this->show_script();?> 
-    <script type="text/javascript"> 
-      $(function(){
-            $(".section").corner();
-      });
-    </script>
-</body></html>
+        <div id="frame">
+        <?php $this->show_frame(); ?>
+        </div>
+
+        <div id="bottom_panel">
+            <?php $this->show_bottom_panel(); ?>
+        </div>
+
+        <?php $this->show_script();?>
+    </div>
+    </body>
+</html>

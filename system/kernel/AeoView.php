@@ -6,7 +6,7 @@
 
 class AeoView
 {
-    public $title = 'Index';
+    public $title = 'defaultTitle';
 
     public $data = null;
 
@@ -19,7 +19,7 @@ class AeoView
         exit(0);
     }
 
-    public function show_style()
+    public function show_head()
     {
         echo '<link type="text/css" href="' , SUB_DIR, 'public/theme/',
             APP_STYLE, '.css" rel="stylesheet" />',
@@ -27,37 +27,31 @@ class AeoView
             'public/script/jquery-ui-1.7.1.css" rel="stylesheet" />';
     }
 
-    public function show_jquery()
+    public function show_top_panel()
     {
-        echo SUB_DIR, 'public/script/jquery-1.3.2.js';
+        echo '<a href="', BASE_URL, '" target="_self"><img src="', SUB_DIR, 'public/image/logo.gif" width="165" height="34" /></a>';
     }
 
-    public function show_jcorner()
+    public function show_frame()
     {
-        echo SUB_DIR, 'public/script/jquery.corner-1.92.js';
     }
 
-    public function show_top()
+    public function show_bottom_panel()
     {
-        Aeolus::loadHelper('top', 'index');
-
-        top();
-    }
-
-    public function show_nav()
-    {
-        Aeolus::loadHelper('nav', 'index');
-        nav();
+        echo 'Powered by <a href="http://github.com/kinch/aeolus/tree/master/">Aeolus</a>',
+            '&nbsp;&middot;&nbsp;&copy;&nbsp;Copyright 2008-2009,&nbsp;',
+            '<a href="mailto:kinch.zhang@gmail.com">Kinch Zhang</a>',
+            '&nbsp;&middot;&nbsp;All Rights Reserved';
     }
 
     public function show_script()
     {
-        echo '<script type="text/javascript" src="', SUB_DIR,
-            'public/script/jquery-ui-1.7.1.js"></script>';
-    }
-
-    public function show_content()
-    {
+        echo '<script type="text/javascript" src="',
+            SUB_DIR, 'public/script/jquery-1.3.2.js"></script>',
+            '<script type="text/javascript" src="',
+            SUB_DIR, 'public/script/jquery.corner-1.92.js"></script>',
+            '<script type="text/javascript" src="',
+            SUB_DIR, 'public/script/jquery-ui-1.7.1.js"></script>';
     }
 
     public function html_safe($v)

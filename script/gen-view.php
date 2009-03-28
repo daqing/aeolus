@@ -26,19 +26,20 @@
             $vpath = $gpath.'/view/'.$viewClass.'.php';
             if (!file_exists($vpath)) {
                 if ($res = fopen($vpath, 'w')) {
-                    $content = "<?php\n\n    /* $viewClass class in $module module */\n    ";
-                    $content .= "class $viewClass extends AeoView\n    {";
-                    $content .= "\n        public function show_content()\n        {\n        }\n";
-                    $content .= "\n        public function show_script()\n        {";
-                    $content .= "\n            parent::show_script();";
-                    $content .= "\n            # echo '<script type=\"text/javascript\" ";
-                    $content .= "src=\"\"></script>';";
-                    $content .= "\n            ?>\n            <script type=\"text/javascript\">";
-                    $content .= "\n                //alert('Hello, Aeolus');";
-                    $content .= "\n            </script>\n            <?php\n        }\n";
-                    $content .= "    }\n?>";
+                    $content = <<<VIEWDEF
+<?php
 
-                    if (FALSE === fwrite($res,$content))
+    /* $viewClass class in $module module */
+
+    class $viewClass extends AeoView
+    {
+        public function show_frame()
+        {
+        }
+    }
+?>
+VIEWDEF;
+                if (FALSE === fwrite($res,$content))
                         echo "[ERROR] Can't write content to '$vpath'.\n";
                 } else
                     echo "[ERROR] Can't open file $vpath to write.\n";

@@ -14,5 +14,5 @@
     define('SUB_DIR', '/aeolus/');
 
     // Base URL for output
-    define('BASE_URL', '/aeolus/index.php/');
+    define('BASE_URL', SUB_DIR . 'index.php/');
 ?>

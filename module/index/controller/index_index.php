@@ -1,6 +1,6 @@
 <?php
 
-    /* index controller in index group */
+    /* index_index controller in index group */
     function index_index($argv=null)
     {
         $m = Aeolus::newModel('Welcome');

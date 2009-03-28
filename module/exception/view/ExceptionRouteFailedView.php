@@ -3,10 +3,10 @@
     /* ExceptionRouteFailedView class in exception module */
     class ExceptionRouteFailedView extends AeoView
     {
-        public function show_content()
+        public function show_frame()
         {
             echo '<div class="section">',
-                '<h2>Error: routing  url failed</h2>',
+                '<h2>Exception: routing  url failed</h2>',
                 '<p>The url: [', $this->data['url'], '] can not be routed properly.</p>',
                 '</div><div class="section">',
                 '<p>Routing result:</p>',
@@ -31,16 +31,6 @@
                 '<li>Or create a wildcard url hander in "', $this->data['module'], '" module using:</li><li><code>',
                 '$ php ./script/gen-controller ', $this->data['module'], ' wildcard</code></li>',
                 '</ul></div>';
-        }
-
-        public function show_script()
-        {
-            # echo '<script type="text/javascript" src=""></script>';
-            ?>
-            <script type="text/javascript">
-                //alert('Hello, Aeolus');
-            </script>
-            <?php
         }
     }
 ?>

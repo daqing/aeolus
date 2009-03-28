@@ -26,12 +26,22 @@
         if (file_exists( $gpath ) && is_writable($gpath)) {
             if (!file_exists($hpath)) {
                   if ($res = fopen($hpath, 'w')) {
-                      $content = "<?php\n\n  /* $h helper in $module module */\n  ";
-                      $content .= "function $h()\n  {\n    ?>\n    <div>Change Me!</div>";
-                    $content .= "\n    <?php\n  }\n?>";
-        
-                    if (FALSE === fwrite($res, $content))
+                      $content = <<<HELPERDEF
+<?php
+
+    /* $h helper in $module module */
+
+    function $h(\$argv=null)
+    {
+        ?>
+        <div>change me</div>
+        <?php
+    }
+?>
+HELPERDEF;
+                    if (FALSE === fwrite($res, $content)) {
                         echo "[ERROR] Can't write content $content to file: $hpath.\n";
+                    }
                 } else {
                     echo "[ERROR] Can't open file $hpath to write.\n";
                 }
@@ -39,6 +49,6 @@
         } else {
             echo "[ERROR] Directory '$gpath' doesn't exist or doesn't allow creating files.\n";
         }
-      }
+    }
 
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-    /* wildcard controller in index module */
+    /* index_wildcard controller in index module */
     function index_wildcard($argv=null)
     {
         $v = Aeolus::newView('WildCard');

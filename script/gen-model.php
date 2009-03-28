@@ -27,16 +27,28 @@
             $mpath = $gpath . '/model/' . $modelClass . '.php';
             if (!file_exists($mpath)) {
                 if ($res = fopen($mpath, 'wb+')) {
-                    $content = "<?php\n\n    /* $modelClass class in $module module */\n    ";
-                    $content .= "class $modelClass extends AeoModel\n    {\n        ";
-                    $content .= "public function foobar()\n        {\n        }\n    }\n?>";
+                    $content = <<<MODELDEF
+<?php
 
-                    if (FALSE === fwrite($res, $content))
-                       echo "[ERROR] Can't write content to '$mpath'.\n";
-                 } else
+    /* $modelClass class in $module module */
+
+    class $modelClass extends AeoModel
+    {
+        public function stub()
+        {
+        }
+    }
+?>
+MODELDEF;
+                    if (FALSE === fwrite($res, $content)) {
+                        echo "[ERROR] Can't write content to '$mpath'.\n";
+                    }
+                } else {
                      echo "[ERROR] Can't open file '$mpath' to write.\n";
+                }
             }
         }
-    } else
+    } else {
         echo "[ERROR] Directory '$module_path' doesn't exist or doesn't allow creating files.\n";
+    }
 ?>

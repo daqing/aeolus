@@ -22,14 +22,22 @@
 
     if (file_exists($gpath) && is_writable($gpath)) {
         foreach ($con as $v) {
-            $path = "$gpath/controller/{$module}_{$v}.php";
+            $controller = $module . '_' . $v;
+            $path = "$gpath/controller/$controller.php";
             if (!file_exists($path)) {
                 if ($res = fopen($path,'w')) {
-                    $content = "<?php\n\n    /* $v controller in $module module */\n    ";
-                    $content .= "function {$module}_{$v}(\$argv=null)\n    {\n        echo 'Hello,world!&nbsp;(From \'$v\'";
-                    $content .= " controller in \'$module\' module)';\n    }\n?>";
+                    $content = <<<CONTROLLERDEF
+<?php
 
-                    if (FALSE === fwrite($res, $content))
+    /* $controller controller in $module module */
+
+    function $controller(\$argv=null)
+    {
+        echo 'This is <em>$controller<em> controller in <strong>$module</strong> module.';
+    }
+?>
+CONTROLLERDEF;
+                if (FALSE === fwrite($res, $content))
                         echo "[ERROR] Can't write content to '$path'.\n";
                 } else
                     echo "[ERROR] Can't open file '$path' to write.\n";

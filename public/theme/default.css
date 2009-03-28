@@ -1,22 +1,15 @@
 /* Default theme */
 
 html,body {
-	background-color: white;
-	font-family: Verdana, "Lucida Grande", "Lucida Sans", sans, Hei;
+    background-color: white;
+    font-family: Verdana, "Lucida Grande", "Lucida Sans", sans, Hei;
     font-size: 11pt;
-	margin: 0px;
-	padding: 0px;
-	color: #000;
+    margin: 0px;
+    padding: 0px;
+    color: #000;
 }
 
-#main {
-    width: 960px;
-    margin: 0 auto;
-}
-
-img {
-  border: 0px;
-}
+img { border: 0px; }
 
 code {
     background-color: #D8E5F1;
@@ -25,71 +18,54 @@ code {
     margin: 10px;
 }
 
-h1, h2, h3, h4, h5, h6, p {
-  margin: 5px;
-}
-
-#top {
-  margin-top: 5px;
-}
-
-#nav {
-  text-align: left;
-  padding: 5px 20px;
-  margin-bottom: 10px;
-  background: #D8E5F1;
-}
-
-#nav a:link, #nav a:visited {
-  display: inline;
-  text-decoration: none;
-  margin-right: 13px;
-}
-
-#nav a:hover {
-  display: inline;
-  text-decoration: underline;
-}
-
-#content {
-  margin: 0 auto;
-  width: 90%;
-}
-
-#bottom {
-	margin-top: 20px;
-	padding: 10px 0px 5px 20px;
-	text-align: left;
-    font-size: 9pt;
-    color: #5762A8;
-    border-top: 1px solid #EBEBEB;
-}
+h1, h2, h3, h4, h5, h6, p { margin: 5px; }
 
 a:link, a:active, a:visited, a:hover {
     text-decoration: underline;
     color: #5762A8;
 }
 
-label {
-  font-size: 10pt;   
-}
+label { font-size: 10pt; }
 
 ul {
-  margin: 0px;
-  text-align: left;
-  font-size: 10pt;
+    margin: 0px;
+    text-align: left;
+    font-size: 10pt;
 }
 
 ul li {
-  list-style-type: none;
-  margin: 2px 0px;
-  padding: 5px;
-  background-color: #EFEFEF;
+    list-style-type: none;
+    margin: 2px 0px;
+    padding: 5px;
+    background-color: #EFEFEF;
+}
+
+#top_panel {
+    height: 20%;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #E1E1E1;
+}
+
+#frame {
+    margin: 0px auto;
+    width: 90%;
+    height: 80%;
+    min-height: 500px;
+}
+
+#bottom_panel {
+    height: 20%;
+    margin-top: 10px;
+    padding: 5px 20px;
+    border-top: 1px solid #E1E1E1;
+    text-align: center;
+    color: #666;
+    font-size: 9pt;
 }
 
 .section {
-  margin-bottom: 8px;
-  padding: 4px 10px;
-  background-color: #EFEFEF;
+    margin-bottom: 8px;
+    padding: 15px 10px;
+    background-color: #EFEFEF;
+    border: 1px solid #E1E1E1;
 }
-
