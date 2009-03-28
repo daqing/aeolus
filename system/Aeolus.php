@@ -46,13 +46,34 @@
             if (APP_DEBUG)
                 clearstatcache();
 
-            if (file_exists($path)) {
+            if (is_file($path)) {
                 require $path;
 
-                return $action;
+                if (function_exists($action)) {
+                    return $action;
+                } else {
+                    throw new AeoException(
+                        array(
+                            'name' => 'ControllerNotDefined',
+                            'detail' => 'controller not defined',
+                            'runtime' => array(
+                                'module' => $module,
+                                'type' => 'controller',
+                                'controller' => $controller
+                            )
+                        )
+                    );
+                }
             } else {
-                throw new AeoException('controller_not_found',
-                    array('module' => $module, 'controller' => $controller)
+                throw new AeoException(
+                    array('name' => 'ControllerNotFound',
+                        'detail' => 'controller not found',
+                        'runtime' => array(
+                            'module' => $module,
+                            'type' => 'controller',
+                            'controller' => $controller
+                        )
+                    )
                 );
             }
         }
@@ -73,7 +94,7 @@
 
             $modelClass = ucfirst($module) . $model . 'Model';
             $path = A_PREFIX . "module/$module/model/" . $modelClass;
-            if (file_exists($path . '.php')) {
+            if (is_file($path . '.php')) {
                 self::loadClass('kernel/AeoModel');
                 self::loadClass($path);
 
@@ -102,16 +123,34 @@
             $obj = null;
             $viewClass = ucfirst($module) . $view . 'View';
             $path = A_PREFIX . "module/$module/view/$viewClass";
-            if (file_exists($path . '.php')) {
+            if (is_file($path . '.php')) {
                 self::loadClass('kernel/AeoView');
                 self::loadClass($path);
 
                 if (class_exists($viewClass))
                     $obj = new $viewClass();
                 else
-                    throw new AeoException('view_not_defined', array('module' => $module, 'view' => $view));
+                    throw new AeoException(
+                        array(
+                            'name' => 'ViewNotDefined',
+                            'detail' => 'view class not defined',
+                            'runtime' => array(
+                                'module' => $module,
+                                'view' => $view,
+                            ),
+                        )
+                    );
             } else {
-                throw new AeoException('view_not_exists', array('module' => $module, 'view' => $view));
+                throw new AeoException(
+                    array(
+                        'name' => 'ViewNotFound',
+                        'detail' => 'view class not found',
+                        'runtime' => array(
+                            'module' => $module,
+                            'view' => $view,
+                        ),
+                    )
+                );
             }
 
             return $obj;
@@ -127,7 +166,7 @@
             }
 
             $path = A_PREFIX . "module/$module/helper/$helper";
-            if (file_exists($path . '.php'))
+            if (is_file($path . '.php'))
                 self::loadClass($path);
         }
     }

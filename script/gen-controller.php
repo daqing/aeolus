@@ -33,7 +33,7 @@
 
     function $controller(\$argv=null)
     {
-        echo 'This is <em>$controller<em> controller in <strong>$module</strong> module.';
+        echo 'This is <em>$controller</em> controller in <strong>$module</strong> module.';
     }
 ?>
 CONTROLLERDEF;

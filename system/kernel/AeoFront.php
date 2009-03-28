@@ -15,7 +15,7 @@
           $this->request = $_SERVER['REQUEST_URI'];
 
           $this->result['module'] = 'index';
-          $this->result['controller'] = 'index_index';
+          $this->result['controller'] = 'index';
           $this->result['argv'] = array();
         }
 
@@ -44,20 +44,20 @@
                     if (in_array($seg[0], $module)) {
                         // default controller in this module
                         $this->result['module'] = $seg[0];
-                        $this->result['controller'] = $seg[0] . '_index';
+                        $this->result['controller'] = 'index';
                     } else{
                         // this controller in 'index' module
-                        $this->result['controller'] = 'index_' . $seg[0];
+                        $this->result['controller'] = $seg[0];
                     }
 
                     break;
                 case 2:
                     if (in_array($seg[0], $module)) {
                         $this->result['module'] = $seg[0];
-                        $this->result['controller'] = $seg[0] . '_' .$seg[1];
+                        $this->result['controller'] = $seg[1];
                     } else {
                         // this controller in 'index' group with argv
-                        $this->result['controller'] = 'index_' . $seg[0];
+                        $this->result['controller'] = $seg[0];
                         $this->result['argv'][] = $seg[1];
                     }
 
@@ -65,10 +65,10 @@
                 default:
                     if (in_array($seg[0], $module)) {
                         $this->result['module'] = $seg[0];
-                        $this->result['controller'] = $seg[0] . '_' . $seg[1];
+                        $this->result['controller'] = $seg[1];
                         $this->result['argv'] = array_slice($seg, 2);
                     } else {
-                        $this->result['controller'] = 'index_' . $seg[0];
+                        $this->result['controller'] = $seg[0];
                         $this->result['argv'] = array_slice($seg, 1);
                     }
 
@@ -82,7 +82,7 @@
         {
             extract($this->result);
 
-            $path = A_PREFIX . "module/$module/controller/$controller.php";
+            $path = A_PREFIX . "module/$module/controller/{$module}_{$controller}.php";
 
             /* Setup environment variable */
             global $thisModule;
@@ -90,28 +90,14 @@
 
             if (is_file($path)) {
                 /* Load controller */
-                require $path;
+                $controller = Aeolus::loadController($controller, $module);
 
-                if (function_exists($controller)) {
-                    $controller($this->result['argv']);
-                } else {
-                    throw new AeoException('controller_not_defined', array('module' => $module, 'controller' => $controller));
-                }
+                $controller($argv);
             } else {
                 // looking for wildcard handler
-                $wildcard = $module . '_wildcard';
-                $wild_path = A_PREFIX . "module/$module/controller/$wildcard.php";
-                if (is_file($wild_path)) {
-                    require $wild_path;
+                $controller = Aeolus::loadController('wildcard', $module);
 
-                    if (function_exists($wildcard)) {
-                        $wildcard($this->request);
-                    } else {
-                        throw new AeoException('wildcard_not_defined', array('module' => $module, 'controller' => $controller, 'url' => $this->request));
-                    }
-                } else {
-                    throw new AeoException('route_failed', array('module' => $module, 'controller' => $controller, 'url' => $this->request));
-                }
+                $controller($this->request);
             }
         }
     }

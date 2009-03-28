@@ -18,7 +18,19 @@ code {
     margin: 10px;
 }
 
-h1, h2, h3, h4, h5, h6, p { margin: 5px; }
+h1, h2, h3, h4, h5, h6, p {
+    margin: 0px;
+    padding: 0px;
+}
+
+p {
+    text-indent: 2em;
+}
+
+h3 span{
+    font-weight: normal;
+    font-style: italic;
+}
 
 a:link, a:active, a:visited, a:hover {
     text-decoration: underline;
