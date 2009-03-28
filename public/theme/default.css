@@ -32,9 +32,14 @@ h3 span{
     font-style: italic;
 }
 
-a:link, a:active, a:visited, a:hover {
+a:link, a:active, a:visited {
     text-decoration: underline;
     color: #5762A8;
+}
+
+a:hover {
+    background-color: #5762A8;
+    color: white;
 }
 
 label { font-size: 10pt; }
@@ -49,13 +54,39 @@ ul li {
     list-style-type: none;
     margin: 2px 0px;
     padding: 5px;
-    background-color: #EFEFEF;
+}
+
+#logo {
+    clear: right;
+}
+
+.corner {
+    float: right;
+
+    position: relative;
+    top: 5px;
+    right: 5%; 
+    font-size: 0.9em; 
+}
+
+.corner a {
+    padding: 3px;
+    margin: 0px;
 }
 
 #top_panel {
-    height: 20%;
+    height: 40%;
     margin-bottom: 10px;
     border-bottom: 1px solid #E1E1E1;
+}
+
+#top_panel a.app {
+    text-decoration: none;
+    border: 1px solid #E1E1E1;
+    border-bottom: 0px;
+    font-size: 1.3em;
+    margin-left: 10px;
+    padding: 0px 5px;
 }
 
 #frame {

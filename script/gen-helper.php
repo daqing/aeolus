@@ -21,17 +21,18 @@
     $gpath = AEOLUS_HOME.'/module/'.$module;
 
     foreach ($helpers as $h) {
-        $hpath = $gpath.'/helper/'.$h.'.php';
+        $helper = $module . '_' . $h . '_helper';
+        $hpath = "$gpath/helper/$helper.php";
 
-        if (file_exists( $gpath ) && is_writable($gpath)) {
+        if (file_exists($gpath) && is_writable($gpath)) {
             if (!file_exists($hpath)) {
                   if ($res = fopen($hpath, 'w')) {
                       $content = <<<HELPERDEF
 <?php
 
-    /* $h helper in $module module */
+    /* $helper in $module module */
 
-    function $h(\$argv=null)
+    function $helper(\$argv=null)
     {
         ?>
         <div>change me</div>

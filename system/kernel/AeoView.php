@@ -29,7 +29,13 @@ class AeoView
 
     public function show_top_panel()
     {
-        echo '<a href="', BASE_URL, '" target="_self"><img src="', SUB_DIR, 'public/image/logo.gif" width="165" height="34" /></a>';
+        echo '<div class="userbox corner"><a href="', BASE_URL, 'login/" target="_self">登录</a>|',
+            '<a href="', BASE_URL, 'register/" target="_self">注册</a></div>',
+            '<a id="logo" href="', BASE_URL, '" target="_self"><img src="', SUB_DIR, 'public/image/logo.gif" width="165" height="34" /></a>';
+
+        $h = Aeolus::loadHelper('apps', 'index');
+
+        $h();
     }
 
     public function show_frame()

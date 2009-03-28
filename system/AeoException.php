@@ -61,14 +61,13 @@
         {
             $trace = parent::getTrace();
 
+            $str = array();
             foreach ($trace as $k => $v) {
-                $str[$k] = "#$k {$v['file']}({$v['line']})<p>{$v['class']}{$v['type']}{$v['function']}(";
+                $str[$k] = "#$k {$v['file']}({$v['line']})<p>";
+                if (isset($v['class']))
+                    $str[$k] .= "{$v['class']}{$v['type']}";
 
-                if ($v['args']) {
-                    $str[$k] .= "array(". implode(', ', $v['args']) . ")";
-                }
-
-                $str[$k] .= ')';
+                $str[$k] .= "{$v['function']}(" . var_export($v['args']) . ')';
             }
 
             return $str;

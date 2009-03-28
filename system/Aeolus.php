@@ -165,9 +165,33 @@
                 $module = $thisModule;
             }
 
+            $helper = $module . '_' . $helper . '_helper';
             $path = A_PREFIX . "module/$module/helper/$helper";
-            if (is_file($path . '.php'))
+            if (is_file($path . '.php')) {
                 self::loadClass($path);
+
+                if (function_exists($helper))
+                    return $helper;
+                else
+                    throw new AeoException(
+                        array(
+                            'name' => 'HelperNotDefined',
+                            'detail' => 'helper not defined',
+                            'runtime' => array('module' => $module, 'helper' => $helper)
+                        )
+                    );
+
+
+
+            } else {
+                throw new AeoException(
+                    array(
+                        'name' => 'HelperNotFound',
+                        'detail' => 'helper not found',
+                        'runtime' => array('module' => $module, 'helper' => $helper)
+                    )
+                );
+            }
         }
     }
 

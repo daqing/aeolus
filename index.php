@@ -36,6 +36,7 @@
 
         $front->run();
     } catch (AeoException $e) {
-        $e->show(APP_DEBUG);
+        die(implode('<br/>', $e->get_trace()));
+        //$e->show(APP_DEBUG);
     }
 ?>
