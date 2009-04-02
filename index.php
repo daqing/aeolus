@@ -7,7 +7,7 @@
 
     global $env;
 
-    $env['cur_module'] = 'index';
+    $env['module'] = 'index';
     $env['controller'] = 'index';
 
     try {

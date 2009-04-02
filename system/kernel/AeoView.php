@@ -27,6 +27,10 @@ class AeoView
             'public/script/jquery-ui-1.7.1.css" rel="stylesheet" />';
     }
 
+    public function show_style()
+    {
+    }
+
     public function show_top_panel()
     {
         echo '<div class="userbox corner"><a href="', BASE_URL, 'login/" target="_self">登录</a>&middot;',

@@ -36,7 +36,7 @@
             if ('this' == $module) {
                 global $env;
 
-                $module = $env['cur_module'];
+                $module = $env['module'];
             }
 
             $action = $module . '_' . $controller;
@@ -84,7 +84,7 @@
             if ('this' == $module) {
                 global $env;
 
-                $module = $env['cur_module'];
+                $module = $env['module'];
             }
 
             if (APP_DEBUG)
@@ -114,7 +114,7 @@
             if ('this' == $module) {
                 global $env;
 
-                $module = $env['cur_module'];
+                $module = $env['module'];
             }
 
             if (APP_DEBUG)
@@ -162,7 +162,7 @@
             if ('this' == $module) {
                 global $env;
 
-                $module = $env['cur_module'];
+                $module = $env['module'];
             }
 
             $helper = $module . '_' . $helper . '_helper';
