@@ -85,8 +85,9 @@
             $path = A_PREFIX . "module/$module/controller/{$module}_{$controller}.php";
 
             /* Setup environment variable */
-            global $thisModule;
-            $thisModule = $module;
+            global $env;
+            $env['module'] = $module;
+            $env['controller'] = $controller;
 
             if (is_file($path)) {
                 /* Load controller */

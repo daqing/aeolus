@@ -34,9 +34,9 @@
         public function loadController($controller, $module='this')
         {
             if ('this' == $module) {
-                global $thisModule;
+                global $env;
 
-                $module = $thisModule;
+                $module = $env['cur_module'];
             }
 
             $action = $module . '_' . $controller;
@@ -82,9 +82,9 @@
         public function newModel($model, $module='this')
         {
             if ('this' == $module) {
-                global $thisModule;
+                global $env;
 
-                $module = $thisModule;
+                $module = $env['cur_module'];
             }
 
             if (APP_DEBUG)
@@ -112,9 +112,9 @@
         public function newView($view, $module='this')
         {
             if ('this' == $module) {
-                global $thisModule;
+                global $env;
 
-                $module = $thisModule;
+                $module = $env['cur_module'];
             }
 
             if (APP_DEBUG)
@@ -160,9 +160,9 @@
         public function loadHelper($helper, $module='this')
         {
             if ('this' == $module) {
-                global $thisModule;
+                global $env;
 
-                $module = $thisModule;
+                $module = $env['cur_module'];
             }
 
             $helper = $module . '_' . $helper . '_helper';

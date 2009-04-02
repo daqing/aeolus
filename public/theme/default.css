@@ -65,8 +65,7 @@ ul li {
 
     position: relative;
     top: 5px;
-    right: 5%; 
-    font-size: 0.9em; 
+    font-size: 0.9em;
 }
 
 .corner a {
@@ -77,16 +76,25 @@ ul li {
 #top_panel {
     height: 40%;
     margin-bottom: 10px;
-    border-bottom: 1px solid #E1E1E1;
+    padding: 0 5%;
 }
 
 #top_panel a.app {
     text-decoration: none;
     border: 1px solid #E1E1E1;
+    margin-left: 10px;
+    padding: 2px 5px;
+}
+
+#top_panel a.current {
+    text-decoration: none;
+    border: 1px solid #E1E1E1;
     border-bottom: 0px;
     font-size: 1.3em;
     margin-left: 10px;
-    padding: 0px 5px;
+    padding: 2px 5px;
+    color: white;
+    background-color: #5762A8;
 }
 
 #frame {
@@ -99,16 +107,17 @@ ul li {
 #bottom_panel {
     height: 20%;
     margin-top: 10px;
-    padding: 5px 20px;
-    border-top: 1px solid #E1E1E1;
+    padding: 0.5em;
+    border-top: 1px solid #DEDEDE;
     text-align: center;
     color: #666;
     font-size: 9pt;
+    background-color: #EAEAEA;
 }
 
 .section {
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     padding: 15px 10px;
-    background-color: #EFEFEF;
-    border: 1px solid #E1E1E1;
+    background-color: #F8F8FF;
+    border: 1px solid #DEDEDE;
 }

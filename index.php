@@ -5,6 +5,11 @@
      *
      */
 
+    global $env;
+
+    $env['cur_module'] = 'index';
+    $env['controller'] = 'index';
+
     try {
         define('A_PREFIX', dirname(__FILE__) . '/');
 
@@ -20,13 +25,14 @@
         // Load Aeolus Exception class
         require 'AeoException.php';
 
-        global $thisModule;
-
         if (! APP_ENABLED) {
-            $thisModule = 'exception';
-
-            $action = Aeolus::loadController('app_not_running', 'exception');
-            $action();
+            throw new AeoException(
+                array(
+                    'name' => 'APPNotRunning',
+                    'detail' => 'app not running',
+                    'runtime' => array(),
+                )
+            );
         }
 
         // Load front controller
@@ -36,7 +42,7 @@
 
         $front->run();
     } catch (AeoException $e) {
-        die(implode('<br/>', $e->get_trace()));
-        //$e->show(APP_DEBUG);
+        // make sure no exception will be thrown here
+        $e->show(APP_DEBUG);
     }
 ?>

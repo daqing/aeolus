@@ -29,17 +29,22 @@ class AeoView
 
     public function show_top_panel()
     {
-        echo '<div class="userbox corner"><a href="', BASE_URL, 'login/" target="_self">登录</a>|',
+        echo '<div class="userbox corner"><a href="', BASE_URL, 'login/" target="_self">登录</a>&middot;',
             '<a href="', BASE_URL, 'register/" target="_self">注册</a></div>',
             '<a id="logo" href="', BASE_URL, '" target="_self"><img src="', SUB_DIR, 'public/image/logo.gif" width="165" height="34" /></a>';
 
+        global $env;
+
         $h = Aeolus::loadHelper('apps', 'index');
 
-        $h();
+        $h($env['controller']);
     }
 
     public function show_frame()
     {
+        echo '<div class="section">',
+            '<p>I am a template.</p>',
+            '</div>';
     }
 
     public function show_bottom_panel()
@@ -58,6 +63,13 @@ class AeoView
             SUB_DIR, 'public/script/jquery.corner-1.92.js"></script>',
             '<script type="text/javascript" src="',
             SUB_DIR, 'public/script/jquery-ui-1.7.1.js"></script>';
+        ?>
+        <script type="text/javascript">
+        $(function() {
+            //$(".section").corner('bottom');
+        });
+        </script>
+        <?php
     }
 
     public function html_safe($v)

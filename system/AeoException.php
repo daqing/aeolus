@@ -67,7 +67,18 @@
                 if (isset($v['class']))
                     $str[$k] .= "{$v['class']}{$v['type']}";
 
-                $str[$k] .= "{$v['function']}(" . var_export($v['args']) . ')';
+                $str[$k] .= "{$v['function']}(";
+                
+                $num = count($v['args']);
+                if ($num > 0)
+                {
+                    for ($i = 0; $i < $num - 1; $i ++)
+                        $str[$k] .= '"' . $v['args'][$i] . '", ';
+
+                    $str[$k] .= '"' . $v['args'][$num - 1] . '"';
+                }
+                
+                $str[$k] .= ');';
             }
 
             return $str;
