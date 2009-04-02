@@ -6,7 +6,8 @@
     <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title><?php echo $this->title; ?></title>
-    <?php $this->show_head() ?>
+    <?php $this->show_head(); ?>
+    <?php $this->show_style(); ?>
     </head>
     <body>
     <div id="main">
