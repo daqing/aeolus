@@ -1,5 +1,6 @@
 Aeolus 1.1 TODO List
 ====================
 
-1. add Memcache backend support
+1. add Memcache backend support.
 2. add template macro support?
+3. try out Ruby on Rails.
