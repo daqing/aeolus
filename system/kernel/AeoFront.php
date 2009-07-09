@@ -1,26 +1,23 @@
 <?php
 
-    /*
-     * Front controller
-     */
-
+    # front controller
     class AeoFront
     {
-        private $request;
+        private $request = null;
 
-        private $result;
+        private $result = array();
 
         function __construct()
         {
-          $this->request = $_SERVER['REQUEST_URI'];
-
-          $this->result['module'] = 'index';
-          $this->result['controller'] = 'index';
-          $this->result['argv'] = array();
+            $this->result['module'] = 'index';
+            $this->result['controller'] = 'index';
+            $this->result['argv'] = array();
         }
 
-        public function run()
+        public function run($url)
         {
+            $this->request = $url;
+
             $this->process();
 
             $this->launch();

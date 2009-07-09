@@ -1,10 +1,6 @@
 <?php
 
-    /*
-     * Aeolus exception class
-     *
-     */
-
+    # aeolus exception class
     class AeoException extends Exception
     {
         private $argv = array();
@@ -12,21 +8,17 @@
         /**
          * Constructor
          *
-         * @param array $argv array('name' => (string) $name, 'detail' => (string) $detail, 'runtime' => (array) $runtime)
+         * @param $argv array('name' => $name, 'detail' => $detail, 'runtime' => $runtime)
          */
         public function __construct($argv)
         {
             $this->argv = $argv;
 
             $this->format_runtime();
+            $this->show(APP_DEBUG);
         }
 
-        public function __toString()
-        {
-            return $this->argv['name'] . 'Exception';
-        }
-
-        public function show($is_debug)
+        private function show($is_debug)
         {
             if ($is_debug) {
                 $v = Aeolus::newView('ExceptionDebug', 'index');
@@ -52,12 +44,12 @@
             $this->argv['runtime'] = $str . ');';
         }
 
-        public function get_data()
+        private function get_data()
         {
             return $this->argv;
         }
 
-        public function get_trace()
+        private function get_trace()
         {
             $trace = parent::getTrace();
 
@@ -82,6 +74,11 @@
             }
 
             return $str;
+        }
+
+        public function __toString()
+        {
+            return $this->argv['name'] . 'Exception';
         }
     }
 

@@ -1,48 +1,34 @@
 <?php
 
-    /*
-     * This is the frontend for Aeolus system.
-     *
-     */
-
+    # global environment variable
     global $env;
 
     $env['module'] = 'index';
     $env['controller'] = 'index';
 
-    try {
-        define('A_PREFIX', dirname(__FILE__) . '/');
+    # handy constant to use
+    define('A_PREFIX', dirname(__FILE__) . '/');
 
-        // Load application configuration
-        require 'config/system/app.php';
+    require 'config/system/app.php';
+    require 'system/bootstrap.php';
+    require 'Aeolus.php';
+    require 'AeoException.php';
+    require 'kernel/AeoFront.php';
 
-        // Bootstrap
-        require 'system/bootstrap.php';
-
-        // Load Aeolus factory class
-        require 'Aeolus.php';
-
-        // Load Aeolus Exception class
-        require 'AeoException.php';
-
-        if (! APP_ENABLED) {
-            throw new AeoException(
-                array(
-                    'name' => 'APPNotRunning',
-                    'detail' => 'app not running',
-                    'runtime' => array(),
-                )
-            );
-        }
-
-        // Load front controller
-        require 'kernel/AeoFront.php';
-
-        $front = new AeoFront();
-
-        $front->run();
-    } catch (AeoException $e) {
-        // make sure no exception will be thrown here
-        $e->show(APP_DEBUG);
+    if (! APP_ENABLED) {
+        new AeoException(
+            array(
+                'name' => 'APPNotRunning',
+                'detail' => 'app not running',
+                'runtime' => array(),
+            )
+        );
     }
+
+    # load front controller
+    $front = new AeoFront();
+
+    $url = $_GET['url'] ? $_GET['url'] : $_SERVER['REQUEST_URI'];
+    $front->run($url);
+
 ?>
