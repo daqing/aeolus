@@ -28,7 +28,7 @@
     # load front controller
     $front = new AeoFront();
 
-    $url = $_GET['url'] ? $_GET['url'] : $_SERVER['REQUEST_URI'];
+    $url = isset($_GET['url']) ? $_GET['url'] : $_SERVER['REQUEST_URI'];
     $front->run($url);
 
 ?>
