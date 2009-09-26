@@ -2,14 +2,14 @@
 
 class IndexController
 {
-    public function index()
+    public function index($sys, $argv)
     {
         echo 'it works';
     }
 
-    public function fallback()
+    public function fallback($sys, $url)
     {
-        echo 'fallback works';
+        echo 'fallback from url: ' . $url;
     }
 }
 

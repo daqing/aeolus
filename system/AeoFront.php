@@ -44,7 +44,7 @@ class AeoFront
                 }
 
                 if (isset($segments[2])) {
-                    $argv = array_slice($segments, 1);
+                    $argv = array_slice($segments, 2);
                 }
 
                 $this->runController($controller, $action, $argv);
@@ -61,7 +61,7 @@ class AeoFront
         }
 
         if (method_exists($controller, $action)) {
-            $controller->index($this->sys, $argv);
+            $controller->$action($this->sys, $argv);
         } else if (method_exists($controller, 'fallback')) {
             $controller->fallback($this->sys, $this->url);
         } else {
