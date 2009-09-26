@@ -1,34 +1,20 @@
 <?php
 
-    # global environment variable
-    global $env;
+    session_start();
 
-    $env['module'] = 'index';
-    $env['controller'] = 'index';
+    $dir = dirname(__FILE__) . '/';
+    # set include_path
+    ini_set(
+        'include_path',
+        $dir . 'plugin/' . PATH_SEPARATOR .
+        $dir . 'system/' . PATH_SEPARATOR .
+        ini_get('include_path')
+    );
 
-    # handy constant to use
-    define('A_PREFIX', dirname(__FILE__) . '/');
+    require 'AeoLib.php';
+    require 'AeoSystem.php';
 
-    require 'config/system/app.php';
-    require 'system/bootstrap.php';
-    require 'Aeolus.php';
-    require 'AeoException.php';
-    require 'kernel/AeoFront.php';
+    $sys = new AeoSystem();
 
-    if (! APP_ENABLED) {
-        new AeoException(
-            array(
-                'name' => 'APPNotRunning',
-                'detail' => 'app not running',
-                'runtime' => array(),
-            )
-        );
-    }
-
-    # load front controller
-    $front = new AeoFront();
-
-    $url = isset($_GET['url']) ? $_GET['url'] : $_SERVER['REQUEST_URI'];
-    $front->run($url);
-
+    $sys->boot();
 ?>
